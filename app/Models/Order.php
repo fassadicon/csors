@@ -19,6 +19,7 @@ class Order extends Model
         'pax',
         'from',
         'to',
+        'location',
         'status',
         'remarks',
     ];

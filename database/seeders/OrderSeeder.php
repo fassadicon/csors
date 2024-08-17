@@ -18,8 +18,9 @@ class OrderSeeder extends Seeder
             'customer_id' => 1,
             'total_amount' => 2000,
             'pax' => 2,
-            'from' => '2024-08-17',
-            'to' => '2024-08-17',
+            'from' => '2024-08-17 12:00:00',
+            'to' => '2024-08-17 14:00:00',
+            'location' => 'Malanday, Marikina City',
             'status' => 'completed',
             'remarks' => 'lorem ipsum dolor sit amet',
         ]);
@@ -29,8 +30,9 @@ class OrderSeeder extends Seeder
             'customer_id' => 1,
             'total_amount' => 10000,
             'pax' => 5,
-            'from' => '2024-08-12',
-            'to' => '2024-08-14',
+            'from' => '2024-08-12 00:00:00',
+            'to' => '2024-08-14 00:00:00',
+            'location' => 'Nangka, Marikina City',
             'status' => 'completed',
             'remarks' => 'lorem ipsum dolor sit amet',
         ]);

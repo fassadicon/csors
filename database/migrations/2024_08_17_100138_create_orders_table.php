@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('service_id')->constrained();
             $table->decimal('total_amount', 8, 2);
             $table->integer('pax');
-            $table->date('from');
-            $table->date('to');
+            $table->dateTime('from');
+            $table->dateTime('to');
+            $table->string('location');
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled']);
             $table->string('remarks')->nullable();
             $table->timestamps();
