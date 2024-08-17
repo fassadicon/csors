@@ -23,14 +23,18 @@ class Order extends Model
         'remarks',
     ];
 
-    public function service() : BelongsTo
+    public function caterer(): BelongsTo
+    {
+        return $this->belongsToThrough(Caterer::class, Service::class, 'service_id', 'caterer_id');
+    }
+
+    public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
 
-    public function customer() : BelongsTo
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
     }
-
 }
