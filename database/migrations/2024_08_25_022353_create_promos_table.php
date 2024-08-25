@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('promos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('caterer_id')->constrained();
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->enum('type', ['percentage', 'fixed']);
+            $table->decimal('value', 8, 2);
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('promos');
     }
 };

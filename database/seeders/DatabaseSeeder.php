@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             EventSeeder::class,
+
+
             ServingTypeSeeder::class,
-            ServiceSeeder::class,
-            OrderSeeder::class,
         ]);
     }
 }

@@ -5,21 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Event extends Model
+class Package extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
-        'caterer_id',
         'name',
         'description',
+        'price',
+        'image_path'
     ];
 
-    public function packages(): HasMany
+    public function events(): HasMany
     {
-        return $this->hasMany(Package::class)
+        return $this->hasMany(Event::class)
             ->using(EventPackage::class)
             ->withTimestamps();
     }

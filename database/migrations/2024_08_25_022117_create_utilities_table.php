@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('utilities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('caterer_id')->constrained();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->decimal('price', 10, 2);
+            $table->text('image_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('utilities');
     }
 };

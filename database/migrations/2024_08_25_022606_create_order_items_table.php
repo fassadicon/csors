@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('caterer_id')->constrained();
-            $table->string('name');
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('order_id')->nullable();
+            // $table->morphs('product_type');
+            // $table->morphs('product_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('order_items');
     }
 };

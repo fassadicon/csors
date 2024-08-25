@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('serving_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('caterer_id')->constrained();
-            $table->foreignId('event_id')->constrained();
-            $table->foreignId('serving_type_id')->constrained();
             $table->string('name');
-            $table->decimal('price', 10, 2);
             $table->text('description')->nullable();
+            $table->text('image_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('serving_types');
     }
 };

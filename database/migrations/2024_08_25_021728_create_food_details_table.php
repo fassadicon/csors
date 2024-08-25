@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('food_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('caterer_id')->constrained();
+            $table->foreignId('food_category_id')->constrained();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->text('image_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('food_details');
     }
 };

@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('name')->unique();
-            $table->text('description')->nullable();
-            $table->text('color')->nullable();
+            $table->string('email')->unique();
+            $table->string('phone_number')->unique()->nullable();
+            $table->text('about')->nullable();
+            $table->text('logo_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
