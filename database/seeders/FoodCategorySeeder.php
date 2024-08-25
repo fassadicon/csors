@@ -14,11 +14,13 @@ class FoodCategorySeeder extends Seeder
     public function run(): void
     {
         FoodCategory::create([
+            'caterer_id' => 1,
             'name' => 'Chicken',
             'description' => 'Wings all the way',
         ]);
 
         FoodCategory::create([
+            'caterer_id' => 1,
             'name' => 'Pork',
             'description' => 'Barrel',
         ]);

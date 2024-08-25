@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('event_id')->constrained();
             $table->foreignId('package_id')->constrained();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

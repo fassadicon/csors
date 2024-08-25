@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EventResource\Pages;
-use App\Filament\Resources\EventResource\RelationManagers;
-use App\Filament\Resources\EventResource\RelationManagers\PackagesRelationManager;
-use App\Models\Event;
+use App\Filament\Resources\UtilityResource\Pages;
+use App\Filament\Resources\UtilityResource\RelationManagers;
+use App\Models\Utility;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,9 +14,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
-class EventResource extends Resource
+class UtilityResource extends Resource
 {
-    protected static ?string $model = Event::class;
+    protected static ?string $model = Utility::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -33,9 +32,13 @@ class EventResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('price')
+                    ->required()
+                    ->numeric()
+                    ->prefix('₱'),
+                Forms\Components\FileUpload::make('image_path'),
                 TinyEditor::make('description')
-                    ->columnSpanFull()
-                    ->nullable(),
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -44,11 +47,13 @@ class EventResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
-                    ->searchable()
-                    ->sortable()
-                    ->visible(auth()->user()->hasRole('superadmin')),
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('price')
+                    ->money()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -81,26 +86,23 @@ class EventResource extends Resource
     public static function getRelations(): array
     {
         return [
-            PackagesRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListEvents::route('/'),
-            'create' => Pages\CreateEvent::route('/create'),
-            'view' => Pages\ViewEvent::route('/{record}'),
-            'edit' => Pages\EditEvent::route('/{record}/edit'),
+            'index' => Pages\ListUtilities::route('/'),
+            'create' => Pages\CreateUtility::route('/create'),
+            'view' => Pages\ViewUtility::route('/{record}'),
+            'edit' => Pages\EditUtility::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->when(auth()->user()->hasRole('caterer'), function ($query) {
-                $query->where('caterer_id', auth()->user()->caterer->id);
-            })
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

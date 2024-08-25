@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EventResource\Pages;
-use App\Filament\Resources\EventResource\RelationManagers;
-use App\Filament\Resources\EventResource\RelationManagers\PackagesRelationManager;
-use App\Models\Event;
+use App\Filament\Resources\FoodDetailResource\Pages;
+use App\Filament\Resources\FoodDetailResource\RelationManagers;
+use App\Filament\Resources\FoodDetailResource\RelationManagers\ServingTypesRelationManager;
+use App\Models\FoodDetail;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,11 +13,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
-class EventResource extends Resource
+class FoodDetailResource extends Resource
 {
-    protected static ?string $model = Event::class;
+    protected static ?string $model = FoodDetail::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -25,17 +24,16 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('caterer_id')
-                    ->relationship('caterer', 'name')
-                    ->default(auth()->user()->hasRole('caterer') ? auth()->user()->caterer->id : null)
-                    ->visible(auth()->user()->hasRole('superadmin'))
+                Forms\Components\Select::make('food_category_id')
+                    ->relationship('foodCategory', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                TinyEditor::make('description')
-                    ->columnSpanFull()
-                    ->nullable(),
+                Forms\Components\Textarea::make('description')
+                    ->columnSpanFull(),
+                Forms\Components\FileUpload::make('image_path')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -43,12 +41,14 @@ class EventResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('caterer.name')
+                Tables\Columns\TextColumn::make('foodCategory.name')
                     ->searchable()
-                    ->sortable()
-                    ->visible(auth()->user()->hasRole('superadmin')),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('description')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -81,26 +81,23 @@ class EventResource extends Resource
     public static function getRelations(): array
     {
         return [
-            PackagesRelationManager::class,
+            ServingTypesRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListEvents::route('/'),
-            'create' => Pages\CreateEvent::route('/create'),
-            'view' => Pages\ViewEvent::route('/{record}'),
-            'edit' => Pages\EditEvent::route('/{record}/edit'),
+            'index' => Pages\ListFoodDetails::route('/'),
+            'create' => Pages\CreateFoodDetail::route('/create'),
+            'view' => Pages\ViewFoodDetail::route('/{record}'),
+            'edit' => Pages\EditFoodDetail::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->when(auth()->user()->hasRole('caterer'), function ($query) {
-                $query->where('caterer_id', auth()->user()->caterer->id);
-            })
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

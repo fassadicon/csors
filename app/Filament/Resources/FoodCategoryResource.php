@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EventResource\Pages;
-use App\Filament\Resources\EventResource\RelationManagers;
-use App\Filament\Resources\EventResource\RelationManagers\PackagesRelationManager;
-use App\Models\Event;
+use App\Filament\Resources\FoodCategoryResource\Pages;
+use App\Filament\Resources\FoodCategoryResource\RelationManagers;
+use App\Filament\Resources\FoodCategoryResource\RelationManagers\FoodDetailsRelationManager;
+use App\Models\FoodCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
-class EventResource extends Resource
+class FoodCategoryResource extends Resource
 {
-    protected static ?string $model = Event::class;
+    protected static ?string $model = FoodCategory::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -27,15 +27,12 @@ class EventResource extends Resource
             ->schema([
                 Forms\Components\Select::make('caterer_id')
                     ->relationship('caterer', 'name')
-                    ->default(auth()->user()->hasRole('caterer') ? auth()->user()->caterer->id : null)
-                    ->visible(auth()->user()->hasRole('superadmin'))
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 TinyEditor::make('description')
-                    ->columnSpanFull()
-                    ->nullable(),
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -44,11 +41,13 @@ class EventResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
-                    ->searchable()
-                    ->sortable()
-                    ->visible(auth()->user()->hasRole('superadmin')),
+                    ->visible(auth()->user()->hasRole('superadmin'))
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('description')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -81,26 +80,23 @@ class EventResource extends Resource
     public static function getRelations(): array
     {
         return [
-            PackagesRelationManager::class,
+            FoodDetailsRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListEvents::route('/'),
-            'create' => Pages\CreateEvent::route('/create'),
-            'view' => Pages\ViewEvent::route('/{record}'),
-            'edit' => Pages\EditEvent::route('/{record}/edit'),
+            'index' => Pages\ListFoodCategories::route('/'),
+            'create' => Pages\CreateFoodCategory::route('/create'),
+            'view' => Pages\ViewFoodCategory::route('/{record}'),
+            'edit' => Pages\EditFoodCategory::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->when(auth()->user()->hasRole('caterer'), function ($query) {
-                $query->where('caterer_id', auth()->user()->caterer->id);
-            })
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

@@ -1,52 +1,52 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\EventResource\RelationManagers;
 
-use App\Filament\Resources\ServingTypeResource\Pages;
-use App\Filament\Resources\ServingTypeResource\RelationManagers;
-use App\Models\ServingType;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
-class ServingTypeResource extends Resource
+class PackagesRelationManager extends RelationManager
 {
-    protected static ?string $model = ServingType::class;
+    protected static string $relationship = 'packages';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('caterer_id')
-                    ->relationship('caterer', 'name')
-                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('description')
+                Forms\Components\TextInput::make('price')
+                    ->required()
+                    ->numeric()
+                    ->prefix('₱'),
+                TinyEditor::make('description')
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('image_path')
+                Forms\Components\FileUpload::make('image_path')
+                    ->label('Image')
+                    ->image()
                     ->columnSpanFull(),
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('caterer.name')
-                    ->visible(auth()->user()->hasRole('superadmin'))
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('price')
+                    ->money('php')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -61,11 +61,17 @@ class ServingTypeResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\TrashedFilter::make()
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -73,31 +79,9 @@ class ServingTypeResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListServingTypes::route('/'),
-            'create' => Pages\CreateServingType::route('/create'),
-            'view' => Pages\ViewServingType::route('/{record}'),
-            'edit' => Pages\EditServingType::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
+            ])
+            ->modifyQueryUsing(fn(Builder $query) => $query->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ]));
     }
 }

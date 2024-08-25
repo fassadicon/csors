@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\EventResource\Pages;
+namespace App\Filament\Resources\FoodCategoryResource\Pages;
 
-use App\Filament\Resources\EventResource;
+use App\Filament\Resources\FoodCategoryResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditEvent extends EditRecord
+class EditFoodCategory extends EditRecord
 {
-    protected static string $resource = EventResource::class;
+    protected static string $resource = FoodCategoryResource::class;
 
     protected function getHeaderActions(): array
     {

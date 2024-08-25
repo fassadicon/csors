@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EventPackage extends Pivot
 {
-    use SoftDeletes;
-
     public $incrementing = true;
     public $timestamps = true;
 

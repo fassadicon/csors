@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\EventResource\Pages;
+namespace App\Filament\Resources\PackageResource\Pages;
 
-use App\Filament\Resources\EventResource;
+use App\Filament\Resources\PackageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
-class ViewEvent extends ViewRecord
+class ViewPackage extends ViewRecord
 {
-    protected static string $resource = EventResource::class;
+    protected static string $resource = PackageResource::class;
 
     protected function getHeaderActions(): array
     {
