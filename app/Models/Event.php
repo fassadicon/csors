@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Event extends Model
 {
@@ -17,9 +18,9 @@ class Event extends Model
         'description',
     ];
 
-    public function packages(): HasMany
+    public function packages(): BelongsToMany
     {
-        return $this->hasMany(Package::class)
+        return $this->belongsToMany(Package::class)
             ->using(EventPackage::class)
             ->withTimestamps();
     }

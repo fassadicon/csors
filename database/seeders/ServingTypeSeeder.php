@@ -15,11 +15,6 @@ class ServingTypeSeeder extends Seeder
     {
         ServingType::create([
             'caterer_id' => 1,
-            'name' => 'Package',
-            'description' => 'lorem ipsum dolor sit amet'
-        ]);
-        ServingType::create([
-            'caterer_id' => 1,
             'name' => 'Buffet Style',
             'description' => 'lorem ipsum dolor sit amet'
         ]);

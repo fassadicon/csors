@@ -12,8 +12,8 @@ class EventPackage extends Pivot
 {
     use SoftDeletes;
 
-    protected $incrementing = true;
-    protected $timestamps = true;
+    public $incrementing = true;
+    public $timestamps = true;
 
     public function event(): BelongsTo
     {

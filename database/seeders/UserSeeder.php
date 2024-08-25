@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'first_name' => 'Gary',
             'middle_name' => 'Dela Cruz',
             'ext_name' => 'Jr',
-            'contact_number' => '09063406601',
+            'phone_number' => '09063406601',
             'email' => 'sa@csors.com',
             'is_customer' => 0,
             'password' => bcrypt('qwe'),

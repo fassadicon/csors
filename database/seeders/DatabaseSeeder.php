@@ -17,10 +17,22 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
-            EventSeeder::class,
 
+            CatererSeeder::class,
+
+            EventSeeder::class,
+            PackageSeeder::class,
 
             ServingTypeSeeder::class,
+            FoodCategorySeeder::class,
+            FoodDetailSeeder::class,
+
+            UtilitySeeder::class,
+
+            PromoSeeder::class,
+            // Order Seeders
+
+            FeedbackSeeder::class,
         ]);
     }
 }

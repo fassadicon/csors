@@ -7,20 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Promo extends Model
+class Feedback extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
         'caterer_id',
-        'type',
-        'name',
-        'value',
-        'start_date',
-        'end_date',
+        'user_id,',
+        'rating',
+        'comment'
     ];
 
-    public function caterer() : BelongsTo {
+    public function users() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function caterers(): BelongsTo
+    {
         return $this->belongsTo(Caterer::class);
     }
 }

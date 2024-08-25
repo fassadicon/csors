@@ -13,10 +13,15 @@ class PackageSeeder extends Seeder
      */
     public function run(): void
     {
-        Package::create([
+        $package = Package::create([
             'name' => 'Gary\'s Special',
             'description' => 'Sarap Sagad',
             'price' => 1000,
+        ]);
+
+        $package->events()->attach([
+            1,
+            3,
         ]);
     }
 }
