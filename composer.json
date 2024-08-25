@@ -11,6 +11,7 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "mohamedsabil83/filament-forms-tinyeditor": "^2.3",
+        "saade/filament-fullcalendar": "^3.0",
         "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {

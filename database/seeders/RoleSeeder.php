@@ -21,6 +21,16 @@ class RoleSeeder extends Seeder
         $catererpermissions = Permission::whereIn(
             'name',
             [
+                'view_order',
+                'view_any_order',
+                'create_order',
+                'update_order',
+                'restore_order',
+                'restore_any_order',
+                'replicate_order',
+                'reorder_order',
+                'delete_order',
+                'delete_any_order',
                 'view_event',
                 'view_any_event',
                 'create_event',
