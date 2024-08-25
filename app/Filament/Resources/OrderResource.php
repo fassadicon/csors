@@ -92,12 +92,15 @@ class OrderResource extends Resource
         ];
     }
 
-    // public static function getEloquentQuery(): Builder
-    // {
-    //     $caterer_id = auth()->user()->caterer->id;
-    //     return parent::getEloquentQuery()->where('caterer_id', $caterer_id)
-    //         ->withoutGlobalScopes([
-    //             SoftDeletingScope::class,
-    //         ]);
-    // }
+    public static function getEloquentQuery(): Builder
+    {
+        $caterer_id = auth()->user()->caterer->id;
+        return parent::getEloquentQuery()
+            ->whereHas('service', function ($query) use ($caterer_id) {
+                $query->where('caterer_id', $caterer_id);
+            })
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
 }

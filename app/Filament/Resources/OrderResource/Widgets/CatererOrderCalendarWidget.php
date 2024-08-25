@@ -16,8 +16,12 @@ class CatererOrderCalendarWidget extends FullCalendarWidget
      */
     public function fetchEvents(array $fetchInfo): array
     {
+        $caterer_id = auth()->user()->caterer->id;
 
         return Order::query()
+            ->whereHas('service', function ($query) use ($caterer_id) {
+                $query->where('caterer_id', $caterer_id);
+            })
             ->where('from', '>=', $fetchInfo['start'])
             ->where('to', '<=', $fetchInfo['end'])
             ->get()
