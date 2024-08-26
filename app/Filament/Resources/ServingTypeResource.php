@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ServingTypeResource\Pages;
 use App\Filament\Resources\ServingTypeResource\RelationManagers;
+use App\Filament\Resources\ServingTypeResource\RelationManagers\FoodDetailsRelationManager;
 use App\Models\ServingType;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -79,7 +80,7 @@ class ServingTypeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            FoodDetailsRelationManager::class,
         ];
     }
 

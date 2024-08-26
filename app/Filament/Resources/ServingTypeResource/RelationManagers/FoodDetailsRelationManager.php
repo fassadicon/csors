@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\FoodDetailResource\RelationManagers;
+namespace App\Filament\Resources\ServingTypeResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -10,25 +10,23 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ServingTypesRelationManager extends RelationManager
+class FoodDetailsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'servingTypes';
+    protected static string $relationship = 'foodDetails';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('caterer_id')
-                    ->relationship('caterer', 'name')
+                Forms\Components\Select::make('food_category_id')
+                    ->relationship('foodCategory', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('description')
-                    ->maxLength(255)
+                Forms\Components\Textarea::make('description')
+                    ->columnSpanFull(),
+                Forms\Components\FileUpload::make('image_path')
                     ->columnSpanFull(),
             ]);
     }
@@ -62,7 +60,12 @@ class ServingTypesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make()
-                    ->preloadRecordSelect(fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id))
+                    ->preloadRecordSelect(fn(Builder $query) => $query
+                        ->with('foodCategory')
+                        ->whereHas(
+                            'foodCategory',
+                            fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id)
+                        ))
                     ->form(fn(Tables\Actions\AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Forms\Components\TextInput::make('price')
