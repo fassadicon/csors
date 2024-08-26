@@ -82,6 +82,15 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Orders')
                     ->icon('heroicon-o-queue-list'),
                 NavigationGroup::make()
+                    ->label('Food Options')
+                    ->icon('heroicon-o-inbox'),
+                NavigationGroup::make()
+                    ->label('Package Options')
+                    ->icon('heroicon-o-inbox-stack'),
+                NavigationGroup::make()
+                    ->label('Other Products')
+                    ->icon('heroicon-o-lifebuoy'),
+                NavigationGroup::make()
                     ->label('Configuration')
                     ->icon('heroicon-o-adjustments-horizontal'),
                 NavigationGroup::make()
@@ -93,6 +102,9 @@ class AdminPanelProvider extends PanelProvider
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 \Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()
                     ->schedulerLicenseKey('CC-Attribution-NonCommercial-NoDerivatives')
-            ]);
+            ])
+            ->sidebarWidth('16rem')
+            ->sidebarCollapsibleOnDesktop();
+        // ->topNavigation();
     }
 }

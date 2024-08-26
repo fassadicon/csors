@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ServingTypeResource\Pages;
-use App\Filament\Resources\ServingTypeResource\RelationManagers;
-use App\Filament\Resources\ServingTypeResource\RelationManagers\FoodDetailsRelationManager;
-use App\Models\ServingType;
+use App\Filament\Resources\PromoResource\Pages;
+use App\Filament\Resources\PromoResource\RelationManagers;
+use App\Models\Promo;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,11 +13,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ServingTypeResource extends Resource
+class PromoResource extends Resource
 {
-    protected static ?string $model = ServingType::class;
+    protected static ?string $model = Promo::class;
 
-    protected static ?string $navigationGroup = 'Food Options';
+    protected static ?string $navigationGroup = 'Configuration';
 
     public static function form(Form $form): Form
     {
@@ -30,10 +29,19 @@ class ServingTypeResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('image_path')
-                    ->columnSpanFull(),
+                Forms\Components\Select::make('type')
+                    ->options([
+                        'percentage' => 'Percentage',
+                        'fixed' => 'Fixed',
+                    ])
+                    ->required(),
+                Forms\Components\TextInput::make('value')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\DatePicker::make('start_date')
+                    ->required(),
+                Forms\Components\DatePicker::make('end_date')
+                    ->required(),
             ]);
     }
 
@@ -42,12 +50,20 @@ class ServingTypeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
-                    ->visible(auth()->user()->hasRole('superadmin'))
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('type'),
+                Tables\Columns\TextColumn::make('value')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('start_date')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('end_date')
+                    ->date()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -80,17 +96,17 @@ class ServingTypeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            FoodDetailsRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListServingTypes::route('/'),
-            'create' => Pages\CreateServingType::route('/create'),
-            'view' => Pages\ViewServingType::route('/{record}'),
-            'edit' => Pages\EditServingType::route('/{record}/edit'),
+            'index' => Pages\ListPromos::route('/'),
+            'create' => Pages\CreatePromo::route('/create'),
+            'view' => Pages\ViewPromo::route('/{record}'),
+            'edit' => Pages\EditPromo::route('/{record}/edit'),
         ];
     }
 

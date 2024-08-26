@@ -18,7 +18,7 @@ class PackageResource extends Resource
 {
     protected static ?string $model = Package::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Package Options';
 
     public static function form(Form $form): Form
     {
@@ -123,4 +123,9 @@ class PackageResource extends Resource
     //             SoftDeletingScope::class,
     //         ]);
     // }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 }

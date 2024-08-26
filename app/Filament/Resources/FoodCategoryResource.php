@@ -19,7 +19,7 @@ class FoodCategoryResource extends Resource
 {
     protected static ?string $model = FoodCategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Food Options';
 
     public static function form(Form $form): Form
     {
@@ -100,5 +100,10 @@ class FoodCategoryResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }

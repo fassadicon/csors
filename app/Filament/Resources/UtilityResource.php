@@ -18,7 +18,7 @@ class UtilityResource extends Resource
 {
     protected static ?string $model = Utility::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Other Products';
 
     public static function form(Form $form): Form
     {
@@ -106,5 +106,10 @@ class UtilityResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }
