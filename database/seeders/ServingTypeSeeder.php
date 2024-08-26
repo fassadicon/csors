@@ -38,5 +38,10 @@ class ServingTypeSeeder extends Seeder
             'name' => 'Family Style',
             'description' => 'lorem ipsum dolor sit amet'
         ]);
+        ServingType::create([
+            'caterer_id' => 2,
+            'name' => 'Style by Test Caterer #1',
+            'description' => 'lorem ipsum dolor sit amet'
+        ]);
     }
 }

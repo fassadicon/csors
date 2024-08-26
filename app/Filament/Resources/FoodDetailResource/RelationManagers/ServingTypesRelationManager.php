@@ -3,12 +3,13 @@
 namespace App\Filament\Resources\FoodDetailResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use App\Models\Caterer;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class ServingTypesRelationManager extends RelationManager
 {
@@ -22,11 +23,11 @@ class ServingTypesRelationManager extends RelationManager
                     ->relationship('caterer', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                    ->required(),
                 Forms\Components\TextInput::make('price')
                     ->required()
-                    ->maxLength(255),
+                    ->prefix('₱')
+                    ->numeric(),
                 Forms\Components\TextInput::make('description')
                     ->maxLength(255)
                     ->columnSpanFull(),
@@ -62,9 +63,13 @@ class ServingTypesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make()
-                    ->preloadRecordSelect(fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id))
+                    ->recordSelectOptionsQuery(
+                        fn(Builder $query) => $query->whereBelongsTo(auth()->user()->caterer)
+                    )
+                    ->preloadRecordSelect()
                     ->form(fn(Tables\Actions\AttachAction $action): array => [
-                        $action->getRecordSelect(),
+                        $action->getRecordSelect()
+                            ->searchable(),
                         Forms\Components\TextInput::make('price')
                             ->numeric()
                             ->prefix('₱'),

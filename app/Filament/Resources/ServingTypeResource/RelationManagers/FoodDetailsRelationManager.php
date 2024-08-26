@@ -23,10 +23,13 @@ class FoodDetailsRelationManager extends RelationManager
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->prefix('₱')
                     ->maxLength(255),
+                Forms\Components\TextInput::make('price')
+                    ->numeric()
+                    ->required(),
+                Forms\Components\FileUpload::make('image_path'),
                 Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
-                Forms\Components\FileUpload::make('image_path')
                     ->columnSpanFull(),
             ]);
     }
@@ -60,12 +63,10 @@ class FoodDetailsRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make()
-                    ->preloadRecordSelect(fn(Builder $query) => $query
-                        ->with('foodCategory')
-                        ->whereHas(
-                            'foodCategory',
-                            fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id)
-                        ))
+                    ->recordSelectOptionsQuery(
+                        fn(Builder $query) => $query->whereBelongsTo(auth()->user()->caterer)
+                    )
+                    ->preloadRecordSelect()
                     ->form(fn(Tables\Actions\AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Forms\Components\TextInput::make('price')

@@ -42,5 +42,14 @@ class FoodDetailSeeder extends Seeder
             1 => ['price' => 400],
             5 => ['price' => 150],
         ]);
+
+        $steak = FoodDetail::create([
+            'food_category_id' => 2,
+            'name' => 'Beef Steak',
+            'description' => 'Salt Bae Inspired Steak',
+        ]);
+        $steak->servingTypes()->attach([
+            6 => ['price' => 650],
+        ]);
     }
 }

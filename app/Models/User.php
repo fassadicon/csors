@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable implements FilamentUser
 {
@@ -61,4 +62,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Feedback::class);
     }
+
+    // public function servingTypes(): HasManyThrough
+    // {
+    //     return $this->hasManyThrough(ServingType::class, Caterer::class);
+    // }
 }

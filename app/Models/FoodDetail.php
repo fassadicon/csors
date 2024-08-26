@@ -28,6 +28,11 @@ class FoodDetail extends Model
             ->withTimestamps();
     }
 
+    public function caterer(): BelongsTo
+    {
+        return $this->belongsTo(Caterer::class);
+    }
+
     public function foodCategory(): BelongsTo
     {
         return $this->belongsTo(FoodCategory::class);

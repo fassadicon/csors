@@ -20,6 +20,7 @@ class ServingType extends Model
         'image_path',
     ];
 
+
     public function foodDetails(): BelongsToMany
     {
         return $this->belongsToMany(FoodDetail::class, 'foods')

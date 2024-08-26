@@ -18,17 +18,31 @@ class UserSeeder extends Seeder
     {
         // Create Super Admin
         User::create([
+            'name' => 'fassadicon',
+            'last_name' => 'Sadicon',
+            'first_name' => 'Frans Audrey',
+            'middle_name' => 'Segovia',
+            'ext_name' => null,
+            'phone_number' => '09063406603',
+            'email' => 'sa@csors.com',
+            'is_customer' => 0,
+            'password' => bcrypt('qwe'),
+        ]);
+        Artisan::call('shield:super-admin --user=1');
+
+        // Create Super Admin
+        User::create([
             'name' => 'gdcbitongjr',
             'last_name' => 'Bitong',
             'first_name' => 'Gary',
             'middle_name' => 'Dela Cruz',
             'ext_name' => 'Jr',
             'phone_number' => '09063406601',
-            'email' => 'sa@csors.com',
+            'email' => 'caterer_1@csors.com',
             'is_customer' => 0,
             'password' => bcrypt('qwe'),
         ]);
-        Artisan::call('shield:super-admin --user=1');
+        // Artisan::call('shield:super-admin --user=1');
 
         // // Create Customer
         // User::create([

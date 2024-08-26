@@ -24,5 +24,11 @@ class FoodCategorySeeder extends Seeder
             'name' => 'Pork',
             'description' => 'Barrel',
         ]);
+
+        FoodCategory::create([
+            'caterer_id' => 2,
+            'name' => 'Beef',
+            'description' => 'Salt Bae',
+        ]);
     }
 }
