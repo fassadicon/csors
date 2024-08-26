@@ -44,7 +44,7 @@ class FoodDetailSeeder extends Seeder
         ]);
 
         $steak = FoodDetail::create([
-            'food_category_id' => 2,
+            'food_category_id' => 3,
             'name' => 'Beef Steak',
             'description' => 'Salt Bae Inspired Steak',
         ]);

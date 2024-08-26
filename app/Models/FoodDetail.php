@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class FoodDetail extends Model
 {
     use SoftDeletes;
+    use \Znck\Eloquent\Traits\BelongsToThrough;
 
     protected $fillable = [
         'food_category_id',
@@ -28,13 +27,13 @@ class FoodDetail extends Model
             ->withTimestamps();
     }
 
-    public function caterer(): BelongsTo
-    {
-        return $this->belongsTo(Caterer::class);
-    }
-
     public function foodCategory(): BelongsTo
     {
         return $this->belongsTo(FoodCategory::class);
+    }
+
+    public function caterer() : \Znck\Eloquent\Relations\BelongsToThrough
+    {
+        return $this->belongsToThrough(Caterer::class, FoodCategory::class);
     }
 }

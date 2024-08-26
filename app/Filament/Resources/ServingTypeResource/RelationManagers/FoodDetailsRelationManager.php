@@ -63,10 +63,14 @@ class FoodDetailsRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make()
-                    ->recordSelectOptionsQuery(
-                        fn(Builder $query) => $query->whereBelongsTo(auth()->user()->caterer)
-                    )
                     ->preloadRecordSelect()
+                    ->recordSelectOptionsQuery(
+                        fn(Builder $query) => $query->whereHas('foodCategory', function ($query) {
+                            $query->whereHas('caterer', function ($query) {
+                                $query->where('id', auth()->user()->caterer->id);
+                            });
+                        })
+                    )
                     ->form(fn(Tables\Actions\AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Forms\Components\TextInput::make('price')
