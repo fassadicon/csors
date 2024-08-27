@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id')->nullable();
-            // $table->morphs('product_type');
-            // $table->morphs('product_id');
+            $table->morphs('orderable');
+            $table->integer('quantity');
+            $table->decimal('amount', 8, 2);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
             // Order Seeders
 
             FeedbackSeeder::class,
+
+            OrderSeeder::class
         ]);
     }
 }
