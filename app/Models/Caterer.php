@@ -46,17 +46,22 @@ class Caterer extends Model
         )->with('foodDetail');
     }
 
-    public function events() : HasMany
+    public function events(): HasMany
     {
         return $this->hasMany(Event::class);
     }
 
-    // public function packages(): HasManyThrough
-    // {
-    //     return $this->hasManyThrough(Package::class, Event::class);
-    // }
-
-
+    public function packages(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Package::class,
+            Event::class,
+            'caterer_id',            // Foreign key on the events table (caterer_id in events)
+            'id',                    // Foreign key on the packages table (package_id, but here we're using the id)
+            'id',                    // Local key on the caterers table (id of caterer)
+            'id'                     // Local key on the events table (id of event, linked to the package)
+        );
+    }
 
     public function feedbacks(): HasMany
     {

@@ -12,5 +12,6 @@ Route::get('/', function () {
 Route::get('/test', function () {
     $caterer = Caterer::find(1);
 
-    dd($caterer->events->count());
+    dd($caterer->packages);
+    // dd($caterer->events);
 });

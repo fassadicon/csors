@@ -18,27 +18,33 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        $caterers = Caterer::all();
+        $caterers = Caterer::with('packages')->all();
 
+        // Packages
         foreach ($caterers as $caterer) {
-            $customer = User::inRandomOrder()->first()->pluck('id');
+            $customer = User::inRandomOrder()->pluck('id')->first();
 
-            $packageCount = $caterer->packages()->count();
+            $packages = $caterer->packages;
+            $packagesCount = $packages->count();
 
+            for ($i = 0; $i < $packagesCount; $i++) {
+                $package = $packages->random();
+                $quantity = rand(25, 100);
+                $orderItem = [
+                    'orderable_type' => get_class($package),
+                    'orderable_id' => $package->id,
+                    'quantity' => $quantity,
+                    'price' => $package->price * $quantity,
+                ];
+                $order = Order::create([
+                    'customer_id' => $customer,
+                    'caterer_id' => $caterer->id,
+                    'total' => $orderItem['price'],
+                ]);
 
-
-
-
-
-            // $orderItemsCount = rand(1, 3);
-            // $orderItems = [];
-
-            // for ($i = 0; $i < $orderItemsCount; $i++) {
-
-            // }
-
-
-
+                $orderItem['order_id'] = $order->id;
+                OrderItem::create($orderItem);
+            }
         }
     }
 }
