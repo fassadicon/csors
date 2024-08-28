@@ -50,6 +50,10 @@ class FoodDetailSeeder extends Seeder
         ]);
         $steak->servingTypes()->attach([
             6 => ['price' => 650],
+            7 => ['price' => 750],
+            8 => ['price' => 850],
+            9 => ['price' => 950],
+            10 => ['price' => 1150],
         ]);
     }
 }

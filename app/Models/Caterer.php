@@ -63,6 +63,11 @@ class Caterer extends Model
         );
     }
 
+    public function utilities(): HasMany
+    {
+        return $this->hasMany(Utility::class);
+    }
+
     public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);

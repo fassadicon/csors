@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Food;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Caterer;
@@ -18,33 +19,93 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        $caterers = Caterer::with('packages')->all();
+        $caterers = Caterer::all();
 
-        // Packages
         foreach ($caterers as $caterer) {
-            $customer = User::inRandomOrder()->pluck('id')->first();
+            // FOODS and UTILITIES
+            $foods = $caterer->foods;
+            $utilities = $caterer->utilities;
 
-            $packages = $caterer->packages;
-            $packagesCount = $packages->count();
-
-            for ($i = 0; $i < $packagesCount; $i++) {
-                $package = $packages->random();
+            for ($i = 0; $i < 15; $i++) {
+                $user = User::inRandomOrder()->pluck('id')->first();
+                // $orderedFoods = $foods->random(rand(2, 4));
+                $orderedFoods = Food::whereHas('servingType', function ($query) use ($caterer) {
+                    $query->where('caterer_id', $caterer->id);
+                });
+                $orderItems = [];
                 $quantity = rand(25, 100);
-                $orderItem = [
-                    'orderable_type' => get_class($package),
-                    'orderable_id' => $package->id,
-                    'quantity' => $quantity,
-                    'price' => $package->price * $quantity,
-                ];
+
+                // Foods
+                $foodsTotalAmount = 0;
+                foreach ($orderedFoods as $orderedFood) {
+                    $orderItem[] = [
+                        'orderable_type' => get_class($orderedFood),
+                        'orderable_id' => $orderedFood->id,
+                        'quantity' => $quantity,
+                        'amount' => $orderedFood->price * $quantity,
+                    ];
+                    $foodsTotalAmount += $orderedFood->price * $quantity;
+                }
+
+                // Utilities
+                // $orderedUtilities = $utilities->random(rand(1, 2));
+                // $utilitiesTotalAmount = 0;
+                // foreach ($orderedUtilities as $orderedUtility) {
+                //     $orderItem[] = [
+                //         'orderable_type' => get_class($orderedUtility),
+                //         'orderable_id' => $orderedUtility->id,
+                //         'quantity' => $quantity,
+                //         'amount' => $orderedUtility->price * $quantity,
+                //     ];
+                //     $utilitiesTotalAmount += $orderedUtility->price * $quantity;
+                // }
+
                 $order = Order::create([
-                    'customer_id' => $customer,
+                    'user_id' => $user,
                     'caterer_id' => $caterer->id,
-                    'total' => $orderItem['price'],
+                    'total_amount' => $foodsTotalAmount,
+                    // 'total_amount' => $foodsTotalAmount + $utilitiesTotalAmount,
                 ]);
 
-                $orderItem['order_id'] = $order->id;
-                OrderItem::create($orderItem);
+                foreach ($orderItems as $orderItem) {
+                    $orderItem['order_id'] = $order->id;
+                    OrderItem::create($orderItem);
+                }
             }
+
+            // Packages
+            $this->seedPackageOrders($caterer);
+        }
+    }
+
+
+    protected function seedPackageOrders($caterer): void
+    {
+        $user = User::inRandomOrder()->pluck('id')->first();
+
+        $packages = $caterer->packages;
+
+        for ($i = 0; $i < 5; $i++) {
+            $package = Package::whereHas('events', function ($query) use ($caterer) {
+                $query->where('caterer_id', $caterer->id);
+            })
+                ->inRandomOrder()->first();
+            // $package = $packages->random();
+            $quantity = rand(25, 100);
+            $orderItem = [
+                'orderable_type' => get_class($package),
+                'orderable_id' => $package->id,
+                'quantity' => $quantity,
+                'amount' => $package->price * $quantity,
+            ];
+            $order = Order::create([
+                'user_id' => $user,
+                'caterer_id' => $caterer->id,
+                'total_amount' => $orderItem['amount'],
+            ]);
+
+            $orderItem['order_id'] = $order->id;
+            OrderItem::create($orderItem);
         }
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Package extends Model
 {
     use SoftDeletes;
+    use \Znck\Eloquent\Traits\BelongsToThrough;
 
     protected $fillable = [
         'name',
@@ -30,4 +31,9 @@ class Package extends Model
     {
         return $this->morphMany(OrderItem::class, 'orderable');
     }
+
+    // public function caterer(): \Znck\Eloquent\Relations\BelongsToThrough
+    // {
+    //     return $this->belongsToThrough(Caterer::class, Event::class);
+    // }
 }

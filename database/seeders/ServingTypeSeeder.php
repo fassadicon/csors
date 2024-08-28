@@ -38,9 +38,31 @@ class ServingTypeSeeder extends Seeder
             'name' => 'Family Style',
             'description' => 'lorem ipsum dolor sit amet'
         ]);
+
+        // Caterer 2 Serving Types
         ServingType::create([
             'caterer_id' => 2,
-            'name' => 'Style by Test Caterer #1',
+            'name' => 'Buffet Style',
+            'description' => 'lorem ipsum dolor sit amet'
+        ]);
+        ServingType::create([
+            'caterer_id' => 2,
+            'name' => 'Boxed Meals',
+            'description' => 'lorem ipsum dolor sit amet'
+        ]);
+        ServingType::create([
+            'caterer_id' => 2,
+            'name' => 'Plated Service',
+            'description' => 'lorem ipsum dolor sit amet'
+        ]);
+        ServingType::create([
+            'caterer_id' => 2,
+            'name' => 'Refreshment Station',
+            'description' => 'lorem ipsum dolor sit amet'
+        ]);
+        ServingType::create([
+            'caterer_id' => 2,
+            'name' => 'Family Style',
             'description' => 'lorem ipsum dolor sit amet'
         ]);
     }

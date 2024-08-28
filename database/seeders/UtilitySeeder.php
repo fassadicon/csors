@@ -27,5 +27,19 @@ class UtilitySeeder extends Seeder
             'description' => 'Rent 50 pcs napkin',
             'price' => 200,
         ]);
+
+        Utility::create([
+            'caterer_id' => 2,
+            'name' => 'Golden Utensils',
+            'description' => 'Time is gold',
+            'price' => 300,
+        ]);
+
+        Utility::create([
+            'caterer_id' => 2,
+            'name' => 'Wine glass',
+            'description' => 'Classy drinks',
+            'price' => 400,
+        ]);
     }
 }

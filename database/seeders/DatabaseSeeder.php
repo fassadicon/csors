@@ -30,11 +30,10 @@ class DatabaseSeeder extends Seeder
             UtilitySeeder::class,
 
             PromoSeeder::class,
-            // Order Seeders
+
+            OrderSeeder::class,
 
             FeedbackSeeder::class,
-
-            OrderSeeder::class
         ]);
     }
 }

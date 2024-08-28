@@ -25,13 +25,35 @@ class PackageSeeder extends Seeder
         ]);
 
         $package = Package::create([
+            'name' => 'Josiah\'s Special',
+            'description' => 'Sarap Josiah',
+            'price' => 1000,
+        ]);
+
+        $package->events()->attach([
+            2,
+            4,
+        ]);
+
+        $package = Package::create([
             'name' => 'Santa\'s Special',
             'description' => 'Sarap Sagad Santa',
             'price' => 1000,
         ]);
 
         $package->events()->attach([
-            4,
+            6,
+            8,
+        ]);
+        $package = Package::create([
+            'name' => 'Gabe\'s Special',
+            'description' => 'Sarap Gabe',
+            'price' => 1000,
+        ]);
+
+        $package->events()->attach([
+            5,
+            7,
         ]);
     }
 }
