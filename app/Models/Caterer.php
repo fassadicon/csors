@@ -46,6 +46,18 @@ class Caterer extends Model
         )->with('foodDetail');
     }
 
+    public function events() : HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    // public function packages(): HasManyThrough
+    // {
+    //     return $this->hasManyThrough(Package::class, Event::class);
+    // }
+
+
+
     public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);

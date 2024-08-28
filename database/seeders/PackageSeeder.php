@@ -23,5 +23,15 @@ class PackageSeeder extends Seeder
             1,
             3,
         ]);
+
+        $package = Package::create([
+            'name' => 'Santa\'s Special',
+            'description' => 'Sarap Sagad Santa',
+            'price' => 1000,
+        ]);
+
+        $package->events()->attach([
+            4,
+        ]);
     }
 }

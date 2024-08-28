@@ -30,5 +30,11 @@ class EventSeeder extends Seeder
             'name' => 'Seminar',
             'description' => 'A seminar is a form of academic instruction, either at an academic institution or offered by a commercial or professional organization.'
         ]);
+
+        Event::create([
+            'caterer_id' => 1,
+            'name' => 'Party',
+            'description' => 'A seminar is a form of academic instruction, either at an academic institution or offered by a commercial or professional organization.'
+        ]);
     }
 }

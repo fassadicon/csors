@@ -10,7 +10,7 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function () {
-    $foodDetail = FoodDetail::find(1);
-    $caterer = $foodDetail->caterer;
-    dd($caterer);
+    $caterer = Caterer::find(1);
+
+    dd($caterer->events->count());
 });
