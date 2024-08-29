@@ -17,10 +17,10 @@ return new class extends Migration
             $table->foreignId('caterer_id')->constrained();
             $table->unsignedBigInteger('promo_id')->nullable();
             $table->unsignedBigInteger('payment_id')->nullable();
+            $table->dateTime('start');
+            $table->dateTime('end');
             $table->decimal('deducted_amount', 8, 2)->nullable();
             $table->decimal('total_amount', 8, 2);
-            // $table->dateTime('start');
-            // $table->dateTime('end');
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();

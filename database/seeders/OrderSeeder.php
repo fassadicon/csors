@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use App\Models\Food;
 use App\Models\User;
 use App\Models\Order;
@@ -23,9 +24,6 @@ class OrderSeeder extends Seeder
 
         foreach ($caterers as $caterer) {
             // FOODS and UTILITIES
-            $foods = $caterer->foods;
-            $utilities = $caterer->utilities;
-
             for ($i = 0; $i < 15; $i++) {
                 $user = User::inRandomOrder()->pluck('id')->first();
                 // $orderedFoods = $foods->random(rand(2, 4));
@@ -49,6 +47,7 @@ class OrderSeeder extends Seeder
                 }
 
                 // Utilities
+                $utilities = $caterer->utilities;
                 $orderedUtilities = $utilities->random(rand(1, 2));
                 $utilitiesTotalAmount = 0;
                 foreach ($orderedUtilities as $orderedUtility) {
@@ -61,11 +60,22 @@ class OrderSeeder extends Seeder
                     $utilitiesTotalAmount += $orderedUtility->price * $quantity;
                 }
 
+                // Randomly decide whether $start is before or after today
+                $direction = rand(0, 1) ? 'before' : 'after';
+                // Set $start to a date that is at least 7 days before or 7 days after today
+                $start = ($direction === 'before')
+                    ? Carbon::now()->subDays(rand(0, 14)) // Randomly between 7 and 14 days before today
+                    : Carbon::now()->addDays(rand(0, 14)); // Randomly between 7 and 14 days after today
+
+                // Set $end to a date and time that follows $start (e.g., 3 days and 5 hours after $start)
+                $end = $start->copy()->addDays(rand(1, 3))->addHours(rand(1, 16));
+
                 $order = Order::create([
                     'user_id' => $user,
                     'caterer_id' => $caterer->id,
+                    'start' => $start,
+                    'end' => $end,
                     'total_amount' => $foodsTotalAmount,
-                    // 'total_amount' => $foodsTotalAmount + $utilitiesTotalAmount,
                 ]);
 
                 foreach ($orderItems as $orderItem) {
@@ -99,11 +109,21 @@ class OrderSeeder extends Seeder
                 'quantity' => $quantity,
                 'amount' => $package->price * $quantity,
             ];
+
+            $direction = rand(0, 1) ? 'before' : 'after';
+            $start = ($direction === 'before')
+                ? Carbon::now()->subDays(rand(0, 14))
+                : Carbon::now()->addDays(rand(0, 14));
+
+            $end = $start->copy()->addDays(rand(1, 3))->addHours(rand(1, 16));
             $order = Order::create([
                 'user_id' => $user,
                 'caterer_id' => $caterer->id,
+                'start' => $start,
+                'end' => $end,
                 'total_amount' => $orderItem['amount'],
             ]);
+
 
             $orderItem['order_id'] = $order->id;
             OrderItem::create($orderItem);
