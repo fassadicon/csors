@@ -6,16 +6,20 @@ use Filament\Forms;
 use App\Models\Food;
 use Filament\Tables;
 use App\Models\Order;
+use App\Models\Promo;
 use App\Models\Package;
 use App\Models\Utility;
 use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Wizard;
+use Illuminate\Support\Facades\Blade;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MorphToSelect;
+use Filament\Forms\Components\Actions\Action;
 use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrderResource\RelationManagers;
@@ -26,19 +30,8 @@ class OrderResource extends Resource
 
     protected static ?string $navigationGroup = 'Orders';
 
-    public function getOrderableOptions($type)
-    {
-        switch ($type) {
-            case Package::class:
-                return Package::get()->pluck('name', 'id');
-            case Food::class:
-                return Food::get()->pluck('name', 'id');
-            case Utility::class:
-                return Utility::get()->pluck('name', 'id');
-            default:
-                return [];
-        }
-    }
+    // See
+    // https://laraveldaily.com/post/filament-repeater-live-calculations-on-update/
 
     public static function form(Form $form): Form
     {
@@ -46,27 +39,29 @@ class OrderResource extends Resource
             ->schema([
                 Wizard::make([
                     Wizard\Step::make('Details')
+                        ->icon('heroicon-m-bars-3-bottom-left')
                         ->columns([
                             'sm' => 1,
                             'xl' => 2,
                         ])
                         ->schema([
-                            // Forms\Components\Select::make('user_id')
-                            //     ->preload()
-                            //     ->relationship('user', 'name')
-                            //     ->required(),
-                            // Forms\Components\Select::make('caterer_id')
-                            //     ->preload()
-                            //     ->relationship('caterer', 'name')
-                            //     ->required(),
-                            // Forms\Components\DateTimePicker::make('start')
-                            //     ->required(),
-                            // Forms\Components\DateTimePicker::make('end')
-                            //     ->afterOrEqual('start')
-                            //     ->required(),
-                            // Forms\Components\Textarea::make('remarks'),
+                            Forms\Components\Select::make('user_id')
+                                ->preload()
+                                ->relationship('user', 'name')
+                                ->required(),
+                            Forms\Components\Select::make('caterer_id')
+                                ->preload()
+                                ->relationship('caterer', 'name')
+                                ->required(),
+                            Forms\Components\DateTimePicker::make('start')
+                                ->required(),
+                            Forms\Components\DateTimePicker::make('end')
+                                ->afterOrEqual('start')
+                                ->required(),
+                            Forms\Components\Textarea::make('remarks'),
                         ]),
                     Wizard\Step::make('Products')
+                        ->icon('heroicon-m-shopping-bag')
                         ->schema([
                             Forms\Components\Repeater::make('orderItems')
                                 ->columns([
@@ -74,32 +69,23 @@ class OrderResource extends Resource
                                     'xl' => 5,
                                 ])
                                 ->schema([
-                                    // MorphToSelect::make('orderable')
-                                    //     ->types([
-                                    //         MorphToSelect\Type::make(Package::class)
-                                    //             ->titleAttribute('name'),
-                                    //         MorphToSelect\Type::make(Food::class)
-                                    //             ->titleAttribute('title'),
-                                    //         MorphToSelect\Type::make(Utility::class)
-                                    //             ->titleAttribute('title'),
-                                    //     ]),
                                     Forms\Components\Select::make('orderable_type')
                                         ->label('Type')
                                         ->options([
-                                            'Food' => 'Food',
-                                            'Utility' => 'Utility',
-                                            'Package' => 'Package',
+                                            'App\Models\Food' => 'Food',
+                                            'App\Models\Utility' => 'Utility',
+                                            'App\Models\Package' => 'Package',
                                         ])
                                         ->live()
                                         ->required(),
                                     Forms\Components\Select::make('orderable_id')
                                         ->options(function (Get $get) {
                                             switch ($get('orderable_type')) {
-                                                case 'Package':
+                                                case 'App\Models\Package':
                                                     return Package::get()->pluck('name', 'id');
-                                                    // case 'Food':
-                                                    //     return Food::get()->pluck('name', 'id');
-                                                case 'Utility':
+                                                    // case 'App\Models\Food':
+                                                    //     return Food::get()->pluck('name', 'id');  // Food Detail and Serving Type
+                                                case 'App\Models\Utility':
                                                     return Utility::get()->pluck('name', 'id');
                                                 default:
                                                     return [];
@@ -110,7 +96,6 @@ class OrderResource extends Resource
                                         ->live()
                                         ->required()
                                         ->afterStateUpdated(function ($state, $get, $set) {
-                                            // Fetch price based on the selected value
                                             $orderableType = $get('orderable_type');
                                             $price = null;
 
@@ -123,48 +108,75 @@ class OrderResource extends Resource
                                                     break;
                                             }
 
-                                            // Set the price field with the fetched price
                                             $set('price', $price);
+                                            $quantity = $get('quantity') ?? 25;
+                                            $set('amount', $price * $quantity);
                                         }),
                                     Forms\Components\TextInput::make('price')
-                                        // ->formatStateUsing(function (Get $get) {
-                                        //     switch ($get('orderable_type')) {
-                                        //         case 'Package':
-                                        //             return Package::where('id', $get('orderable_id'))->first()->pluck('price');
-                                        //             // case 'Food':
-                                        //             //     return Food::where('id', $get['orderable_id'])->first()->pluck('price');
-                                        //         case 'Utility':
-                                        //             return Utility::where('id', $get('orderable_id'))->first()->pluck('price');
-                                        //         default:
-                                        //             return null;
-                                        //     }
-                                        // })
                                         ->live()
                                         ->readonly()
                                         ->required(),
                                     Forms\Components\TextInput::make('quantity')
-                                        ->required(),
+                                        ->live()
+                                        ->default(25)
+                                        ->required()
+                                        ->afterStateUpdated(function ($state, $get, $set) {
+                                            $set('amount', $get('price') * $state);
+                                        }),
                                     Forms\Components\TextInput::make('amount')
+                                        ->live()
+                                        ->readOnly()
                                         ->required(),
                                 ])
+                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                ->deleteAction(
+                                    fn (Action $action) => $action->requiresConfirmation(),
+                                )
                                 ->columns(2)
                         ]),
                     Wizard\Step::make('Billing')
+                        ->icon('heroicon-m-credit-card')
+                        ->columns([
+                            'sm' => 1,
+                            'xl' => 3,
+                        ])
                         ->schema([
                             Forms\Components\Select::make('promo_id')
                                 ->preload()
                                 ->relationship('promo', 'name')
-                                ->required(),
+                                ->nullable()
+                                ->afterStateUpdated(function ($state, $get, $set) {
+                                    $promo = $state ? Promo::find($state) : null;
+                                    $deductedAmount = 0;
+                                    if ($promo->type == 'percentage') {
+                                        $deductedAmount = $promo->value / 100 * $get('total_amount');
+                                    } else {
+                                        $deductedAmount = $promo->value;
+                                    }
+                                    $set('deducted_amount', $deductedAmount);
+                                }),
+                            Forms\Components\TextInput::make('deducted_amount')
+                                ->readOnly()
+                                ->default(0)
+                                ->prefix('₱')
+                                ->numeric(),
                             // Forms\Components\TextInput::make('payment_id')
-                            //     ->numeric(),
-                            // Forms\Components\TextInput::make('deducted_amount')
                             //     ->numeric(),
                             Forms\Components\TextInput::make('total_amount')
                                 ->prefix('₱')
                                 ->required()
                                 ->numeric(),
+                            // Get the sum from the order item repeater
                         ]),
                 ])
+                    // ->submitAction(new HtmlString(Blade::render(<<<BLADE
+                    //     <x-filament::button
+                    //         type="submit"
+                    //         size="sm"
+                    //     >
+                    //         Submit
+                    //     </x-filament::button>
+                    // BLADE))) // Find a way to remove the form button in create/edit form OR try to implement wizard directly into the resource
                     ->columnSpanFull()
             ]);
     }
