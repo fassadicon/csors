@@ -19,6 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_id')->nullable();
             $table->decimal('deducted_amount', 8, 2)->nullable();
             $table->decimal('total_amount', 8, 2);
+            // $table->dateTime('start');
+            // $table->dateTime('end');
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();

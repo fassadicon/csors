@@ -31,14 +31,15 @@ class OrderSeeder extends Seeder
                 // $orderedFoods = $foods->random(rand(2, 4));
                 $orderedFoods = Food::whereHas('servingType', function ($query) use ($caterer) {
                     $query->where('caterer_id', $caterer->id);
-                });
+                })->get();
+
                 $orderItems = [];
                 $quantity = rand(25, 100);
 
                 // Foods
                 $foodsTotalAmount = 0;
                 foreach ($orderedFoods as $orderedFood) {
-                    $orderItem[] = [
+                    $orderItems[] = [
                         'orderable_type' => get_class($orderedFood),
                         'orderable_id' => $orderedFood->id,
                         'quantity' => $quantity,
@@ -48,17 +49,17 @@ class OrderSeeder extends Seeder
                 }
 
                 // Utilities
-                // $orderedUtilities = $utilities->random(rand(1, 2));
-                // $utilitiesTotalAmount = 0;
-                // foreach ($orderedUtilities as $orderedUtility) {
-                //     $orderItem[] = [
-                //         'orderable_type' => get_class($orderedUtility),
-                //         'orderable_id' => $orderedUtility->id,
-                //         'quantity' => $quantity,
-                //         'amount' => $orderedUtility->price * $quantity,
-                //     ];
-                //     $utilitiesTotalAmount += $orderedUtility->price * $quantity;
-                // }
+                $orderedUtilities = $utilities->random(rand(1, 2));
+                $utilitiesTotalAmount = 0;
+                foreach ($orderedUtilities as $orderedUtility) {
+                    $orderItems[] = [
+                        'orderable_type' => get_class($orderedUtility),
+                        'orderable_id' => $orderedUtility->id,
+                        'quantity' => $quantity,
+                        'amount' => $orderedUtility->price * $quantity,
+                    ];
+                    $utilitiesTotalAmount += $orderedUtility->price * $quantity;
+                }
 
                 $order = Order::create([
                     'user_id' => $user,
