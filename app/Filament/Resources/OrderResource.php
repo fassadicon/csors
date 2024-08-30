@@ -128,9 +128,9 @@ class OrderResource extends Resource
                                         ->readOnly()
                                         ->required(),
                                 ])
-                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                // ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                 ->deleteAction(
-                                    fn (Action $action) => $action->requiresConfirmation(),
+                                    fn(Action $action) => $action->requiresConfirmation(),
                                 )
                                 ->columns(2)
                         ]),
@@ -189,8 +189,11 @@ class OrderResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('orderItems')
+                    ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall)
                     ->listWithLineBreaks()
                     ->bulleted()
+                    ->limitList(2)
+                    ->expandableLimitedList()
                     ->formatStateUsing(function ($state) {
                         $orderable_type = get_class($state->orderable);
                         if ($orderable_type === 'App\Models\Food') {
