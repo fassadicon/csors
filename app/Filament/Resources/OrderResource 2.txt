@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\Food;
 use Filament\Tables;
-use App\Models\Event;
 use App\Models\Order;
 use App\Models\Promo;
 use App\Models\Package;
@@ -94,51 +93,25 @@ class OrderResource extends Resource
                             ->label('Order List')
                             ->relationship('orderItems')
                             ->schema([
-                                Forms\Components\Select::make('orderable_type')
-                                    ->label('Type')
-                                    ->options([
-                                        'App\Models\Food' => 'Food',
-                                        'App\Models\Utility' => 'Utility',
-                                        'App\Models\Package' => 'Package',
-                                    ])
+                                Forms\Components\MorphToSelect::make('orderable')
+                                    ->label('Order Item')
+                                    ->columnSpan(2)
                                     ->live()
-                                    ->required(),
-                                Forms\Components\Select::make('orderable_id')
-                                    ->options(function (Get $get) {
-                                        if ($get('orderable_type') === 'App\Models\Package') {
-                                            return Package::whereBe('events', 1)
-                                                ->get()->pluck('name', 'id');
-                                        } else if ($get('orderable_type') === 'App\Models\Food') {
-                                            fn(Food $record): string =>
-                                            $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)";
-                                        } else if ($get('orderable_type') === 'App\Models\Utility') {
-                                            return Utility::get()->pluck('name', 'id');
+                                    ->types([
+                                        MorphToSelect\Type::make(Utility::class)
+                                            ->getOptionLabelFromRecordUsing(fn(Utility $record): string => "$record->name - (₱$record->price/[pc/set])"),
+                                        MorphToSelect\Type::make(Package::class)
+                                            ->getOptionLabelFromRecordUsing(fn(Package $record): string => "$record->name - (₱$record->price/pax)"),
+                                        MorphToSelect\Type::make(Food::class)
+                                            ->getOptionLabelFromRecordUsing(fn(Food $record): string =>
+                                            $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"),
+                                    ])
+                                    ->afterStateUpdated(function ($state, $get, $set, $record) {
+                                        dump($record);
+                                        if ($get('orderable_id') != null) {
+                                            $set('amount', $get('orderable_id'));
                                         }
                                     })
-                                    ->searchable()
-                                    ->preload()
-                                    ->live()
-                                    ->required()
-                                    ->afterStateUpdated(function ($state, $get, $set) {
-                                        $orderableType = $get('orderable_type');
-                                        $price = null;
-
-                                        switch ($orderableType) {
-                                            case 'Package':
-                                                $price = Package::find($state)?->price;
-                                                break;
-                                            case 'Utility':
-                                                $price = Utility::find($state)?->price;
-                                                break;
-                                        }
-
-                                        $set('price', $price);
-                                        $quantity = $get('quantity') ?? 25;
-                                        $set('amount', $price * $quantity);
-                                    }),
-                                Forms\Components\TextInput::make('price')
-                                    ->live()
-                                    ->readonly()
                                     ->required(),
                                 Forms\Components\TextInput::make('quantity')
                                     ->live()
