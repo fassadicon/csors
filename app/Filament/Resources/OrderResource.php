@@ -24,6 +24,7 @@ use Filament\Forms\Components\Actions\Action;
 use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrderResource\RelationManagers;
+use Ramsey\Uuid\Type\Decimal;
 
 class OrderResource extends Resource
 {
@@ -38,129 +39,133 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Split::make([
-                    Forms\Components\Section::make([
-                        Forms\Components\Select::make('user_id')
-                            ->preload()
-                            ->relationship('user', 'name')
-                            ->required(),
-                        Forms\Components\Select::make('caterer_id')
-                            ->preload()
-                            ->relationship('caterer', 'name')
-                            ->required(),
-                        Forms\Components\DateTimePicker::make('start')
-                            ->required(),
-                        Forms\Components\DateTimePicker::make('end')
-                            ->afterOrEqual('start')
-                            ->required(),
-                        Forms\Components\Textarea::make('remarks')
-                            ->nullable()
-                            ->columnSpanFull(),
-                        Forms\Components\Select::make('promo_id')
-                            ->preload()
-                            ->relationship('promo', 'name')
-                            ->nullable()
-                            ->afterStateUpdated(function ($state, $get, $set) {
-                                $promo = $state ? Promo::find($state) : null;
-                                $deductedAmount = 0;
-                                if ($promo->type == 'percentage') {
-                                    $deductedAmount = $promo->value / 100 * $get('total_amount');
-                                } else {
-                                    $deductedAmount = $promo->value;
-                                }
-                                $set('deducted_amount', $deductedAmount);
-                            }),
-                        Forms\Components\TextInput::make('deducted_amount')
-                            ->readOnly()
-                            ->default(0)
-                            ->prefix('₱')
-                            ->numeric(),
-                        // Forms\Components\TextInput::make('payment_id')
-                        //     ->numeric(),
-                        Forms\Components\TextInput::make('total_amount')
-                            ->prefix('₱')
-                            ->required()
-                            ->numeric()
-                            ->columnSpanFull()
-                            ->live(),
-                        // Get the sum from the order item repeater
-                    ])
-                        ->columns(2),
-                    Forms\Components\Section::make([
-                        Forms\Components\Repeater::make('orderItems')
-                            ->columns([
-                                'xl' => 2,
-                            ])
-                            ->label('Order List')
-                            ->relationship('orderItems')
-                            ->schema([
-                                Forms\Components\Select::make('orderable_type')
-                                    ->label('Type')
-                                    ->options([
-                                        'App\Models\Food' => 'Food',
-                                        'App\Models\Utility' => 'Utility',
-                                        'App\Models\Package' => 'Package',
-                                    ])
-                                    ->live()
-                                    ->required(),
-                                Forms\Components\Select::make('orderable_id')
-                                    ->options(function (Get $get) {
-                                        if ($get('orderable_type') === 'App\Models\Package') {
-                                            return Package::whereBe('events', 1)
-                                                ->get()->pluck('name', 'id');
-                                        } else if ($get('orderable_type') === 'App\Models\Food') {
-                                            fn(Food $record): string =>
-                                            $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)";
-                                        } else if ($get('orderable_type') === 'App\Models\Utility') {
-                                            return Utility::get()->pluck('name', 'id');
-                                        }
-                                    })
-                                    ->searchable()
-                                    ->preload()
-                                    ->live()
-                                    ->required()
-                                    ->afterStateUpdated(function ($state, $get, $set) {
-                                        $orderableType = $get('orderable_type');
-                                        $price = null;
-
-                                        switch ($orderableType) {
-                                            case 'Package':
-                                                $price = Package::find($state)?->price;
-                                                break;
-                                            case 'Utility':
-                                                $price = Utility::find($state)?->price;
-                                                break;
-                                        }
-
-                                        $set('price', $price);
-                                        $quantity = $get('quantity') ?? 25;
-                                        $set('amount', $price * $quantity);
-                                    }),
-                                Forms\Components\TextInput::make('price')
-                                    ->live()
-                                    ->readonly()
-                                    ->required(),
-                                Forms\Components\TextInput::make('quantity')
-                                    ->live()
-                                    ->default(25)
-                                    ->required()
-                                    ->afterStateUpdated(function ($state, $get, $set) {
-                                        $set('amount', $get('orderable'));
-                                    }),
-                                Forms\Components\TextInput::make('amount')
-                                    ->live()
-                                    ->readOnly()
-                                    ->required(),
-                            ])
-                            // ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                            ->deleteAction(
-                                fn(Action $action) => $action->requiresConfirmation(),
-                            )
-                    ])
+                Forms\Components\Section::make([
+                    Forms\Components\Select::make('user_id')
+                        ->preload()
+                        ->relationship('user', 'name')
+                        ->required(),
+                    Forms\Components\DateTimePicker::make('start')
+                        ->required(),
+                    Forms\Components\DateTimePicker::make('end')
+                        ->afterOrEqual('start')
+                        ->required(),
+                    Forms\Components\Select::make('caterer_id')
+                        ->preload()
+                        ->relationship('caterer', 'name')
+                        ->required(),
+                    Forms\Components\Textarea::make('remarks')
+                        ->nullable()
+                        ->columnSpan(fn() => auth()->user()->caterer ? 2 : 3),
                 ])
-                    ->columnSpanFull()
+                    ->columns(3),
+                Forms\Components\Section::make([
+                    Forms\Components\Repeater::make('orderItems')
+                        ->label('Order List')
+                        ->relationship('orderItems')
+                        ->schema([
+                            Forms\Components\MorphToSelect::make('orderable')
+                                ->label('Order Item')
+                                // ->columnSpan(2)
+                                ->live()
+                                ->required()
+                                ->types([
+                                    MorphToSelect\Type::make(Utility::class)
+                                        ->getOptionLabelFromRecordUsing(fn(Utility $record): string => "$record->name - (₱$record->price/[pc/set])"),
+                                    MorphToSelect\Type::make(Package::class)
+                                        ->getOptionLabelFromRecordUsing(fn(Package $record): string => "$record->name - (₱$record->price/pax)"),
+                                    MorphToSelect\Type::make(Food::class)
+                                        ->getOptionLabelFromRecordUsing(fn(Food $record): string =>
+                                        $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"),
+                                ])
+                                ->afterStateUpdated(function ($state, $get, $set) {
+                                    if ($state['orderable_id'] !== null) {
+                                        $orderItemPrice = static::getAmount($state['orderable_type'], $state['orderable_id']);
+                                        $set('amount', $orderItemPrice * $get('quantity'));
+                                        $set('../../total_amount', static::getTotalAmount($get('../')));
+                                    }
+                                })
+                                ->columnSpan(6),
+                            Forms\Components\TextInput::make('quantity')
+                                ->live()
+                                ->default(25)
+                                ->required()
+                                ->afterStateUpdated(function ($state, $get, $set) {
+                                    if ($get('orderable_id') !== null) {
+                                        $orderItemPrice = static::getAmount($get('orderable_type'), $get('orderable_id'));
+                                        $set('amount', $orderItemPrice * $state);
+                                        $set('../../total_amount', static::getTotalAmount($get('../')));
+                                    }
+                                })
+                                ->columnSpan(2),
+                            Forms\Components\TextInput::make('amount')
+                                ->prefix('₱')
+                                ->live()
+                                ->readOnly()
+                                ->required()
+                                ->columnSpan(4),
+                        ])
+                        ->reorderable()
+                        ->deleteAction(
+                            fn(Action $action) => $action->requiresConfirmation(),
+                        )
+                        ->columns(12)
+                ]),
+                Forms\Components\Section::make([
+                    Forms\Components\Select::make('promo_id')
+                        ->preload()
+                        ->relationship('promo', 'name')
+                        ->nullable()
+                        ->live()
+                        // ->readOnly(fn ($get) => $get('total_amount') > $get('deducted_amount'))
+                        ->afterStateUpdated(function ($state, $get, $set) {
+                            $promo = $state ? Promo::find($state) : null;
+                            $deductedAmount = 0;
+                            if ($promo->type == 'percentage') {
+                                $deductedAmount = $promo->value / 100 * $get('total_amount');
+                            } else {
+                                $deductedAmount = $promo->value;
+                            }
+                            $set('deducted_amount', $deductedAmount);
+                            $set('total_amount', $get('total_amount') - $deductedAmount);
+                        })
+                        ->columnSpan(2),
+                    Forms\Components\TextInput::make('deducted_amount')
+                        ->live()
+                        ->readOnly()
+                        ->default(0)
+                        ->prefix('₱')
+                        ->numeric()
+                        ->columnSpan(2),
+                    Forms\Components\TextInput::make('total_amount')
+                        ->prefix('₱')
+                        ->required()
+                        ->numeric()
+                        ->live()
+                        ->columnSpan(4),
+                ])
+                    ->columns(8)
 
             ]);
+    }
+
+    protected static function getAmount($orderableType, $orderableId): float
+    {
+        if ($orderableType === 'App\Models\Utility') {
+            return Utility::where('id', $orderableId)->pluck('price')->first();
+        } else if ($orderableType === 'App\Models\Package') {
+            return Package::where('id', $orderableId)->pluck('price')->first();
+        } else if ($orderableType === 'App\Models\Food') {
+            return Food::where('id', $orderableId)->pluck('price')->first();
+        }
+    }
+
+    protected static function getTotalAmount($orderItems): float
+    {
+        $totalAmount = 0;
+        foreach ($orderItems as $orderItem) {
+            $totalAmount += $orderItem['amount'];
+        }
+        return $totalAmount;
     }
 
     public static function table(Table $table): Table
