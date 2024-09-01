@@ -25,7 +25,7 @@ class OrderResource extends Resource
     protected static ?string $model = Order::class;
 
     protected static ?string $navigationGroup = 'Orders';
-
+    protected static ?string $navigationLabel = 'List';
     // See
     // https://laraveldaily.com/post/filament-repeater-live-calculations-on-update/
 

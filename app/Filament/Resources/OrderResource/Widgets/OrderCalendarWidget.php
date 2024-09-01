@@ -54,6 +54,18 @@ class OrderCalendarWidget extends FullCalendarWidget
             ->toArray();
     }
 
+    public function config(): array
+    {
+        return [
+            'headerToolbar' => [
+                'left' => 'prev,next today listMonth',
+                'center' => 'title',
+                'right' => 'dayGridMonth,timeGridWeek,timeGridDay',
+            ],
+            'navLinks' => 'true',
+        ];
+    }
+
     protected function headerActions(): array
     {
         return [
