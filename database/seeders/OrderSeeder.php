@@ -8,10 +8,8 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Caterer;
 use App\Models\Package;
-use App\Models\Utility;
 use App\Models\OrderItem;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class OrderSeeder extends Seeder
 {
@@ -60,15 +58,13 @@ class OrderSeeder extends Seeder
                     $utilitiesTotalAmount += $orderedUtility->price * $quantity;
                 }
 
-                // Randomly decide whether $start is before or after today
-                $direction = rand(0, 1) ? 'before' : 'after';
-                // Set $start to a date that is at least 7 days before or 7 days after today
+
+                $direction = rand(0, 1) ? 'before' : 'after'; // Randomly decide whether $start is before or after today
                 $start = ($direction === 'before')
                     ? Carbon::now()->subDays(rand(0, 14)) // Randomly between 7 and 14 days before today
                     : Carbon::now()->addDays(rand(0, 14)); // Randomly between 7 and 14 days after today
-
-                // Set $end to a date and time that follows $start (e.g., 3 days and 5 hours after $start)
-                $end = $start->copy()->addDays(rand(1, 3))->addHours(rand(1, 16));
+                $start->setTime(rand(7, 19), [0, 30][rand(0, 1)]); // start between 7am and 7pm, either sharp or 30 minutes past
+                $end = $start->copy()->addHour();
 
                 $order = Order::create([
                     'user_id' => $user,
@@ -76,6 +72,11 @@ class OrderSeeder extends Seeder
                     'start' => $start,
                     'end' => $end,
                     'total_amount' => $foodsTotalAmount,
+                    'status' => [
+                        'pending', // Unpaid
+                        'paid', // Paid
+                        'cancelled'
+                    ][rand(0, 2)],
                 ]);
 
                 foreach ($orderItems as $orderItem) {
@@ -94,8 +95,6 @@ class OrderSeeder extends Seeder
     {
         $user = User::inRandomOrder()->pluck('id')->first();
 
-        $packages = $caterer->packages;
-
         for ($i = 0; $i < 5; $i++) {
             $package = Package::whereHas('events', function ($query) use ($caterer) {
                 $query->where('caterer_id', $caterer->id);
@@ -110,12 +109,13 @@ class OrderSeeder extends Seeder
                 'amount' => $package->price * $quantity,
             ];
 
-            $direction = rand(0, 1) ? 'before' : 'after';
+            $direction = rand(0, 1) ? 'before' : 'after'; // Randomly decide whether $start is before or after today
             $start = ($direction === 'before')
-                ? Carbon::now()->subDays(rand(0, 14))
-                : Carbon::now()->addDays(rand(0, 14));
+                ? Carbon::now()->subDays(rand(0, 14)) // Randomly between 7 and 14 days before today
+                : Carbon::now()->addDays(rand(0, 14)); // Randomly between 7 and 14 days after today
+            $start->setTime(rand(7, 19), [0, 30][rand(0, 1)]); // start between 7am and 7pm, either sharp or 30 minutes past
+            $end = $start->copy()->addHour();
 
-            $end = $start->copy()->addDays(rand(1, 3))->addHours(rand(1, 16));
             $order = Order::create([
                 'user_id' => $user,
                 'caterer_id' => $caterer->id,

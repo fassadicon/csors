@@ -21,6 +21,8 @@ class Order extends Model
         'remarks',
         'start',
         'end',
+        'total_amount',
+        'status'
     ];
 
     public function user(): BelongsTo

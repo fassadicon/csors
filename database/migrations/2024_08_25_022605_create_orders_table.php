@@ -19,8 +19,15 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_id')->nullable();
             $table->dateTime('start');
             $table->dateTime('end');
-            $table->decimal('deducted_amount', 8, 2)->nullable();
             $table->decimal('total_amount', 8, 2);
+            $table->decimal('deducted_amount', 8, 2)->nullable();
+            $table->enum('status', [
+                'pending', // Unpaid
+                'paid', // Paid
+                'completed', // After the order timeframe
+                'cancelled'
+            ])
+                ->default('pending');
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();

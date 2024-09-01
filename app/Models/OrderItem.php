@@ -11,6 +11,13 @@ class OrderItem extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'orderable_type',
+        'orderable_id',
+        'quantity',
+        'amount'
+    ];
+
     public function orderable(): MorphTo
     {
         return $this->morphTo();

@@ -102,6 +102,10 @@ class AdminPanelProvider extends PanelProvider
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 \Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()
                     ->schedulerLicenseKey('CC-Attribution-NonCommercial-NoDerivatives')
+                // ->plugins([
+                //     'dayGrid',
+                //     'timeGrid',
+                // ])
             ])
             ->sidebarWidth('16rem')
             ->sidebarCollapsibleOnDesktop();
