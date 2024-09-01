@@ -16,7 +16,7 @@ class CalendarOrders extends Page
     protected static ?string $navigationLabel = 'Calendar';
     protected static ?string $slug = 'orders/calendar';
     protected ?string $heading = 'Orders Calendar';
-    protected static ?string $navigationGroup = 'Orders';
+    protected static ?string $navigationGroup = 'Order Management';
 
     protected function getHeaderWidgets(): array {
         return [

@@ -79,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('Orders')
+                    ->label('Order Management')
                     ->icon('heroicon-o-queue-list'),
                 NavigationGroup::make()
                     ->label('Food Options')

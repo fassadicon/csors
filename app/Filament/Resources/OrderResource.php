@@ -24,12 +24,12 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static ?string $navigationGroup = 'Orders';
-    protected static ?string $navigationLabel = 'List';
+    protected static ?string $navigationGroup = 'Order Management';
     // See
     // https://laraveldaily.com/post/filament-repeater-live-calculations-on-update/
 
-    public static function getFormSchema() : array {
+    public static function getFormSchema(): array
+    {
         return [
             Forms\Components\Section::make([
                 Forms\Components\Select::make('user_id')
@@ -294,5 +294,11 @@ class OrderResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('status', 'pending')
+            ->count();
     }
 }
