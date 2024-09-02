@@ -10,6 +10,8 @@ use App\Models\Order;
 use App\Models\Promo;
 use App\Models\Package;
 use App\Models\Utility;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Enums\OrderStatus;
 use Filament\Tables\Table;
@@ -27,8 +29,23 @@ class OrderResource extends Resource
     protected static ?string $model = Order::class;
 
     protected static ?string $navigationGroup = 'Order Management';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema(static::getFormSchema());
+    }
+
     // See
     // https://laraveldaily.com/post/filament-repeater-live-calculations-on-update/
+
+    // Repeater Component -  // Disable options that are already selected in other rows
+    // ->disableOptionWhen(function ($value, $state, Get $get) {
+    //     return collect($get('../*.product_id'))
+    //         ->reject(fn($id) => $id == $state)
+    //         ->filter()
+    //         ->contains($value);
+    // })
 
     public static function getFormSchema(): array
     {
@@ -39,17 +56,22 @@ class OrderResource extends Resource
                     ->relationship('user', 'name')
                     ->required(),
                 Forms\Components\DateTimePicker::make('start')
+                    ->date()
+                    ->beforeOrEqual('end')
                     ->required(),
                 Forms\Components\DateTimePicker::make('end')
+                    ->date()
                     ->afterOrEqual('start')
                     ->required(),
                 Forms\Components\Select::make('caterer_id')
                     ->preload()
                     ->relationship('caterer', 'name')
+                    ->default(auth()->user()->caterer->id)
+                    ->hidden(auth()->user()->hasRole('caterer'))
                     ->required(),
                 Forms\Components\Textarea::make('remarks')
                     ->nullable()
-                    ->columnSpan(fn() => auth()->user()->caterer ? 2 : 3),
+                    ->columnSpan(fn() => auth()->user()->hasRole('superadmin') ? 2 : 3),
             ])
                 ->columns(3),
             Forms\Components\Section::make([
@@ -59,7 +81,8 @@ class OrderResource extends Resource
                     ->schema([
                         Forms\Components\MorphToSelect::make('orderable')
                             ->label('Order Item')
-                            ->live()
+                            ->preload()
+                            ->searchable()
                             ->types([
                                 MorphToSelect\Type::make(Utility::class)
                                     ->getOptionLabelFromRecordUsing(fn(Utility $record): string => "$record->name - (₱$record->price/[pc/set])"),
@@ -70,24 +93,29 @@ class OrderResource extends Resource
                                     $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"),
                             ])
                             ->afterStateUpdated(function ($state, $get, $set) {
-                                if ($state['orderable_id'] !== null) {
-                                    $orderItemPrice = static::getAmount($state['orderable_type'], $state['orderable_id']);
-                                    $set('amount', $orderItemPrice * $get('quantity'));
-                                    $set('../../total_amount', static::getTotalAmount($get('../'), $get('../../deducted_amount')));
-                                }
+                                $set('amount', static::getAmount($state['orderable_type'], $state['orderable_id'], $get('quantity')));
+
+                                $totalAmount = static::getTotalAmount($get('../'));
+                                $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
+                                $set('../../deducted_amount', $deductedAmount);
+                                $set('../../total_amount', $totalAmount - $deductedAmount);
                             })
+                            ->live(debounce: 500)
                             ->required()
                             ->columnSpan(6),
                         Forms\Components\TextInput::make('quantity')
-                            ->live()
+                            ->minValue(1)
+                            ->live(debounce: 500)
                             ->default(25)
+                            ->integer()
                             ->required()
                             ->afterStateUpdated(function ($state, $get, $set) {
-                                if ($get('orderable_id') !== null) {
-                                    $orderItemPrice = static::getAmount($get('orderable_type'), $get('orderable_id'));
-                                    $set('amount', $orderItemPrice * $state);
-                                    $set('../../total_amount', static::getTotalAmount($get('../'), $get('../../deducted_amount')));
-                                }
+                                $set('amount', static::getAmount($get('orderable_type'), $get('orderable_id'), $state));
+
+                                $totalAmount = static::getTotalAmount($get('../'));
+                                $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
+                                $set('../../deducted_amount', $deductedAmount);
+                                $set('../../total_amount', $totalAmount - $deductedAmount);
                             })
                             ->columnSpan(2),
                         Forms\Components\TextInput::make('amount')
@@ -97,36 +125,32 @@ class OrderResource extends Resource
                             ->required()
                             ->columnSpan(4),
                     ])
+                    ->afterStateUpdated(function ($get, $set) {
+                        $totalAmount = static::getTotalAmount($get('orderItems'));
+                        $deductedAmount = static::getDeductedAmount($get('promo_id'), $totalAmount);
+                        $set('deducted_amount', $deductedAmount);
+                        $set('total_amount', $totalAmount - $deductedAmount);
+                    })
                     ->reorderable()
-                    ->deleteAction(
-                        function (Action $action, $get, $set) {
-                            // dump($get(''));
-                            $set('total_amount', static::getTotalAmount($get('orderItems'), $get('deducted_amount')));
-                            return $action->requiresConfirmation();
-                        },
-                    )
                     ->columns(12)
             ]),
             Forms\Components\Section::make([
                 Forms\Components\Select::make('promo_id')
                     ->preload()
-                    ->relationship('promo', 'name')
+                    ->relationship(
+                        name: 'promo',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn(Builder $query, Get $get) => $query->where('minimum', '<=', $get('total_amount')),
+                    )
                     ->nullable()
                     ->live()
                     ->hidden(fn($get) => $get('total_amount') <= 0)
                     ->afterStateUpdated(function ($state, $get, $set) {
-                        $promo = $state ? Promo::find($state) : null;
-                        $deductedAmount = 0;
-                        if ($promo->type == 'percentage') {
-                            $deductedAmount = ($promo->value / 100) * $get('total_amount');
-                        } else {
-                            $deductedAmount = $promo->value;
-                        }
-                        $set('deducted_amount', $deductedAmount);
-                        $set('total_amount',  static::getTotalAmount($get('orderItems'), $deductedAmount));
+                        $set('deducted_amount', static::getDeductedAmount($state, static::getTotalAmount($get('orderItems'))));
+                        $set('total_amount', static::getTotalAmount($get('orderItems')) - $get('deducted_amount'));
                     }),
                 Forms\Components\TextInput::make('deducted_amount')
-                    ->live()
+                    ->live(debounce: 500)
                     ->readOnly()
                     ->default(0)
                     ->prefix('- ₱')
@@ -138,7 +162,7 @@ class OrderResource extends Resource
                     ->prefix('₱')
                     ->required()
                     ->numeric()
-                    ->live(),
+                    ->live(debounce: 500),
                 Forms\Components\Select::make('order_status')
                     ->default(OrderStatus::Pending)
                     ->options(OrderStatus::class)
@@ -186,13 +210,9 @@ class OrderResource extends Resource
         ];
     }
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema(static::getFormSchema());
-    }
+    /* Order Form Custom Functions */
 
-    protected static function getTotalAmount($orderItems = null, $deductedAmount = 0): float
+    protected static function getTotalAmount($orderItems = null): float
     {
         if ($orderItems === null) {
             return 0;
@@ -202,18 +222,37 @@ class OrderResource extends Resource
         foreach ($orderItems as $orderItem) {
             $totalAmount += $orderItem['amount'];
         }
-        return $totalAmount - $deductedAmount;
+        return $totalAmount;
     }
 
-    protected static function getAmount($orderableType, $orderableId): float
+    protected static function getDeductedAmount(int $promoId = null, float $totalAmount): float
     {
-        if ($orderableType === 'App\Models\Utility') {
-            return Utility::where('id', $orderableId)->pluck('price')->first();
-        } else if ($orderableType === 'App\Models\Package') {
-            return Package::where('id', $orderableId)->pluck('price')->first();
-        } else if ($orderableType === 'App\Models\Food') {
-            return Food::where('id', $orderableId)->pluck('price')->first();
+        if ($promoId === null) {
+            return 0;
         }
+
+        $promo = Promo::find($promoId);
+
+        return $promo->type === 'percentage' ? ($promo->value / 100) * $totalAmount : $promo->value;
+    }
+
+    protected static function getAmount($orderableType, $orderableId, $quantity = 1): float
+    {
+        $amount = 0;
+
+        if ($orderableType !== null && $orderableId !== null) {
+            if ($orderableType === 'App\Models\Utility') {
+                $amount = Utility::where('id', $orderableId)->pluck('price')->first();
+            } else if ($orderableType === 'App\Models\Package') {
+                $amount = Package::where('id', $orderableId)->pluck('price')->first();
+            } else if ($orderableType === 'App\Models\Food') {
+                $amount = Food::where('id', $orderableId)->pluck('price')->first();
+            }
+
+            $amount = floatval($amount) * floatval($quantity);
+        }
+
+        return $amount;
     }
 
     public static function table(Table $table): Table

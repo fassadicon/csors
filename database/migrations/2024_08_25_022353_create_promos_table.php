@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->enum('type', ['percentage', 'fixed']);
             $table->decimal('value', 8, 2);
+            $table->decimal('minimum', 8, 2);
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

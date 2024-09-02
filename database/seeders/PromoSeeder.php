@@ -18,6 +18,7 @@ class PromoSeeder extends Seeder
             'name' => 'Less 500',
             'type' => 'fixed',
             'value' => 500,
+            'minimum' => 1000,
             'start_date' => '2024-01-01',
             'end_date' => '2024-12-31',
         ]);
@@ -27,6 +28,7 @@ class PromoSeeder extends Seeder
             'name' => '10% Discount',
             'type' => 'percentage',
             'value' => 10,
+            'minimum' => 500,
             'start_date' => '2024-01-01',
             'end_date' => '2024-12-31',
         ]);

@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PromoResource\Pages;
-use App\Filament\Resources\PromoResource\RelationManagers;
-use App\Models\Promo;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Promo;
+use Filament\Forms\Get;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PromoResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PromoResource\RelationManagers;
 
 class PromoResource extends Resource
 {
@@ -36,6 +37,13 @@ class PromoResource extends Resource
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('value')
+                    ->prefix(function (Get $get) {
+                        return $get('type') === 'percentage' ? '%' : '₱';
+                    })
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('minimum')
+                    ->prefix('₱')
                     ->required()
                     ->numeric(),
                 Forms\Components\DatePicker::make('start_date')
@@ -56,6 +64,10 @@ class PromoResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\TextColumn::make('value')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('minimum')
+                    ->money('php')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')

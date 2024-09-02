@@ -18,6 +18,7 @@ class Promo extends Model
         'value',
         'start_date',
         'end_date',
+        'minimum'
     ];
 
     public function caterer() : BelongsTo {
