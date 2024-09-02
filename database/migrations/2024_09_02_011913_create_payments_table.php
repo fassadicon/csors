@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained();
-            $table->string('status');
+            $table->string('status')->default('paid');
             $table->enum('type', [
                 'cash',
                 'online',

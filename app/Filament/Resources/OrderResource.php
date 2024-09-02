@@ -69,9 +69,11 @@ class OrderResource extends Resource
                     ->default(auth()->user()->caterer->id)
                     ->hidden(auth()->user()->hasRole('caterer'))
                     ->required(),
+                Forms\Components\Textarea::make('location')
+                    ->required(),
                 Forms\Components\Textarea::make('remarks')
                     ->nullable()
-                    ->columnSpan(fn() => auth()->user()->hasRole('superadmin') ? 2 : 3),
+                    ->columnSpan(fn() => auth()->user()->hasRole('superadmin') ? 1 : 2),
             ])
                 ->columns(3),
             Forms\Components\Section::make([
