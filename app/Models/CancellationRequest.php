@@ -7,18 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Payment extends Model
+class CancellationRequest extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
         'order_id',
         'status',
-        'type',
-        'method',
-        'amount',
-        'reference_no',
-        'remarks',
+        'reason',
+        'response',
     ];
 
     public function order() : BelongsTo {

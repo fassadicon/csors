@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MorphToSelect;
 use Filament\Forms\Components\Actions\Action;
 use App\Filament\Resources\OrderResource\Pages;
+use App\Filament\Resources\OrderResource\RelationManagers\CancellationRequestRelationManager;
+use Filament\Forms\FormsComponent;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderResource extends Resource
@@ -206,9 +208,37 @@ class OrderResource extends Resource
                         fn(Action $action) => $action->requiresConfirmation(),
                     )
                     ->columns(6)
+            ]),
+            Forms\Components\Section::make([
+                Forms\Components\Toggle::make('has_cancellation_request')
+                    ->label('Has Cancellation Request?')
+                    ->live()
+                    ->default(true),
+                Forms\Components\Group::make()
+                    ->label('Cancellation Request')
+                    ->relationship('cancellationRequest')
+                    ->live()
+                    ->visible(fn($get) => $get('has_cancellation_request'))
+                    ->schema([
+                        Forms\Components\Select::make('status')
+                            ->label('Cancellation Status')
+                            ->options([
+                                0 => 'Pending',
+                                1 => 'Declined',
+                                2 => 'Accepted',
+                            ])
+                            ->required(),
+                        Forms\Components\Textarea::make('reason')
+                            ->readOnlyOn('edit')
+                            ->required(),
+                        Forms\Components\Textarea::make('response')
+                            ->nullable()
+                            ->afterStateUpdated(function ($state, $get, $set) {
+                                dump($get('has_cancellation_request'));
+                            }),
+                    ])
+                    ->columns(3),
             ])
-                ->hidden(fn($get) => $get('total_amount') <= 0),
-
         ];
     }
 
@@ -355,9 +385,7 @@ class OrderResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

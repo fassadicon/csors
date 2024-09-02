@@ -67,4 +67,14 @@ class User extends Authenticatable implements FilamentUser
     // {
     //     return $this->hasManyThrough(ServingType::class, Caterer::class);
     // }
+
+    // public function cancellationRequests(): HasManyThrough
+    // {
+    //    orders->cancellationRequests
+    // }
+
+    // public function cancellationRequests(): HasManyThrough
+    // {
+    //    orders->payments
+    // }
 }

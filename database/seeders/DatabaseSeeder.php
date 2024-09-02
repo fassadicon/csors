@@ -33,7 +33,9 @@ class DatabaseSeeder extends Seeder
 
             OrderSeeder::class,
 
-            FeedbackSeeder::class,
+            CancellationRequestSeeder::class,
+
+            // FeedbackSeeder::class,
         ]);
     }
 }
