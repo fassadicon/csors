@@ -73,7 +73,7 @@ class OrderResource extends Resource
                                 if ($state['orderable_id'] !== null) {
                                     $orderItemPrice = static::getAmount($state['orderable_type'], $state['orderable_id']);
                                     $set('amount', $orderItemPrice * $get('quantity'));
-                                    $set('../../total_amount', static::getTotalAmount($get('../')));
+                                    $set('../../total_amount', static::getTotalAmount($get('../'), $get('../../deducted_amount')));
                                 }
                             })
                             ->required()
@@ -86,7 +86,7 @@ class OrderResource extends Resource
                                 if ($get('orderable_id') !== null) {
                                     $orderItemPrice = static::getAmount($get('orderable_type'), $get('orderable_id'));
                                     $set('amount', $orderItemPrice * $state);
-                                    $set('../../total_amount', static::getTotalAmount($get('../')));
+                                    $set('../../total_amount', static::getTotalAmount($get('../'), $get('../../deducted_amount')));
                                 }
                             })
                             ->columnSpan(2),
@@ -99,7 +99,11 @@ class OrderResource extends Resource
                     ])
                     ->reorderable()
                     ->deleteAction(
-                        fn(Action $action) => $action->requiresConfirmation(),
+                        function (Action $action, $get, $set) {
+                            // dump($get(''));
+                            $set('total_amount', static::getTotalAmount($get('orderItems'), $get('deducted_amount')));
+                            return $action->requiresConfirmation();
+                        },
                     )
                     ->columns(12)
             ]),
@@ -109,23 +113,25 @@ class OrderResource extends Resource
                     ->relationship('promo', 'name')
                     ->nullable()
                     ->live()
+                    ->hidden(fn($get) => $get('total_amount') <= 0)
                     ->afterStateUpdated(function ($state, $get, $set) {
                         $promo = $state ? Promo::find($state) : null;
                         $deductedAmount = 0;
                         if ($promo->type == 'percentage') {
-                            $deductedAmount = $promo->value / 100 * $get('total_amount');
+                            $deductedAmount = ($promo->value / 100) * $get('total_amount');
                         } else {
                             $deductedAmount = $promo->value;
                         }
                         $set('deducted_amount', $deductedAmount);
-                        $set('total_amount', $get('total_amount') - $deductedAmount);
+                        $set('total_amount',  static::getTotalAmount($get('orderItems'), $deductedAmount));
                     }),
                 Forms\Components\TextInput::make('deducted_amount')
                     ->live()
                     ->readOnly()
                     ->default(0)
                     ->prefix('- ₱')
-                    ->numeric(),
+                    ->numeric()
+                    ->hidden(fn($get) => $get('promo_id') === null),
                 Forms\Components\TextInput::make('total_amount')
                     ->readOnly()
                     ->default(0)
@@ -175,6 +181,7 @@ class OrderResource extends Resource
                     )
                     ->columns(6)
             ])
+                ->hidden(fn($get) => $get('total_amount') <= 0),
 
         ];
     }
@@ -183,6 +190,19 @@ class OrderResource extends Resource
     {
         return $form
             ->schema(static::getFormSchema());
+    }
+
+    protected static function getTotalAmount($orderItems = null, $deductedAmount = 0): float
+    {
+        if ($orderItems === null) {
+            return 0;
+        }
+
+        $totalAmount = 0;
+        foreach ($orderItems as $orderItem) {
+            $totalAmount += $orderItem['amount'];
+        }
+        return $totalAmount - $deductedAmount;
     }
 
     protected static function getAmount($orderableType, $orderableId): float
@@ -194,15 +214,6 @@ class OrderResource extends Resource
         } else if ($orderableType === 'App\Models\Food') {
             return Food::where('id', $orderableId)->pluck('price')->first();
         }
-    }
-
-    protected static function getTotalAmount($orderItems): float
-    {
-        $totalAmount = 0;
-        foreach ($orderItems as $orderItem) {
-            $totalAmount += $orderItem['amount'];
-        }
-        return $totalAmount;
     }
 
     public static function table(Table $table): Table

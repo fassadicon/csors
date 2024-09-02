@@ -25,8 +25,8 @@ class PromoSeeder extends Seeder
         Promo::create([
             'caterer_id' => 1,
             'name' => '10% Discount',
-            'type' => 'fixed',
-            'value' => 0.10,
+            'type' => 'percentage',
+            'value' => 10,
             'start_date' => '2024-01-01',
             'end_date' => '2024-12-31',
         ]);
