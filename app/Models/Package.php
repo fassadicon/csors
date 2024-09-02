@@ -20,6 +20,13 @@ class Package extends Model
         'image_path'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2'
+        ];
+    }
+
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class)

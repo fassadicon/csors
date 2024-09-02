@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,14 +18,24 @@ class Order extends Model
         'user_id',
         'caterer_id',
         'promo_id',
-        'payment_id',
         'deducted_amount',
+        'location',
         'remarks',
         'start',
         'end',
         'total_amount',
-        'status'
+        'payment_status',
+        'order_status',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'payment_status' => PaymentStatus::class,
+            'order_status' => OrderStatus::class,
+            'total_amount' => 'decimal:2'
+        ];
+    }
 
     public function user(): BelongsTo
     {
@@ -43,5 +55,10 @@ class Order extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 }

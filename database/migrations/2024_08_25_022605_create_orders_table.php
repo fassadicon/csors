@@ -16,18 +16,22 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('caterer_id')->constrained();
             $table->unsignedBigInteger('promo_id')->nullable();
-            $table->unsignedBigInteger('payment_id')->nullable();
             $table->dateTime('start');
             $table->dateTime('end');
+            $table->string('location');
             $table->decimal('total_amount', 8, 2);
             $table->decimal('deducted_amount', 8, 2)->nullable();
-            $table->enum('status', [
-                'pending', // Unpaid
-                'paid', // Paid
-                'completed', // After the order timeframe
+            $table->enum('payment_status', [
+                'pending',
+                'partial',
+                'paid',
+            ])->default('pending');
+            $table->enum('order_status', [
+                'pending',
+                'confirmed',
+                'completed',
                 'cancelled'
-            ])
-                ->default('pending');
+            ]);
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();

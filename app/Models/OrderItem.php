@@ -18,6 +18,13 @@ class OrderItem extends Model
         'amount'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'decimal:2'
+        ];
+    }
+
     public function orderable(): MorphTo
     {
         return $this->morphTo();

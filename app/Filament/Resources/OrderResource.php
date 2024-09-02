@@ -11,7 +11,9 @@ use App\Models\Promo;
 use App\Models\Package;
 use App\Models\Utility;
 use Filament\Forms\Form;
+use App\Enums\OrderStatus;
 use Filament\Tables\Table;
+use App\Enums\PaymentStatus;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
@@ -102,21 +104,11 @@ class OrderResource extends Resource
                     ->columns(12)
             ]),
             Forms\Components\Section::make([
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'pending' => 'Pending',
-                        'paid' => 'Paid',
-                        'completed' => 'Completed',
-                        'cancelled' => 'Cancelled',
-                    ])
-                    ->required()
-                    ->columnSpan(1),
                 Forms\Components\Select::make('promo_id')
                     ->preload()
                     ->relationship('promo', 'name')
                     ->nullable()
                     ->live()
-                    // ->readOnly(fn ($get) => $get('total_amount') > $get('deducted_amount'))
                     ->afterStateUpdated(function ($state, $get, $set) {
                         $promo = $state ? Promo::find($state) : null;
                         $deductedAmount = 0;
@@ -127,25 +119,62 @@ class OrderResource extends Resource
                         }
                         $set('deducted_amount', $deductedAmount);
                         $set('total_amount', $get('total_amount') - $deductedAmount);
-                    })
-                    ->columnSpan(2),
+                    }),
                 Forms\Components\TextInput::make('deducted_amount')
                     ->live()
                     ->readOnly()
                     ->default(0)
-                    ->prefix('₱')
-                    ->numeric()
-                    ->columnSpan(2),
+                    ->prefix('- ₱')
+                    ->numeric(),
                 Forms\Components\TextInput::make('total_amount')
                     ->readOnly()
                     ->default(0)
                     ->prefix('₱')
                     ->required()
                     ->numeric()
-                    ->live()
-                    ->columnSpan(3),
+                    ->live(),
+                Forms\Components\Select::make('order_status')
+                    ->default(OrderStatus::Pending)
+                    ->options(OrderStatus::class)
+                    ->required(),
             ])
-                ->columns(8)
+                ->columns(2),
+            Forms\Components\Section::make([
+                Forms\Components\Select::make('payment_status')
+                    ->default(PaymentStatus::Pending)
+                    ->options(PaymentStatus::class)
+                    ->live()
+                    ->required(),
+                Forms\Components\Repeater::make('payments')
+                    ->hidden(function ($get) {
+                        return $get('payment_status') === PaymentStatus::Pending;
+                    })
+                    ->relationship()
+                    ->schema([
+                        Forms\Components\TextInput::make('amount')
+                            ->label('Payment Amount')
+                            ->prefix('₱')
+                            ->columnSpan(2),
+                        Forms\Components\Select::make('type')
+                            ->label('Type')
+                            ->options([
+                                'cash' => 'Cash',
+                                'online' => 'Online',
+                                'manual' => 'Manual',
+                            ])
+                            ->required(),
+                        Forms\Components\TextInput::make('method')
+                            ->label('Method'),
+                        Forms\Components\TextInput::make('reference_no')
+                            ->label('Reference Number')
+                            ->columnSpan(2),
+                    ])
+                    ->reorderable()
+                    ->deleteAction(
+                        fn(Action $action) => $action->requiresConfirmation(),
+                    )
+                    ->columns(6)
+            ])
 
         ];
     }
@@ -200,32 +229,33 @@ class OrderResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('start')
                     ->sortable()
-                    ->dateTime('M j, Y g:i A'),
+                    ->dateTime('M j, Y g:i A')
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('end')
                     ->sortable()
-                    ->dateTime('M j, Y g:i A'),
+                    ->dateTime('M j, Y g:i A')
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('caterer.name')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('status')
+                Tables\Columns\TextColumn::make('payment_status')
                     ->searchable()
                     ->sortable()
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        'pending' => 'amber',
-                        'paid' => 'green',
-                        'completed' => 'blue',
-                        'cancelled' => 'red',
-                    }),
+                    ->badge(),
+                Tables\Columns\TextColumn::make('order_status')
+                    ->searchable()
+                    ->sortable()
+                    ->badge(),
                 Tables\Columns\TextColumn::make('promo_id')
                     ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('payment_id')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                // INSERT PAYMENTS HERE
+                // Tables\Columns\TextColumn::make('payment_id')
+                //     ->numeric()
+                //     ->sortable()
+                //     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deducted_amount')
                     ->money('php')
                     ->numeric()
@@ -298,7 +328,7 @@ class OrderResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('status', 'pending')
+        return static::getModel()::where('created_at', '>=', today())
             ->count();
     }
 }

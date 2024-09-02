@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use Carbon\Carbon;
 use App\Models\Food;
 use App\Models\User;
@@ -16,6 +18,16 @@ class OrderSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+
+    protected $paymentStatuses;
+    protected $orderStatuses;
+
+    public function __construct()
+    {
+        $this->paymentStatuses = PaymentStatus::cases();
+        $this->orderStatuses = OrderStatus::cases();
+    }
+
     public function run(): void
     {
         $caterers = Caterer::all();
@@ -72,11 +84,9 @@ class OrderSeeder extends Seeder
                     'start' => $start,
                     'end' => $end,
                     'total_amount' => $foodsTotalAmount,
-                    'status' => [
-                        'pending', // Unpaid
-                        'paid', // Paid
-                        'cancelled'
-                    ][rand(0, 2)],
+                    'location' => 'test',
+                    'payment_status' => $this->paymentStatuses[array_rand($this->paymentStatuses)],
+                    'order_status' => $this->orderStatuses[array_rand($this->orderStatuses)],
                 ]);
 
                 foreach ($orderItems as $orderItem) {
@@ -122,6 +132,9 @@ class OrderSeeder extends Seeder
                 'start' => $start,
                 'end' => $end,
                 'total_amount' => $orderItem['amount'],
+                'location' => 'test',
+                'payment_status' => $this->paymentStatuses[array_rand($this->paymentStatuses)],
+                'order_status' => $this->orderStatuses[array_rand($this->orderStatuses)],
             ]);
 
 

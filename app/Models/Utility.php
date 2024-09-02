@@ -20,6 +20,13 @@ class Utility extends Model
         'price',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2'
+        ];
+    }
+
     public function caterer(): BelongsTo
     {
         return $this->belongsTo(Caterer::class);

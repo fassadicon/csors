@@ -19,6 +19,13 @@ class Food extends Pivot
         'price'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2'
+        ];
+    }
+
     public function foodDetail(): BelongsTo
     {
         return $this->belongsTo(FoodDetail::class);
