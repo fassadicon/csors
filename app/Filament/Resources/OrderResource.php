@@ -38,17 +38,6 @@ class OrderResource extends Resource
             ->schema(static::getFormSchema());
     }
 
-    // See
-    // https://laraveldaily.com/post/filament-repeater-live-calculations-on-update/
-
-    // Repeater Component -  // Disable options that are already selected in other rows
-    // ->disableOptionWhen(function ($value, $state, Get $get) {
-    //     return collect($get('../*.product_id'))
-    //         ->reject(fn($id) => $id == $state)
-    //         ->filter()
-    //         ->contains($value);
-    // })
-
     public static function getFormSchema(): array
     {
         return [
@@ -210,15 +199,10 @@ class OrderResource extends Resource
                     ->columns(6)
             ]),
             Forms\Components\Section::make([
-                Forms\Components\Toggle::make('has_cancellation_request')
-                    ->label('Has Cancellation Request?')
-                    ->live()
-                    ->default(true),
                 Forms\Components\Group::make()
                     ->label('Cancellation Request')
                     ->relationship('cancellationRequest')
                     ->live()
-                    ->visible(fn($get) => $get('has_cancellation_request'))
                     ->schema([
                         Forms\Components\Select::make('status')
                             ->label('Cancellation Status')
@@ -232,13 +216,11 @@ class OrderResource extends Resource
                             ->readOnlyOn('edit')
                             ->required(),
                         Forms\Components\Textarea::make('response')
-                            ->nullable()
-                            ->afterStateUpdated(function ($state, $get, $set) {
-                                dump($get('has_cancellation_request'));
-                            }),
+                            ->nullable(),
                     ])
                     ->columns(3),
             ])
+                ->visible(fn($record) => $record->cancellationRequest !== null)
         ];
     }
 
