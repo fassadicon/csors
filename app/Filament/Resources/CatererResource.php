@@ -44,7 +44,9 @@ class CatererResource extends Resource
                     ->label('Business Requirements (.zip)'),
                 TinyEditor::make('about')
                     ->columnSpanFull(),
-
+                Forms\Components\Toggle::make('is_verified')
+                    ->label('Verified?')
+                    ->required(),
             ]);
     }
 

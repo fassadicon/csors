@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone_number')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->unsignedTinyInteger('is_customer')->default(1);
+            $table->unsignedTinyInteger('is_verified')->default(0);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -20,6 +20,7 @@ class Caterer extends Model
         'about',
         'logo_path',
         'requirements_path',
+        'is_verified',
     ];
 
     public function user(): BelongsTo
