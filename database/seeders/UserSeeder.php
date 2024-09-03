@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
         Artisan::call('shield:super-admin --user=1');
 
         // Create Super Admin
-        User::create([
+        $test_1_caterer = User::create([
             'name' => 'gdcbitongjr',
             'last_name' => 'Bitong',
             'first_name' => 'Gary',
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
             'is_customer' => 0,
             'password' => bcrypt('qwe'),
         ]);
-        // Artisan::call('shield:super-admin --user=1');
+        $test_1_caterer->assignRole('caterer');
 
         // // Create Customer
         // User::create([

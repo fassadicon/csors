@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\CatererRegister;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
@@ -28,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration(CatererRegister::class)
             ->colors([
                 'primary' => Color::Blue,
                 'slate' => Color::Slate,

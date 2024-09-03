@@ -16,15 +16,42 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         Artisan::call('shield:generate --all');
+        $superadmin = Role::where(['name' => 'superadmin'])->first();
+        $superadmin->revokePermissionTo('page_EditCatererPage');
 
-        // $caterer = Role::create(['name' => 'caterer']);
-        // $catererpermissions = Permission::whereIn(
-        //     'name',
-        //     [
-
-        //     ]
-        // )
-        //     ->get();
-        // $caterer->syncPermissions($catererpermissions);
+        $caterer = Role::create(['name' => 'caterer']);
+        $catererpermissions = Permission::whereNotIn(
+            'name',
+            [
+                'view_user',
+                'view_any_user',
+                'create_user',
+                'update_user',
+                'restore_user',
+                'restore_any_user',
+                'replicate_user',
+                'reorder_user',
+                'delete_user',
+                'delete_any_user',
+                'view_role',
+                'view_any_role',
+                'create_role',
+                'update_role',
+                'delete_role',
+                'delete_any_role',
+                'view_caterer',
+                'view_any_caterer',
+                'create_caterer',
+                'update_caterer',
+                'restore_caterer',
+                'restore_any_caterer',
+                'replicate_caterer',
+                'reorder_caterer',
+                'delete_caterer',
+                'delete_any_caterer',
+            ]
+        )
+            ->get();
+        $caterer->syncPermissions($catererpermissions);
     }
 }

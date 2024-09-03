@@ -18,7 +18,7 @@ class CatererResource extends Resource
 {
     protected static ?string $model = Caterer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Authorization';
 
     public static function form(Form $form): Form
     {
@@ -41,7 +41,7 @@ class CatererResource extends Resource
                     ->label('Logo')
                     ->image(),
                 Forms\Components\FileUpload::make('requirements_path')
-                    ->label('Requirements (.zip)'),
+                    ->label('Business Requirements (.zip)'),
                 TinyEditor::make('about')
                     ->columnSpanFull(),
 
@@ -80,6 +80,8 @@ class CatererResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -113,5 +115,10 @@ class CatererResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }

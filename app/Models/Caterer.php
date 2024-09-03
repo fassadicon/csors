@@ -14,8 +14,12 @@ class Caterer extends Model
 
     protected $fillable = [
         'user_id',
+        'email',
+        'phone_number',
         'name',
-        'description',
+        'about',
+        'logo_path',
+        'requirements_path',
     ];
 
     public function user(): BelongsTo

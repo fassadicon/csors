@@ -28,6 +28,11 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'last_name',
+        'first_name',
+        'middle_name',
+        'ext_name',
+        'phone_number'
     ];
 
     /**
@@ -73,7 +78,7 @@ class User extends Authenticatable implements FilamentUser
     //    orders->cancellationRequests
     // }
 
-    // public function cancellationRequests(): HasManyThrough
+    // public function payments(): HasManyThrough
     // {
     //    orders->payments
     // }
