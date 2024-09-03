@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\CancellationRequestStatus;
-use App\Filament\Resources\CancellationRequestResource\Pages;
-use App\Filament\Resources\CancellationRequestResource\RelationManagers;
-use App\Models\CancellationRequest;
+use App\Filament\Resources\CatererResource\Pages;
+use App\Filament\Resources\CatererResource\RelationManagers;
+use App\Models\Caterer;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,30 +12,39 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
-class CancellationRequestResource extends Resource
+class CatererResource extends Resource
 {
-    protected static ?string $model = CancellationRequest::class;
+    protected static ?string $model = Caterer::class;
 
-    protected static ?string $navigationGroup = 'Order Management';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('order_id')
-                    ->searchable()
-                    ->preload()
-                    ->relationship('order', 'id')
+                Forms\Components\Select::make('user_id')
+                    ->relationship('user', 'name')
                     ->required(),
-                Forms\Components\Select::make('status')
-                    ->default(CancellationRequestStatus::Pending)
-                    ->options(CancellationRequestStatus::class)
-                    ->required(),
-                Forms\Components\Textarea::make('reason')
-                    ->required(),
-                Forms\Components\Textarea::make('response')
-                    ->nullable(),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('phone_number')
+                    ->tel()
+                    ->maxLength(255),
+                Forms\Components\FileUpload::make('logo_path')
+                    ->label('Logo')
+                    ->image(),
+                Forms\Components\FileUpload::make('requirements_path')
+                    ->label('Requirements (.zip)'),
+                TinyEditor::make('about')
+                    ->columnSpanFull(),
+
             ]);
     }
 
@@ -44,19 +52,15 @@ class CancellationRequestResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('order.id')
+                Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('order.user.name')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('reason')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('response'),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone_number')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -72,13 +76,10 @@ class CancellationRequestResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-                Tables\Filters\SelectFilter::make('status')
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -99,10 +100,10 @@ class CancellationRequestResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCancellationRequests::route('/'),
-            'create' => Pages\CreateCancellationRequest::route('/create'),
-            'view' => Pages\ViewCancellationRequest::route('/{record}'),
-            'edit' => Pages\EditCancellationRequest::route('/{record}/edit'),
+            'index' => Pages\ListCaterers::route('/'),
+            'create' => Pages\CreateCaterer::route('/create'),
+            'view' => Pages\ViewCaterer::route('/{record}'),
+            'edit' => Pages\EditCaterer::route('/{record}/edit'),
         ];
     }
 
@@ -112,11 +113,5 @@ class CancellationRequestResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::where('status', 'pending')
-            ->count();
     }
 }

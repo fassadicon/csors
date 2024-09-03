@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('phone_number')->unique()->nullable();
             $table->text('about')->nullable();
             $table->text('logo_path')->nullable();
+            $table->text('requirements_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
