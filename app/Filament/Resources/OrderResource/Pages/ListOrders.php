@@ -49,15 +49,15 @@ class ListOrders extends ListRecords
                 ->modifyQueryUsing(fn() => $this->getOrderByOrderStatus(OrderStatus::Cancelled))
                 ->badge($this->getOrderByOrderStatus(OrderStatus::Cancelled)->count())
                 ->badgeColor('danger'),
-            'payment_pending' => Tab::make()
+            'payment_pending' => Tab::make('Pending Payment')
                 ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Pending))
                 ->badge($this->getOrderByPaymentStatus(PaymentStatus::Pending)->count())
                 ->badgeColor('amber'),
-            'payment_partial' => Tab::make()
+            'payment_partial' => Tab::make('Partial Payment')
                 ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Partial))
                 ->badge($this->getOrderByPaymentStatus(PaymentStatus::Partial)->count())
                 ->badgeColor('blue'),
-            'payment_paid' => Tab::make()
+            'payment_paid' => Tab::make('Paid Payment')
                 ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Paid))
                 ->badge($this->getOrderByPaymentStatus(PaymentStatus::Paid)->count())
                 ->badgeColor('success'),

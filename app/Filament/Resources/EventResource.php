@@ -108,6 +108,8 @@ class EventResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getModel()::when(auth()->user()->hasRole('caterer'), function ($query) {
+            $query->where('caterer_id', auth()->user()->caterer->id);
+        })->count();
     }
 }
