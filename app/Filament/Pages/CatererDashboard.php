@@ -7,7 +7,7 @@ use Filament\Pages\Page;
 
 class CatererDashboard extends Dashboard
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-home';
 
     protected static string $view = 'filament.pages.caterer-dashboard';
 

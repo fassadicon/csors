@@ -13,11 +13,13 @@ use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
     use HasRoles, HasPanelShield;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +36,7 @@ class User extends Authenticatable implements FilamentUser
         'ext_name',
         'phone_number',
         'is_verified',
+        'is_customer',
     ];
 
     /**
@@ -67,6 +70,11 @@ class User extends Authenticatable implements FilamentUser
     public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 
     // public function servingTypes(): HasManyThrough

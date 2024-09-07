@@ -44,6 +44,19 @@ class UserSeeder extends Seeder
         ]);
         $test_1_caterer->assignRole('caterer');
 
+         // Create Super Admin
+         $test_1_customer = User::create([
+            'name' => 'mfssadicon',
+            'last_name' => 'Sadicon',
+            'first_name' => 'Marian Faye',
+            'middle_name' => 'Segovia',
+            'ext_name' => null,
+            'phone_number' => '09063406602',
+            'email' => 'customer_1@csors.com',
+            'is_customer' => 1,
+            'password' => bcrypt('qwe'),
+        ]);
+
         // // Create Customer
         // User::create([
         //     'name' => 'fassadicon',
