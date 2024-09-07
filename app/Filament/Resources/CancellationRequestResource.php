@@ -109,6 +109,9 @@ class CancellationRequestResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->whereHas('order', function ($query) {
+                $query->where('caterer_id', auth()->user()->caterer->id);
+            })
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
@@ -116,7 +119,10 @@ class CancellationRequestResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('status', 'pending')
+        return static::getModel()::whereHas('order', function ($query) {
+            $query->where('caterer_id', auth()->user()->caterer->id);
+        })
+            ->where('status', 'pending')
             ->count();
     }
 }

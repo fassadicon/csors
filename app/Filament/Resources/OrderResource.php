@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\Food;
 use Filament\Tables;
-use App\Models\Event;
 use App\Models\Order;
 use App\Models\Promo;
 use App\Models\Package;
@@ -22,8 +21,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MorphToSelect;
 use Filament\Forms\Components\Actions\Action;
 use App\Filament\Resources\OrderResource\Pages;
-use App\Filament\Resources\OrderResource\RelationManagers\CancellationRequestRelationManager;
-use Filament\Forms\FormsComponent;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderResource extends Resource
@@ -346,6 +343,12 @@ class OrderResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('payment_status')
+                    ->multiple()
+                    ->options(PaymentStatus::class),
+                Tables\Filters\SelectFilter::make('order_status')
+                    ->multiple()
+                    ->options(OrderStatus::class),
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
@@ -383,6 +386,7 @@ class OrderResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->where('caterer_id', auth()->user()->caterer->id)
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
@@ -391,6 +395,12 @@ class OrderResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('created_at', '>=', today())
+            ->where('caterer_id', auth()->user()->caterer->id)
+            ->where(function ($query) {
+                $query->where('order_status', OrderStatus::Pending)
+                    ->orWhere('payment_status', PaymentStatus::Pending)
+                    ->orWhereIn('payment_status', [PaymentStatus::Pending, PaymentStatus::Partial]);
+            })
             ->count();
     }
 }

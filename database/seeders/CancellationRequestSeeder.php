@@ -30,7 +30,7 @@ class CancellationRequestSeeder extends Seeder
         ]);
 
         CancellationRequest::create([
-            'order_id' => 3,
+            'order_id' => 21,
             'status' => CancellationRequestStatus::Approved,
             'reason' => 'Too slow to respond!',
             'response' => 'Refund ongoing. Sorry for the inconvenience.',
