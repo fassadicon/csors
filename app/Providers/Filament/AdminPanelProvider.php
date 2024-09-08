@@ -2,15 +2,17 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Pages\Auth\CatererRegister;
-use App\Filament\Pages\CatererDashboard;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
+use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
+use App\Filament\Pages\EditProfilePage;
+use App\Filament\Pages\CatererDashboard;
 use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\Authenticate;
+use App\Filament\Pages\Auth\CatererRegister;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -31,6 +33,12 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->registration(CatererRegister::class)
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Profile')
+                    ->url(fn(): string => EditProfilePage::getUrl())
+                    ->icon('heroicon-o-user'),
+            ])
             ->colors([
                 'primary' => Color::Blue,
                 'slate' => Color::Slate,

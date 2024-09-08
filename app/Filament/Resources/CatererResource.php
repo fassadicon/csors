@@ -50,11 +50,14 @@ class CatererResource extends Resource
                 Forms\Components\FileUpload::make('logo_path')
                     ->directory('caterers/' . auth()->user()->caterer->id . '/images/logo')
                     ->label('Logo')
-                    ->image(),
+                    ->image()
+                    ->nullable()
+                    ->visibleOn('edit'),
                 Forms\Components\FileUpload::make('requirements_path')
                     ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
                     ->label('Business Requirements (.zip)')
-                    ->nullable(),
+                    ->nullable()
+                    ->visibleOn('edit'),
                 Forms\Components\FileUpload::make('images')
                     ->directory('caterers/' . auth()->user()->caterer->id . '/images/profile')
                     ->image()
@@ -65,10 +68,12 @@ class CatererResource extends Resource
                     ->panelLayout('grid')
                     ->uploadingMessage('Uploading images...')
                     ->nullable()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->visibleOn('edit'),
                 Forms\Components\Toggle::make('is_verified')
                     ->label('Verified?')
-                    ->required(),
+                    ->required()
+                    ->visibleOn('edit'),
             ]);
     }
 
