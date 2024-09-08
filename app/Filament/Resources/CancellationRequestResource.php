@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\CancellationRequestStatus;
+use App\Enums\OrderStatus;
 use App\Filament\Resources\CancellationRequestResource\Pages;
 use App\Filament\Resources\CancellationRequestResource\RelationManagers;
 use App\Models\CancellationRequest;
@@ -27,7 +28,15 @@ class CancellationRequestResource extends Resource
                 Forms\Components\Select::make('order_id')
                     ->searchable()
                     ->preload()
-                    ->relationship('order', 'id')
+                    ->relationship(
+                        'order',
+                        'id',
+                        modifyQueryUsing: function ($query) {
+                            return $query
+                                ->where('caterer_id', auth()->user()->caterer->id)
+                                ->whereIn('order_status', [OrderStatus::Confirmed, OrderStatus::Pending]);
+                        }
+                    )
                     ->required(),
                 Forms\Components\Select::make('status')
                     ->default(CancellationRequestStatus::Pending)
@@ -110,8 +119,10 @@ class CancellationRequestResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->whereHas('order', function ($query) {
-                $query->where('caterer_id', auth()->user()->caterer->id);
+            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                $query->whereHas('order', function ($query) {
+                    $query->where('caterer_id', auth()->user()->caterer->id);
+                });
             })
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
@@ -120,8 +131,10 @@ class CancellationRequestResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::whereHas('order', function ($query) {
-            $query->where('caterer_id', auth()->user()->caterer->id);
+        return static::getModel()::when(auth()->user()->hasRole('caterer'), function ($query) {
+            $query->whereHas('order', function ($query) {
+                $query->where('caterer_id', auth()->user()->caterer->id);
+            });
         })
             ->where('status', 'pending')
             ->count();
