@@ -46,8 +46,15 @@ class PackageResource extends Resource
                 TinyEditor::make('description')
                     ->nullable()
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('image_path')
-                    ->label('Image')
+                Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/packages')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->openable()
+                    ->preserveFilenames()
+                    ->panelLayout('grid')
+                    ->uploadingMessage('Uploading images...')
                     ->nullable()
                     ->columnSpanFull(),
             ]);

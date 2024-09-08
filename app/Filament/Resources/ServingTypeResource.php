@@ -30,9 +30,18 @@ class ServingTypeResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('description')
+                TinyEditor::make('description')
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('image_path')
+                Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/serving-types')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->openable()
+                    ->preserveFilenames()
+                    ->panelLayout('grid')
+                    ->uploadingMessage('Uploading images...')
+                    ->nullable()
                     ->columnSpanFull(),
             ]);
     }

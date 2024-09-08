@@ -11,6 +11,10 @@ class Image extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'path',
+    ];
+
     public function imageable(): MorphTo
     {
         return $this->morphTo();

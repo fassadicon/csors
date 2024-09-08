@@ -19,6 +19,9 @@ class ServingType extends Model
         'description',
     ];
 
+    protected $casts = [
+        'images' => 'array',
+    ];
 
     public function foodDetails(): BelongsToMany
     {

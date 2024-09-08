@@ -38,12 +38,15 @@ class FoodDetailResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
-                    ->directory(
-                        auth()->user()->caterer->name . '/images/foods/'
-                    )
-                    ->multiple()
+                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/foods')
                     ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->openable()
+                    ->preserveFilenames()
                     ->panelLayout('grid')
+                    ->uploadingMessage('Uploading images...')
+                    ->nullable()
                     ->columnSpanFull(),
             ]);
     }
