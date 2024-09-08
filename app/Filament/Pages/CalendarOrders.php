@@ -15,7 +15,6 @@ class CalendarOrders extends Page
 
     protected static string $view = 'filament.pages.calendar-orders';
 
-    protected static ?string $title = 'Orders Calendar - CSORS';
     protected static ?string $navigationLabel = 'Calendar';
     protected static ?string $slug = 'orders/calendar';
     protected ?string $heading = 'Orders Calendar';

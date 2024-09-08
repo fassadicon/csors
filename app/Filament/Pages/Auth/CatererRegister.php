@@ -78,6 +78,7 @@ class CatererRegister extends Register
                     Wizard\Step::make('Caterer')
                         ->schema([
                             Forms\Components\TextInput::make('caterer.name')
+                                ->label('Caterer Name')
                                 ->unique(
                                     table: Caterer::class,
                                     column: 'name'
@@ -85,6 +86,7 @@ class CatererRegister extends Register
                                 ->required()
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('caterer.email')
+                                ->label('Caterer Email')
                                 ->unique(
                                     table: Caterer::class,
                                     column: 'email'
@@ -93,6 +95,7 @@ class CatererRegister extends Register
                                 ->required()
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('caterer.phone_number')
+                                ->label('Caterer Phone Number')
                                 ->tel()
                                 ->nullable()
                                 ->unique(
@@ -100,13 +103,6 @@ class CatererRegister extends Register
                                     column: 'phone_number'
                                 )
                                 ->maxLength(255),
-                            Forms\Components\FileUpload::make('caterer.logo_path')
-                                ->label('Logo')
-                                ->image(),
-                            Forms\Components\FileUpload::make('caterer.requirements_path')
-                                ->label('Business Requirements (.zip)'),
-                            TinyEditor::make('about')
-                                ->columnSpanFull(),
                         ]),
                 ])->submitAction(new HtmlString(Blade::render(<<<BLADE
                         <x-filament::button
@@ -150,6 +146,8 @@ class CatererRegister extends Register
                 $user->forceDelete();
                 return false;
             }
+
+            $user->assignRole('caterer');
 
             $this->form->model($user)->saveRelationships();
 

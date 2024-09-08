@@ -50,6 +50,15 @@ class EditCatererPage extends Page implements HasForms
             Forms\Components\FileUpload::make('logo_path')
                 ->label('Logo')
                 ->image(),
+            Forms\Components\FileUpload::make('images')
+                ->directory('caterers/' . auth()->user()->caterer->id . '/images/profile')
+                ->image()
+                ->multiple()
+                ->reorderable()
+                ->openable()
+                ->preserveFilenames()
+                ->uploadingMessage('Uploading images...')
+                ->nullable(),
             Forms\Components\FileUpload::make('requirements_path')
                 ->label('Business Requirements (.zip)'),
 

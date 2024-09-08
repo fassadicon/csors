@@ -20,10 +20,17 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    // protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationGroup = 'Authorization';
     protected static ?string $navigationLabel = 'Customers';
     protected static ?string $breadcrumb = 'Customers';
     public static ?string $pluralModelLabel = 'Customers';
+
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {
@@ -54,6 +61,12 @@ class CustomerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Toggle::make('is_verified')
                     ->visible(auth()->user()->hasRole('superadmin')),
+                // ->columnSpan(2),
+                Forms\Components\FileUpload::make('verification_image_path')
+                    ->label('Valid ID')
+                    ->directory('users/' . auth()->id() . '/verification')
+                    ->nullable()
+                    ->columnSpan(3),
             ]);
     }
 
@@ -73,6 +86,8 @@ class CustomerResource extends Resource
                     ->badge()
                     ->color(fn($record) => $record->is_verified == 1 ? 'success' : 'danger')
                     ->label('Verified'),
+                Tables\Columns\TextColumn::make('orders_count')
+                ->label('# of Orders'),
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime()
                 //     ->sortable(),
@@ -104,7 +119,8 @@ class CustomerResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
@@ -128,8 +144,14 @@ class CustomerResource extends Resource
     {
         return parent::getEloquentQuery()
             ->where('is_customer', 1)
+            ->withCount('orders')
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }

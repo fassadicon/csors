@@ -25,7 +25,15 @@ class CatererResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
+                    ->relationship(
+                        'user',
+                        'name',
+                        modifyQueryUsing: function ($query) {
+                            return $query->whereHas('roles', function ($query) {
+                                $query->where('name', 'caterer');
+                            });
+                        }
+                    )
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
@@ -37,12 +45,26 @@ class CatererResource extends Resource
                 Forms\Components\TextInput::make('phone_number')
                     ->tel()
                     ->maxLength(255),
+                TinyEditor::make('about')
+                    ->columnSpanFull(),
                 Forms\Components\FileUpload::make('logo_path')
+                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/logo')
                     ->label('Logo')
                     ->image(),
                 Forms\Components\FileUpload::make('requirements_path')
-                    ->label('Business Requirements (.zip)'),
-                TinyEditor::make('about')
+                    ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
+                    ->label('Business Requirements (.zip)')
+                    ->nullable(),
+                Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/profile')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->openable()
+                    ->preserveFilenames()
+                    ->panelLayout('grid')
+                    ->uploadingMessage('Uploading images...')
+                    ->nullable()
                     ->columnSpanFull(),
                 Forms\Components\Toggle::make('is_verified')
                     ->label('Verified?')
@@ -63,6 +85,15 @@ class CatererResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone_number')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('is_verified')
+                    ->badge()
+                    ->color(fn($record) => $record == '1' ? 'success' : 'danger')
+                    ->formatStateUsing(function ($record) {
+                        return $record == '1' ? 'Yes' : 'No';
+                    })
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('orders_count')
+                    ->label('# of Orders'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -91,7 +122,8 @@ class CatererResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
@@ -114,6 +146,7 @@ class CatererResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->withCount('orders')
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

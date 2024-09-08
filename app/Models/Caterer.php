@@ -20,7 +20,12 @@ class Caterer extends Model
         'name',
         'about',
         'logo_path',
+        'requirements_path',
         'is_verified',
+    ];
+
+    protected $casts = [
+        'images' => 'array',
     ];
 
     public function user(): BelongsTo
@@ -31,6 +36,11 @@ class Caterer extends Model
     public function servingTypes(): HasMany
     {
         return $this->hasMany(ServingType::class);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(order::class);
     }
 
     public function foodCategories(): HasMany

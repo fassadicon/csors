@@ -22,19 +22,48 @@ class UserResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+            ->columns(4)
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Username')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+                Forms\Components\TextInput::make('phone_number')
+                    ->nullable()
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('password')
+                    ->visibleOn('create')
                     ->password()
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('first_name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('last_name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('middle_name')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('ext_name')
+                    ->maxLength(255),
+                Forms\Components\FileUpload::make('verification_image_path')
+                    ->label('Valid ID')
+                    ->directory('users/' . auth()->id() . '/verification')
+                    ->columnSpan(2)
+                    ->nullable(),
+                Forms\Components\Toggle::make('is_verified')
+                    ->visible(auth()->user()->hasRole('superadmin')),
+                Forms\Components\Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->getOptionLabelFromRecordUsing(function ($record) {
+                        return $record->name == 'guest' ? 'customer' : $record->name;
+                    })
+                    ->preload()
+                    ->required()
             ]);
     }
 
@@ -69,7 +98,8 @@ class UserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

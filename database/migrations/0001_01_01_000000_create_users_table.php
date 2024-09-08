@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('name');
+            $table->string('full_name')->virtualAs('concat(first_name, \' \', last_name)');
             $table->string('last_name');
             $table->string('first_name');
             $table->string('middle_name')->nullable();
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->unsignedTinyInteger('is_customer')->default(1);
             $table->unsignedTinyInteger('is_verified')->default(0);
+            $table->text('verification_image_path')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

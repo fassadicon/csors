@@ -6,7 +6,7 @@
     @if (!$this->isVerifiedCaterer())
         <h1>
             WARNING: You have an ongoing process of verification, the services will not be available to the
-            customers. Please contact the admin for more information.
+            customers. Visit your <a href="{{ route('filament.admin.pages.edit-caterer-page') }}" style="font-weight: bold; color: blue;">Caterer Profile Page</a> and <a href="{{ route('filament.admin.pages.edit-caterer-page') }}" style="font-weight: bold; color: blue;">User Profile Page</a> to comply other requirements. Please contact the admin for more information.
         </h1>
     @endif
 
