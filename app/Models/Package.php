@@ -17,7 +17,6 @@ class Package extends Model
         'name',
         'description',
         'price',
-        'image_path'
     ];
 
     protected function casts(): array
@@ -32,6 +31,11 @@ class Package extends Model
         return $this->belongsToMany(Event::class)
             ->using(EventPackage::class)
             ->withTimestamps();
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 
     public function orderItems(): MorphMany

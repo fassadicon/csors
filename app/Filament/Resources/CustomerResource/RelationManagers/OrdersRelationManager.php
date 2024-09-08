@@ -30,6 +30,13 @@ class OrdersRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn(Builder $query) => $query
+                ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                    $query->where('caterer_id', auth()->user()->caterer->id);
+                })
+                ->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ]))
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->searchable()
@@ -38,8 +45,8 @@ class OrdersRelationManager extends RelationManager
                     ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall)
                     ->listWithLineBreaks()
                     ->bulleted()
-                    ->limitList(2)
-                    ->expandableLimitedList()
+                    // ->limitList(2)
+                    // ->expandableLimitedList()
                     ->formatStateUsing(function ($state) {
                         $orderable_type = get_class($state->orderable);
                         if ($orderable_type === 'App\Models\Food') {

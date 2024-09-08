@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('caterer_id')->constrained();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->text('image_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

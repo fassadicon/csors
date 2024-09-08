@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class FoodDetail extends Model
@@ -16,7 +17,10 @@ class FoodDetail extends Model
         'food_category_id',
         'name',
         'description',
-        'image_path'
+    ];
+
+    protected $casts = [
+        'images' => 'array',
     ];
 
     public function servingTypes(): BelongsToMany
@@ -32,8 +36,13 @@ class FoodDetail extends Model
         return $this->belongsTo(FoodCategory::class);
     }
 
-    public function caterer() : \Znck\Eloquent\Relations\BelongsToThrough
+    public function caterer(): \Znck\Eloquent\Relations\BelongsToThrough
     {
         return $this->belongsToThrough(Caterer::class, FoodCategory::class);
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

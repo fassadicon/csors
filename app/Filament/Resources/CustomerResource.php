@@ -14,6 +14,7 @@ use App\Filament\Resources\CustomerResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Filament\Resources\CustomerResource\RelationManagers\OrdersRelationManager;
+use Filament\Forms\FormsComponent;
 
 class CustomerResource extends Resource
 {
@@ -27,8 +28,32 @@ class CustomerResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+            ->columns(4)
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->label('Username')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\DateTimePicker::make('email_verified_at'),
+                Forms\Components\TextInput::make('phone_number')
+                    ->nullable()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('first_name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('last_name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('middle_name')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('ext_name')
+                    ->maxLength(255),
+                Forms\Components\Toggle::make('is_verified')
+                    ->visible(auth()->user()->hasRole('superadmin')),
             ]);
     }
 
@@ -43,10 +68,11 @@ class CustomerResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone_number')
                     ->searchable(),
-                Tables\Columns\CheckboxColumn::make('is_verified')
+                Tables\Columns\TextColumn::make('is_verified')
+                    ->formatStateUsing(fn(string $state) => $state == 1 ? 'Yes' : 'No')
+                    ->badge()
+                    ->color(fn($record) => $record->is_verified == 1 ? 'success' : 'danger')
                     ->label('Verified'),
-                Tables\Columns\CheckboxColumn::make('is_customer')
-                    ->label('Customer'),
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime()
                 //     ->sortable(),

@@ -386,7 +386,9 @@ class OrderResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->where('caterer_id', auth()->user()->caterer->id)
+            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                $query->where('caterer_id', auth()->user()->caterer->id);
+            })
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
@@ -395,7 +397,9 @@ class OrderResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('created_at', '>=', today())
-            ->where('caterer_id', auth()->user()->caterer->id)
+            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                $query->where('caterer_id', auth()->user()->caterer->id);
+            })
             ->where(function ($query) {
                 $query->where('order_status', OrderStatus::Pending)
                     ->orWhere('payment_status', PaymentStatus::Pending)

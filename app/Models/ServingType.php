@@ -17,7 +17,6 @@ class ServingType extends Model
         'caterer_id',
         'name',
         'description',
-        'image_path',
     ];
 
 

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\FoodDetailResource\Pages;
 use App\Filament\Resources\FoodDetailResource\RelationManagers;
 use App\Filament\Resources\FoodDetailResource\RelationManagers\ServingTypesRelationManager;
+use App\Models\FoodCategory;
 use App\Models\FoodDetail;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -25,14 +26,24 @@ class FoodDetailResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('food_category_id')
-                    ->relationship('foodCategory', 'name')
+                    ->relationship(
+                        name: 'foodCategory',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id),
+                    )
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('image_path')
+                Forms\Components\FileUpload::make('images')
+                    ->directory(
+                        auth()->user()->caterer->name . '/images/foods/'
+                    )
+                    ->multiple()
+                    ->image()
+                    ->panelLayout('grid')
                     ->columnSpanFull(),
             ]);
     }

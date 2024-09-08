@@ -23,12 +23,11 @@ class OrderCalendarWidget extends FullCalendarWidget
     {
         $query = Order::query()
             ->with(['user', 'caterer', 'orderItems', 'promo'])
+            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                $query->where('caterer_id', auth()->user()->caterer->id);
+            })
             ->where('start', '>=', $fetchInfo['start'])
             ->where('end', '<=', $fetchInfo['end']);
-
-        if (auth()->user()->caterer && auth()->user()->hasRole('caterer')) {
-            $query->where('caterer_id', auth()->user()->caterer->id);
-        }
 
         return $query->get()
             ->map(function (Order $order): EventData {

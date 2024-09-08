@@ -16,7 +16,6 @@ class Utility extends Model
         'caterer_id',
         'name',
         'description',
-        'image_path',
         'price',
     ];
 
@@ -35,5 +34,10 @@ class Utility extends Model
     public function orderItems(): MorphMany
     {
         return $this->morphMany(OrderItem::class, 'orderable');
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }
