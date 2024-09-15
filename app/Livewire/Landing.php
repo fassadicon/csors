@@ -3,12 +3,15 @@
 namespace App\Livewire;
 
 use App\Models\Caterer;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Landing')]
 class Landing extends Component
 {
     public $caterers;
+
+    #[Session(key: '{id}')]
+    public $caterer;
 
     public function mount()
     {

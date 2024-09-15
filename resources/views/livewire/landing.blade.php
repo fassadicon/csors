@@ -1,11 +1,21 @@
-<div class="py-12">
-    @foreach ($caterers as $caterer)
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ $caterer->name }}
-                </div>
-            </div>
-        </div>
-    @endforeach
+<div>
+    <x-mary-header title="Caterers"
+        class="mb-6"
+        subtitle="Please select your chosen caterer to view their products, services, pricings, and more."
+        separator />
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        @foreach ($caterers as $caterer)
+            <a href="{{ route('about', ['caterer' => $caterer]) }}">
+                <x-mary-card title="{{ $caterer->name }}">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, consectetur!
+                    <x-mary-badge value="+99"
+                        class="badge-neutral" />
+                    <x-mary-rating wire:model="ranking0" />
+                    <x-slot:figure>
+                        <img src="https://picsum.photos/500/200" />
+                    </x-slot:figure>
+                </x-mary-card>
+            </a>
+        @endforeach
+    </div>
 </div>
