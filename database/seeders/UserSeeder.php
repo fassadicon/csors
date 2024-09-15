@@ -56,6 +56,7 @@ class UserSeeder extends Seeder
             'is_customer' => 1,
             'password' => bcrypt('qwe'),
         ]);
+        $test_1_customer->assignRole('customer');
 
         // // Create Customer
         // User::create([

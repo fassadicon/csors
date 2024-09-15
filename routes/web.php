@@ -1,20 +1,21 @@
 <?php
 
-use App\Models\Event;
-use App\Models\Caterer;
-use App\Models\Package;
-use App\Models\FoodDetail;
+use App\Livewire\Landing;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Database\Eloquent\Builder;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', Landing::class)
+    ->name('landing');
 
-Route::get('/test', function () {
-    $caterer = Caterer::find(1);
-    dd([
-        $caterer->packages,
-        $caterer->packages[0],
-    ]);
-});
+// Breeze
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
+
+// Livewire custom routes
+
+
+require __DIR__ . '/auth.php';

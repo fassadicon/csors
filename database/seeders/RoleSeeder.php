@@ -53,5 +53,7 @@ class RoleSeeder extends Seeder
         )
             ->get();
         $caterer->syncPermissions($catererpermissions);
+
+        $customer = Role::create(['name' => 'customer']);
     }
 }
