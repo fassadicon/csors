@@ -29,7 +29,7 @@ class Package extends Model
 
     public function events(): BelongsToMany
     {
-        return $this->belongsToMany(Event::class, 'event_package')
+        return $this->belongsToMany(Event::class)
             ->using(EventPackage::class)
             ->withTimestamps();
     }
@@ -44,8 +44,8 @@ class Package extends Model
         return $this->morphMany(OrderItem::class, 'orderable');
     }
 
-    public function caterer(): \Znck\Eloquent\Relations\BelongsToThrough
-    {
-        return $this->belongsToThrough(Caterer::class, Event::class);
-    }
+    // public function caterer(): \Znck\Eloquent\Relations\BelongsToThrough
+    // {
+    //     return $this->belongsToThrough(Caterer::class, Event::class);
+    // }
 }

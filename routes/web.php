@@ -1,10 +1,20 @@
 <?php
 
+use App\Models\Event;
 use App\Livewire\About;
+use App\Models\Caterer;
+use App\Models\Package;
 use App\Livewire\Landing;
 use App\Livewire\Packages;
 use App\Livewire\Utilities;
 use Illuminate\Support\Facades\Route;
+
+Route::get('test', function () {
+    $caterer = Caterer::find(2); // Replace with the actual caterer ID
+    $packages = $caterer->packages()->get();
+
+    dd($packages);
+});
 
 Route::get('/', Landing::class)
     ->name('landing');

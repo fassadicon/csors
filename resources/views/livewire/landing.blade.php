@@ -10,9 +10,9 @@
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, consectetur!
                     <x-mary-badge value="+99"
                         class="badge-neutral" />
-                    <x-mary-rating wire:model="ranking0" />
+                    <x-mary-rating />
                     <x-slot:figure>
-                        <img src="https://picsum.photos/500/200" />
+                        <img src="{{ asset('storage/placeholder.jpg') }}" />
                     </x-slot:figure>
                 </x-mary-card>
             </a>

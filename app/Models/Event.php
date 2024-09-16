@@ -21,7 +21,7 @@ class Event extends Model
 
     public function packages(): BelongsToMany
     {
-        return $this->belongsToMany(Package::class)
+        return $this->belongsToMany(Package::class, 'event_package')
             ->using(EventPackage::class)
             ->withTimestamps();
     }
