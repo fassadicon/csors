@@ -13,7 +13,7 @@ class About extends Component
     {
         session()->put('caterer', $this->caterer->id);
 
-        return redirect()->route('packages');
+        return redirect()->route('utilities');
     }
 
     public function render()
