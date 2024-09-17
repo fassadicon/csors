@@ -4,6 +4,15 @@ use App\Livewire\Actions\Logout;
 use Livewire\Volt\Component;
 
 new class extends Component {
+    public $caterer;
+
+    public function mount(): void
+    {
+        $this->caterer = false;
+        if (session()->has('caterer') != null) {
+            $this->caterer = App\Models\Caterer::with(['events'])->find(session()->get('caterer'));
+        }
+    }
     /**
      * Log the current user out of the application.
      */
@@ -23,20 +32,46 @@ new class extends Component {
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
+                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     <a href="{{ route('landing') }}"
                         wire:navigate>
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        @if ($caterer)
+                            <div class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200">
+                                {{ $caterer->name }}</div>
+                        @endif
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('landing')"
-                        :active="request()->routeIs('landing')"
+                    <x-nav-link :href="route('packages')"
+                        :active="request()->routeIs('packages')"
                         wire:navigate>
-                        {{ __('Caterers') }}
+                        {{ __('Packages') }}
                     </x-nav-link>
                 </div> --}}
+
+                @php
+                    $navClasses =
+                        $active ?? false
+                            ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
+                            : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out';
+                @endphp
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
+                    <x-nav-dropdown>
+                        <x-slot name="trigger">
+                            <a href="{{ route('events') }}">Events</a>
+                        </x-slot>
+                        <x-slot name="content">
+                            @if ($caterer)
+                                @foreach ($caterer->events as $event)
+                                    <x-dropdown-link>{{ $event->name }}</x-dropdown-link>
+                                @endforeach
+                            @endif
+                        </x-slot>
+                    </x-nav-dropdown>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

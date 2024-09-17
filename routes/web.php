@@ -2,6 +2,7 @@
 
 use App\Models\Event;
 use App\Livewire\About;
+use App\Livewire\Events;
 use App\Models\Caterer;
 use App\Models\Package;
 use App\Livewire\Landing;
@@ -37,6 +38,9 @@ Route::get('packages', Packages::class)
 
 Route::get('utilities', Utilities::class)
     ->name('utilities');
+
+Route::get('events', Events::class)
+    ->name('events');
 
 
 
