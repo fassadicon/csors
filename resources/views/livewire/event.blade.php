@@ -2,13 +2,13 @@
     @php
         $slides = [
             [
-                'image' => asset('storage/about-header-1.jpg'),
+                'image' => asset('images/about-header-1.jpg'),
             ],
             [
-                'image' => asset('storage/about-header-2.jpg'),
+                'image' => asset('images/about-header-2.jpg'),
             ],
             [
-                'image' => asset('storage/about-header-3.jpg'),
+                'image' => asset('images/about-header-3.jpg'),
             ],
         ];
     @endphp
@@ -26,7 +26,7 @@
                 <x-mary-card title="{{ $package->name }}"
                     class="!pb-0">
                     <x-slot:figure>
-                        <img src="{{ asset('storage/placeholder.jpg') }}" />
+                        <img src="{{ asset('images/placeholder.jpg') }}" />
                     </x-slot:figure>
                 </x-mary-card>
             </a>

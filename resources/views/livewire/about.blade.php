@@ -2,17 +2,17 @@
     @php
         $slides = [
             [
-                'image' => asset('storage/about-header-1.jpg'),
+                'image' => asset('images/about-header-1.jpg'),
                 // 'title' => $caterer->name,
                 // 'description' => 'We love last week frameworks.',
                 // 'url' => '/docs/installation',
                 // 'urlText' => 'Get started',
             ],
             [
-                'image' => asset('storage/about-header-2.jpg'),
+                'image' => asset('images/about-header-2.jpg'),
             ],
             [
-                'image' => asset('storage/about-header-3.jpg'),
+                'image' => asset('images/about-header-3.jpg'),
             ],
         ];
     @endphp
@@ -42,7 +42,7 @@
             <x-mary-card title="{{ $event->name }}"
                 class="!pb-0">
                 <x-slot:figure>
-                    <img src="{{ asset('storage/placeholder.jpg') }}" />
+                    <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
@@ -56,7 +56,7 @@
             <x-mary-card title="{{ $package->name }}"
                 class="!pb-0">
                 <x-slot:figure>
-                    <img src="{{ asset('storage/placeholder.jpg') }}" />
+                    <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
@@ -70,7 +70,7 @@
             <x-mary-card title="{{ $foodCategory->name }}"
                 class="!pb-0">
                 <x-slot:figure>
-                    <img src="{{ asset('storage/placeholder.jpg') }}" />
+                    <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
@@ -84,7 +84,7 @@
             <x-mary-card title="{{ $foodDetail->name }}"
                 class="!pb-0">
                 <x-slot:figure>
-                    <img src="{{ asset('storage/placeholder.jpg') }}" />
+                    <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
@@ -98,7 +98,7 @@
             <x-mary-card title="{{ $servingType->name }}"
                 class="!pb-0">
                 <x-slot:figure>
-                    <img src="{{ asset('storage/placeholder.jpg') }}" />
+                    <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
@@ -112,7 +112,7 @@
             <x-mary-card title="{{ $utility->name }}"
                 class="!pb-0">
                 <x-slot:figure>
-                    <img src="{{ asset('storage/placeholder.jpg') }}" />
+                    <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach

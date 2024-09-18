@@ -2,13 +2,13 @@
     @php
         $slides = [
             [
-                'image' => asset('storage/about-header-1.jpg'),
+                'image' => asset('images/about-header-1.jpg'),
             ],
             [
-                'image' => asset('storage/about-header-2.jpg'),
+                'image' => asset('images/about-header-2.jpg'),
             ],
             [
-                'image' => asset('storage/about-header-3.jpg'),
+                'image' => asset('images/about-header-3.jpg'),
             ],
         ];
     @endphp

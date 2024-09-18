@@ -11,7 +11,7 @@
                 <x-mary-card title="{{ $event->name }}"
                     class="!pb-0">
                     <x-slot:figure>
-                        <img src="{{ asset('storage/placeholder.jpg') }}" />
+                        <img src="{{ asset('images/placeholder.jpg') }}" />
                     </x-slot:figure>
                 </x-mary-card>
             </a>
