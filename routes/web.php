@@ -1,20 +1,10 @@
 <?php
 
-use App\Models\Event;
-use App\Livewire\About;
-use App\Livewire\Events;
-use App\Models\Caterer;
-use App\Models\Package;
 use App\Livewire\Landing;
-use App\Livewire\Packages;
-use App\Livewire\Utilities;
 use Illuminate\Support\Facades\Route;
 
 Route::get('test', function () {
-    $caterer = Caterer::find(2); // Replace with the actual caterer ID
-    $packages = $caterer->packages()->get();
-
-    dd($packages);
+    return "Hello World";
 });
 
 Route::get('/', Landing::class)
@@ -29,18 +19,22 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-// Livewire custom routes
-Route::get('caterer/{caterer:name}', About::class)
+// General Caterer
+Route::get('caterer/{caterer:name}', App\Livewire\About::class)
     ->name('about');
 
-Route::get('packages', Packages::class)
-    ->name('packages');
-
-Route::get('utilities', Utilities::class)
+// Utilities
+Route::get('utilities', App\Livewire\Utilities::class)
     ->name('utilities');
 
-Route::get('events', Events::class)
+// Events
+Route::get('events', App\Livewire\Events::class)
     ->name('events');
+Route::get('event/{event:name}', App\Livewire\Event::class)
+    ->name('event');
+
+Route::get('package/{package:name}', App\Livewire\Package::class)
+    ->name('package');
 
 
 

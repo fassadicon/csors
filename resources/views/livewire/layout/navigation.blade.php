@@ -66,7 +66,8 @@ new class extends Component {
                         <x-slot name="content">
                             @if ($caterer)
                                 @foreach ($caterer->events as $event)
-                                    <x-dropdown-link>{{ $event->name }}</x-dropdown-link>
+                                    <x-dropdown-link
+                                        href="{{ route('event', ['event' => $event]) }}">{{ $event->name }}</x-dropdown-link>
                                 @endforeach
                             @endif
                         </x-slot>
