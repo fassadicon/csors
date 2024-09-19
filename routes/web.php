@@ -1,13 +1,12 @@
 <?php
 
-use App\Livewire\Landing;
 use Illuminate\Support\Facades\Route;
 
 Route::get('test', function () {
     return "Hello World";
 });
 
-Route::get('/', Landing::class)
+Route::get('/', App\Livewire\Landing::class)
     ->name('landing');
 
 // Breeze
@@ -20,12 +19,16 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 // General Caterer
+Route::get('caterers', App\Livewire\Caterers::class)
+    ->name('caterers');
 Route::get('caterer/{caterer:name}', App\Livewire\About::class)
     ->name('about');
 
 // Utilities
 Route::get('utilities', App\Livewire\Utilities::class)
     ->name('utilities');
+Route::get('utility/{utility:name}', App\Livewire\Utility::class)
+    ->name('utility');
 
 // Events
 Route::get('events', App\Livewire\Events::class)

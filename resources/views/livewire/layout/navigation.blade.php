@@ -43,13 +43,13 @@ new class extends Component {
                 </div>
 
                 <!-- Navigation Links -->
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('packages')"
-                        :active="request()->routeIs('packages')"
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('caterers')"
+                        :active="request()->routeIs('caterers')"
                         wire:navigate>
-                        {{ __('Packages') }}
+                        {{ __('Caterers') }}
                     </x-nav-link>
-                </div> --}}
+                </div>
 
                 @php
                     $navClasses =
@@ -59,20 +59,40 @@ new class extends Component {
                 @endphp
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
-                    <x-nav-dropdown>
-                        <x-slot name="trigger">
-                            <a href="{{ route('events') }}">Events</a>
-                        </x-slot>
-                        <x-slot name="content">
-                            @if ($caterer)
+                    @if ($caterer)
+                        <x-nav-dropdown>
+                            <x-slot name="trigger">
+                                <a href="{{ route('events') }}">Events</a>
+                            </x-slot>
+                            <x-slot name="content">
+
                                 @foreach ($caterer->events as $event)
                                     <x-dropdown-link
                                         href="{{ route('event', ['event' => $event]) }}">{{ $event->name }}</x-dropdown-link>
                                 @endforeach
-                            @endif
-                        </x-slot>
-                    </x-nav-dropdown>
+
+                            </x-slot>
+                        </x-nav-dropdown>
+                    @endif
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
+                    @if ($caterer)
+                        <x-nav-dropdown>
+                            <x-slot name="trigger">
+                                <a href="{{ route('utilities') }}">Utilities</a>
+                            </x-slot>
+                            <x-slot name="content">
+                                @foreach ($caterer->utilities as $utility)
+                                    <x-dropdown-link
+                                        href="{{ route('utility', ['utility' => $utility]) }}">{{ $utility->name }}</x-dropdown-link>
+                                @endforeach
+
+                            </x-slot>
+                        </x-nav-dropdown>
+                    @endif
+                </div>
+
             </div>
 
             <!-- Settings Dropdown -->
