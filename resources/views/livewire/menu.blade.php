@@ -9,7 +9,7 @@
                     id="selectedCategories_{{ $foodCategory->id }}"
                     right />
             @endforeach
-
+            <h1>Selected</h1>
         </div>
 
         <!-- Second column: 80% width -->
@@ -22,6 +22,12 @@
                         <x-slot:figure>
                             <img src="{{ asset('images/placeholder.jpg') }}" />
                         </x-slot:figure>
+                        <x-slot:actions>
+                            <x-mary-button label="View"
+                                class="btn-primary" />
+                            <x-mary-button label="Add to Cart"
+                                class="btn-primary" />
+                        </x-slot:actions>
                     </x-mary-card>
                 @endforeach
             </div>
