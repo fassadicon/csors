@@ -39,6 +39,8 @@ Route::get('event/{event:name}', App\Livewire\Event::class)
 Route::get('package/{package:name}', App\Livewire\Package::class)
     ->name('package');
 
+Route::get('menu', App\Livewire\Menu::class)
+    ->name('menu');
 
 
 require __DIR__ . '/auth.php';

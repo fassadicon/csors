@@ -60,7 +60,7 @@ new class extends Component {
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)
-                        <x-nav-dropdown>
+                        <x-nav-dropdown :active="request()->routeIs('events')">
                             <x-slot name="trigger">
                                 <a href="{{ route('events') }}">Events</a>
                             </x-slot>
@@ -75,6 +75,16 @@ new class extends Component {
                         </x-nav-dropdown>
                     @endif
                 </div>
+
+                @if ($caterer)
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('menu')"
+                            :active="request()->routeIs('menu')"
+                            wire:navigate>
+                            {{ __('Menu') }}
+                        </x-nav-link>
+                    </div>
+                @endif
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)

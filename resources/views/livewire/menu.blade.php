@@ -5,11 +5,11 @@
             <h2>Categories</h2>
             @foreach ($foodCategories as $foodCategory)
                 <x-mary-checkbox label="{{ $foodCategory->name }}"
-                    wire:model.live="selectedCategories"
-                    value="{{ $foodCategory->id }}"
+                    wire:model.live="selectedCategories.{{ $foodCategory->id }}"
                     id="selectedCategories_{{ $foodCategory->id }}"
                     right />
             @endforeach
+
         </div>
 
         <!-- Second column: 80% width -->
