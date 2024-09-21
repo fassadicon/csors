@@ -1,9 +1,36 @@
-@php
-    $navClasses =
-        $active ?? false
-            ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
-            : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out';
-@endphp
+<?php
+
+use App\Livewire\Actions\Logout;
+use Livewire\Volt\Component;
+use function Livewire\Volt\{on};
+
+new class extends Component {
+    public $caterer;
+
+    public $cartItemCount = 0;
+
+    public function mount(): void
+    {
+        $this->caterer = false;
+        if (session()->has('caterer') != null) {
+            $this->caterer = App\Models\Caterer::with(['events'])->find(session()->get('caterer'));
+        }
+
+        on([
+            'cart-item-added' => function () {
+                dd('listened');
+                $this->cartItemCount = session('cart') ? count(session('cart')) : 0;
+            },
+        ]);
+    }
+
+    public function logout(Logout $logout): void
+    {
+        $logout();
+
+        $this->redirect('/', navigate: true);
+    }
+}; ?>
 
 <nav x-data="{ open: false }"
     class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -14,34 +41,31 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-
+                    <a href="{{ route('landing') }}"
+                        class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                        wire:navigate>
+                        @if ($caterer)
+                            <div class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200">
+                                {{ $caterer->name }}</div>
+                        @endif
+                    </a>
                 </div>
 
+                <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('caterers')"
+                        :active="request()->routeIs('caterers')"
+                        wire:navigate>
+                        {{ __('Caterers') }}
+                    </x-nav-link>
+                </div>
 
-                @if ($caterer)
-                    <!-- Navigation Links -->
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
-                        <x-nav-dropdown>
-                            <x-slot name="trigger">{{ $caterer->name }}
-                            </x-slot>
-                            <x-slot name="content">
-                                <x-dropdown-link
-                                    href="{{ route('about', ['caterer' => $caterer]) }}">About</x-dropdown-link>
-                                <x-dropdown-link href="{{ route('caterers') }}">Change Caterer</x-dropdown-link>
-                                <x-dropdown-link href="{{ route('contact') }}">Contact</x-dropdown-link>
-                            </x-slot>
-                        </x-nav-dropdown>
-                    </div>
-                @else
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('caterers')"
-                            :active="request()->routeIs('caterers')"
-                            wire:navigate>
-                            {{ __('Caterers') }}
-                        </x-nav-link>
-                    </div>
-                @endif
-
+                @php
+                    $navClasses =
+                        $active ?? false
+                            ? 'inline-flex items-center px-1 pt-1 border-b-2 border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out'
+                            : 'inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700 transition duration-150 ease-in-out';
+                @endphp
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)
@@ -88,17 +112,17 @@
                     @endif
                 </div>
 
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    Cart:
+                    <input type="text"
+                        wire:model.live='cartItemCount'
+                        readonly>
+                </div>
+
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0 flex items-center">
-                    <x-mary-button icon="o-shopping-cart"
-                        class="btn-circle relative">
-                        <x-mary-badge value="{{ $cartItemCount }}"
-                            class="badge-primary absolute -right-2 -top-2" />
-                    </x-mary-button>
-                </div>
                 @if (auth()->guest())
                     <a href="{{ route('login') }}"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">

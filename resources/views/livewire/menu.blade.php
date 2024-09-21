@@ -26,11 +26,8 @@
                             <img src="{{ asset('images/placeholder.jpg') }}" />
                         </x-slot:figure>
                         <x-slot:actions>
-                            <a href="{{ route('food', ['foodDetail' => $foodDetail]) }}"><x-mary-button label="View"
-                                    class="btn-primary" /></a>
-
-                            <x-mary-button label="Add to Cart"
-                                class="btn-primary" />
+                            <a href="{{ route('food', ['foodDetail' => $foodDetail]) }}"><x-mary-button icon="o-plus"
+                                    class="btn-primary btn-circle" /></a>
                         </x-slot:actions>
                     </x-mary-card>
                 @endforeach

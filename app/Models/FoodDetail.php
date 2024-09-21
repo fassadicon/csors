@@ -27,7 +27,7 @@ class FoodDetail extends Model
     {
         return $this->belongsToMany(ServingType::class, 'foods')
             ->using(Food::class)
-            ->withPivot('price')
+            ->withPivot('price', 'id')
             ->withTimestamps();
     }
 

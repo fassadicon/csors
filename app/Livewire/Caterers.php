@@ -11,6 +11,8 @@ class Caterers extends Component
 
     public function mount()
     {
+        session()->flush();
+
         $this->caterers = Caterer::get();
     }
 

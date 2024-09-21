@@ -7,12 +7,13 @@
         @foreach ($utilities as $utility)
             <x-mary-card title="{{ $utility->name }}">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, consectetur!
-                <x-mary-badge value="+99"
-                    class="badge-neutral" />
-                <x-mary-rating wire:model="ranking0" />
                 <x-slot:figure>
-                    <img src="https://picsum.photos/500/200" />
+                    <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
+                <x-slot:actions>
+                    <a href="{{ route('utility', ['utility' => $utility]) }}"><x-mary-button icon="o-plus"
+                            class="btn-primary btn-circle" /></a>
+                </x-slot:actions>
             </x-mary-card>
         @endforeach
     </div>
