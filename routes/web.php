@@ -42,5 +42,8 @@ Route::get('package/{package:name}', App\Livewire\Package::class)
 Route::get('menu', App\Livewire\Menu::class)
     ->name('menu');
 
+Route::get('menu/{foodDetail}', App\Livewire\Food::class)
+    ->name('food');
+
 
 require __DIR__ . '/auth.php';

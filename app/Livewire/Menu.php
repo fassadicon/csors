@@ -13,6 +13,8 @@ class Menu extends Component
 
     public $selectedCategories = [];
 
+    // public $selectAll = false;
+
     public function mount()
     {
         $this->foodCategories = FoodCategory::where('caterer_id', session()->get('caterer'))->get();
@@ -27,6 +29,17 @@ class Menu extends Component
             $this->foodDetails = FoodDetail::whereIn('food_category_id', $this->foodCategories->pluck('id')->toArray())->get();
         }
     }
+
+    // public function updatedSelectAll($value)
+    // {
+    //     if ($value) {
+    //         $this->selectedCategories = $this->foodCategories->pluck('id')->toArray();
+    //     } else {
+    //         $this->selectedCategories = [];
+    //     }
+
+    //     // $this->updatedSelectedCategories();
+    // }
 
     public function render()
     {

@@ -3,15 +3,18 @@
         <!-- First column: 20% width -->
         <div class="w-1/6">
             <h2>Categories</h2>
+            {{-- <x-mary-checkbox label="All"
+                wire:model.live="selectAll"
+                id="selectAllCategories"
+                right /> --}}
             @foreach ($foodCategories as $foodCategory)
                 <x-mary-checkbox label="{{ $foodCategory->name }}"
-                    wire:model.live="selectedCategories.{{ $foodCategory->id }}"
+                    wire:model.live="selectedCategories"
+                    value="{{ $foodCategory->id }}"
                     id="selectedCategories_{{ $foodCategory->id }}"
                     right />
             @endforeach
-            <h1>Selected</h1>
         </div>
-
         <!-- Second column: 80% width -->
         <div class="w-5/6">
             <h2>Food Items</h2>
@@ -23,8 +26,9 @@
                             <img src="{{ asset('images/placeholder.jpg') }}" />
                         </x-slot:figure>
                         <x-slot:actions>
-                            <x-mary-button label="View"
-                                class="btn-primary" />
+                            <a href="{{ route('food', ['foodDetail' => $foodDetail]) }}"><x-mary-button label="View"
+                                    class="btn-primary" /></a>
+
                             <x-mary-button label="Add to Cart"
                                 class="btn-primary" />
                         </x-slot:actions>
