@@ -13,8 +13,6 @@ class Menu extends Component
 
     public $selectedCategories = [];
 
-    // public $selectAll = false;
-
     public function mount()
     {
         $this->foodCategories = FoodCategory::where('caterer_id', session()->get('caterer'))->get();

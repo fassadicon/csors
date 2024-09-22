@@ -92,13 +92,17 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0 flex items-center">
-                    <x-mary-button icon="o-shopping-cart"
-                        class="btn-circle relative">
-                        <x-mary-badge value="{{ $cartItemCount }}"
-                            class="badge-primary absolute -right-2 -top-2" />
-                    </x-mary-button>
-                </div>
+                @if ($caterer)
+                    <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0 flex items-center">
+                        <a href="{{ route('cart') }}">
+                            <x-mary-button icon="o-shopping-cart"
+                                class="btn-circle relative">
+                                <x-mary-badge value="{{ $cartItemCount }}"
+                                    class="badge-primary absolute -right-2 -top-2" />
+                            </x-mary-button>
+                        </a>
+                    </div>
+                @endif
                 @if (auth()->guest())
                     <a href="{{ route('login') }}"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">

@@ -31,7 +31,7 @@ class About extends Component
     {
         session()->put('caterer', $this->caterer->id);
 
-        return redirect()->route('utilities');
+        return redirect()->route('events');
     }
 
     public function render()

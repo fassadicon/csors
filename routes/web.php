@@ -6,12 +6,8 @@ Route::get('test', function () {
     return "Hello World";
 });
 
-Route::get('/clear', function () {
+Route::get('clear', function () {
     session()->flush();
-});
-
-Route::get('/cart', function () {
-    dd(session('cart'));
 });
 
 Route::get('/', App\Livewire\Landing::class)
@@ -55,5 +51,7 @@ Route::get('menu/{foodDetail}', App\Livewire\Food::class)
 Route::get('contact', App\Livewire\Contact::class)
     ->name('contact');
 
+Route::get('cart', App\Livewire\Cart::class)
+    ->name('cart');
 
 require __DIR__ . '/auth.php';

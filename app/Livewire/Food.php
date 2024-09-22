@@ -66,9 +66,10 @@ class Food extends Component
             $cart[$this->food->id]['price'] += $this->price;
         } else {
             $cart[$this->food->id] = [
-                'orderItem' => $this->food,
+                'orderItem' => $this->food->load('foodDetail', 'servingType'),
+                'servingTypeId' => $this->food->servingType->id,
                 'quantity' => $this->quantity,
-                'price' => $this->price
+                'price' => $this->price,
             ];
         }
 
