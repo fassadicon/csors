@@ -54,4 +54,7 @@ Route::get('contact', App\Livewire\Contact::class)
 Route::get('cart', App\Livewire\Cart::class)
     ->name('cart');
 
+Route::get('order', App\Livewire\Order::class)
+    ->name('order');
+
 require __DIR__ . '/auth.php';

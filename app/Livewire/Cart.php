@@ -17,9 +17,9 @@ class Cart extends Component
         $this->cart = session()->get('cart') ?? [];
     }
 
-    public function save()
+    public function checkout()
     {
-        dd($this->cart);
+        return redirect()->route('order');
     }
 
     public function updateServingType($servingTypeId, $categoryName, $key)

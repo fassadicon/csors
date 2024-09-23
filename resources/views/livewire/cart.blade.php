@@ -4,7 +4,7 @@
         class="!my-2">
     </x-mary-header>
 
-    <form wire:submit="save">
+    <form wire:submit="checkout">
         @foreach ($cart as $categoryName => $categoryItems)
             <div>
                 <x-mary-header title="{{ ucwords($categoryName) }}"
