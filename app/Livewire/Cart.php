@@ -16,14 +16,18 @@ class Cart extends Component
         $this->cart = session()->get('cart') ?? [];
     }
 
-    public function submit()
+    public function save()
     {
         dd($this->cart);
     }
 
+    public function updateQuantity($newQuantity, $categoryName, $key)
+    {
+        $this->cart[$categoryName][$key]['price'] = $newQuantity * $this->cart[$categoryName][$key]['orderItem']->price;
+    }
+
     public function render()
     {
-        dd($this->cart);
         return view('livewire.cart');
     }
 }

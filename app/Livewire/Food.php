@@ -67,6 +67,7 @@ class Food extends Component
         } else {
             $cart[$this->food->id] = [
                 'orderItem' => $this->food->load('foodDetail', 'servingType'),
+                'foodDetailId' => $this->food->foodDetail->id,
                 'servingTypeId' => $this->food->servingType->id,
                 'quantity' => $this->quantity,
                 'price' => $this->price,
