@@ -10,11 +10,16 @@ class Cart extends Component
 {
     public $cart = [];
     public $caterer;
+    public float $totalAmount;
 
     public function mount()
     {
         $this->caterer = Caterer::find(session()->get('caterer'));
         $this->cart = session()->get('cart') ?? [];
+
+        $this->totalAmount = collect($this->cart)->flatMap(function ($orderItems) {
+            return $orderItems;
+        })->sum('price');
     }
 
     public function checkout()
@@ -34,12 +39,20 @@ class Cart extends Component
 
         $this->cart[$categoryName][$key]['price'] =  $this->cart[$categoryName][$key]['quantity'] * $this->cart[$categoryName][$key]['orderItem']->price;
 
+        $this->totalAmount = collect($this->cart)->flatMap(function ($orderItems) {
+            return $orderItems;
+        })->sum('price');
+
         session()->put('cart', $this->cart);
     }
 
     public function updateQuantity($quantity, $categoryName, $key)
     {
         $this->cart[$categoryName][$key]['price'] = $quantity * $this->cart[$categoryName][$key]['orderItem']->price;
+
+        $this->totalAmount = collect($this->cart)->flatMap(function ($orderItems) {
+            return $orderItems;
+        })->sum('price');
 
         session()->put('cart', $this->cart);
     }

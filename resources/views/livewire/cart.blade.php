@@ -71,9 +71,14 @@
                 @endforeach
             </div>
         @endforeach
+        <x-mary-header title="Total: {{ $totalAmount }}"
+            class="!my-2">
+        </x-mary-header>
         <x-mary-button type="submit"
             label="Proceed to Checkout"
             class="btn-primary"
             spinner />
     </form>
+
+
 </div>
