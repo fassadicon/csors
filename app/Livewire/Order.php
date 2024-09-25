@@ -23,6 +23,8 @@ class Order extends Component
     public $remarks;
     public float $totalAmount;
 
+    public $recipient;
+
     public function mount()
     {
         $this->caterer = Caterer::find(session()->get('caterer'));
@@ -32,11 +34,14 @@ class Order extends Component
         $this->totalAmount = collect($this->cart)->flatMap(function ($orderItems) {
             return $orderItems;
         })->sum('price');
+
+        $this->recipient = auth()->user() ? auth()->user()->full_name : null;
     }
 
     public function pay()
     {
-        dd(Carbon::parse($this->startDateTime)->format('Y-m-d H:i:s'), $this->endDateTime, $this->location, $this->remarks);
+        $downPayment = $this->totalAmount * 0.7;
+        dd($downPayment);
     }
     public function render()
     {

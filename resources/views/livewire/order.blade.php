@@ -45,6 +45,16 @@
         separator />
 
     <form wire:submit='pay'>
+        <x-input-label for="recipient"
+            :value="__('Recipient Name')" />
+        <x-text-input wire:model.live="recipient"
+            id="recipient"
+            class="block mt-1 w-full"
+            type="recipient"
+            name="recipient"
+            required />
+        <x-input-error :messages="$errors->get('startDateTime')"
+            class="mt-2" />
         <x-input-label for="startDateTime"
             :value="__('Start')" />
         <x-text-input wire:model.live="startDateTime"
