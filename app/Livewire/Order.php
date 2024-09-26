@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Carbon\Carbon;
 use App\Models\Caterer;
 use Livewire\Component;
+use Ixudra\Curl\Facades\Curl;
 use Livewire\Attributes\Validate;
 
 class Order extends Component
@@ -41,8 +42,48 @@ class Order extends Component
     public function pay()
     {
         $downPayment = $this->totalAmount * 0.7;
-        dd($downPayment);
+        // dd($downPayment);
+
+        $data = [
+            'data' => [
+                'attributes' => [
+                    'line_items' => [
+                        'currency' => 'PHP',
+                        'amount' => $downPayment,
+                        'name' => 'CSORS test',
+                        'quantity' => 1,
+                    ],
+                    'payment_method_types' => [
+                        'card',
+                        'gcash',
+                        // 'grab_pay',
+                        // 'paymaya',
+                        // 'brankas_landbank',
+                        // 'brankas_metrobank',
+                        // 'billease',
+                        // 'dob',
+                        // 'dob_ubp',
+                        // 'qrph'
+                    ],
+                    'description' => 'test',
+                    'send_email_receipt' => false,
+                    'show_description' => true,
+                    'show_line_items' => true,
+                ],
+            ],
+        ];
+
+        $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
+            ->withHeader('Content-Type: application/json')
+            ->withHeader('accept: application/json')
+            ->withHeader('Authorization: BASIC ' . env('PAYMONGO_SECRET_KEY'))
+            ->withData($data)
+            ->asJson(true)
+            ->post();
+
+        dd($response);
     }
+
     public function render()
     {
         // dd($this->cart);
