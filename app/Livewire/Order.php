@@ -42,46 +42,56 @@ class Order extends Component
     public function pay()
     {
         $downPayment = $this->totalAmount * 0.7;
-        // dd($downPayment);
+        $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format(5000, 2)))));
 
         $data = [
             'data' => [
                 'attributes' => [
                     'line_items' => [
-                        'currency' => 'PHP',
-                        'amount' => $downPayment,
-                        'name' => 'CSORS test',
-                        'quantity' => 1,
+                        [
+                            'currency' => 'PHP',
+                            'amount' => $downPayment,
+                            'name' => 'CSORS test',
+                            'quantity' => 1,
+                        ]
                     ],
                     'payment_method_types' => [
                         'card',
                         'gcash',
-                        // 'grab_pay',
-                        // 'paymaya',
-                        // 'brankas_landbank',
-                        // 'brankas_metrobank',
-                        // 'billease',
-                        // 'dob',
-                        // 'dob_ubp',
-                        // 'qrph'
+                        'grab_pay',
+                        'paymaya',
+                        'brankas_landbank',
+                        'brankas_metrobank',
+                        'billease',
+                        'dob',
+                        'dob_ubp',
+                        'qrph',
                     ],
                     'description' => 'test',
                     'send_email_receipt' => false,
                     'show_description' => true,
                     'show_line_items' => true,
+                    // 'success_url' => url("/payment-success"),
+                    // 'cancel_url' => url("/payment-cancelled"),
                 ],
             ],
         ];
 
+        dd('payment link redirect');
+
+        $auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
+
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
             ->withHeader('Content-Type: application/json')
             ->withHeader('accept: application/json')
-            ->withHeader('Authorization: BASIC ' . env('PAYMONGO_SECRET_KEY'))
+            ->withHeader('Authorization: Basic ' . $auth_paymongo)
             ->withData($data)
-            ->asJson(true)
+            ->asJson()
             ->post();
 
-        dd($response);
+        // dd($response->data->attributes->checkout_url);
+        return redirect($response->data->attributes->checkout_url);
+        // return response()->$response->data->attributes->checkout_url;
     }
 
     public function render()
