@@ -18,7 +18,6 @@ class UserSeeder extends Seeder
     {
         // Create Super Admin
         User::create([
-            'name' => 'fassadicon',
             'last_name' => 'Sadicon',
             'first_name' => 'Frans Audrey',
             'middle_name' => 'Segovia',
@@ -32,7 +31,6 @@ class UserSeeder extends Seeder
 
         // Create Super Admin
         $test_1_caterer = User::create([
-            'name' => 'gdcbitongjr',
             'last_name' => 'Bitong',
             'first_name' => 'Gary',
             'middle_name' => 'Dela Cruz',
@@ -44,9 +42,8 @@ class UserSeeder extends Seeder
         ]);
         $test_1_caterer->assignRole('caterer');
 
-         // Create Super Admin
-         $test_1_customer = User::create([
-            'name' => 'mfssadicon',
+        // Create Super Admin
+        $test_1_customer = User::create([
             'last_name' => 'Sadicon',
             'first_name' => 'Marian Faye',
             'middle_name' => 'Segovia',
@@ -60,7 +57,6 @@ class UserSeeder extends Seeder
 
         // // Create Customer
         // User::create([
-        //     'name' => 'fassadicon',
         //     'last_name' => 'Sadicon',
         //     'first_name' => 'Frans Audrey',
         //     'middle_name' => 'Segovia',
@@ -72,7 +68,6 @@ class UserSeeder extends Seeder
 
         // // Create Caterer
         // $caterer1 = User::create([
-        //     'name' => 'jlmpalado',
         //     'last_name' => 'Palado',
         //     'first_name' => 'Justin Luis',
         //     'middle_name' => 'Montalban',
@@ -83,7 +78,6 @@ class UserSeeder extends Seeder
         // ]);
         // Caterer::create([
         //     'user_id' => 3,
-        //     'name' => 'JLM Palado Catering Services',
         //     'description' => 'Catering Services',
         //     'color' => 'blue',
         // ]);
@@ -91,7 +85,6 @@ class UserSeeder extends Seeder
 
         // // Create Caterer
         // $caterer2 = User::create([
-        //     'name' => 'aslcruz',
         //     'last_name' => 'Cruz',
         //     'first_name' => 'Alaine Stephen',
         //     'middle_name' => 'Lopez',
@@ -102,7 +95,6 @@ class UserSeeder extends Seeder
         // ]);
         // Caterer::create([
         //     'user_id' => 4,
-        //     'name' => 'Cruz Catering',
         //     'description' => 'Catering Services',
         //     'color' => 'red',
         // ]);

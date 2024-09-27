@@ -41,6 +41,10 @@ class Order extends Component
 
     public function pay()
     {
+        if (auth()->guest()) {
+            return redirect()->route('login');
+        }
+
         $downPayment = $this->totalAmount * 0.7;
         $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format(5000, 2)))));
 

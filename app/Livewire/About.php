@@ -29,6 +29,8 @@ class About extends Component
 
     public function select()
     {
+        session()->forget('cart');
+        session()->forget('caterer');
         session()->put('caterer', $this->caterer->id);
 
         return redirect()->route('events');

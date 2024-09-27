@@ -15,12 +15,18 @@ return new class extends Migration
             $table->id();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('name');
-            $table->string('full_name')->virtualAs('concat(first_name, \' \', last_name)');
             $table->string('last_name');
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('ext_name')->nullable();
+            $table->string('full_name')
+                ->virtualAs('concat(first_name,
+                    \' \',
+                    COALESCE(middle_name, \'\'),
+                    \' \',
+                    last_name,
+                    \' \',
+                    COALESCE(ext_name, \'\'))');
             $table->string('phone_number')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->unsignedTinyInteger('is_customer')->default(1);
