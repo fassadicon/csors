@@ -13,11 +13,6 @@ Route::get('clear', function () {
 Route::get('/', App\Livewire\Landing::class)
     ->name('landing');
 
-// Breeze
-// Route::view('dashboard', 'dashboard')
-//     ->middleware(['auth', 'verified'])
-//     ->name('dashboard');
-
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
@@ -55,6 +50,11 @@ Route::get('cart', App\Livewire\Cart::class)
     ->name('cart');
 
 Route::get('order', App\Livewire\Order::class)
+    ->middleware(['auth'])
     ->name('order');
+// ->middleware(['auth', 'verified'])
+
+Route::get('order-history', App\Livewire\OrderHistory::class)
+    ->name('order-history');
 
 require __DIR__ . '/auth.php';
