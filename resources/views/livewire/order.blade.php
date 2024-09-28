@@ -52,7 +52,7 @@
             class="block mt-1 w-full"
             type="recipient"
             name="recipient" />
-        <x-input-error :messages="$errors->get('startDateTime')"
+        <x-input-error :messages="$errors->get('recipient')"
             class="mt-2" />
         <x-input-label for="startDateTime"
             :value="__('Start')" />

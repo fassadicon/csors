@@ -5,20 +5,26 @@ namespace App\Livewire;
 use App\Models\User;
 use App\Models\Order;
 use Livewire\Component;
+use Illuminate\Database\Eloquent\Collection;
 
 class OrderHistory extends Component
 {
     public $customer;
+    public $orders;
+
     public $headers;
     // public $cell_decoration;
 
     public function mount()
     {
         $this->customer = User::find(auth()->id());
+        $this->orders = Order::where('user_id', $this->customer->id)
+            ->orderByDesc('start')
+            ->get();
 
         $this->headers = [
             ['key' => 'id', 'label' => '#'],
-            ['key' => 'name', 'label' => 'Total Amount'],
+            ['key' => 'total_amount', 'label' => 'Total Amount'],
             ['key' => 'payment_status', 'label' => 'Payment Status'],
             ['key' => 'order_status', 'label' => 'Order Status'],
             ['key' => 'caterer.name', 'label' => 'Caterer'],
@@ -40,9 +46,6 @@ class OrderHistory extends Component
 
     public function render()
     {
-        $orders = Order::where('user_id', $this->customer->id)
-            ->get();
-
-        return view('livewire.order-history', compact('orders'));
+        return view('livewire.order-history');
     }
 }

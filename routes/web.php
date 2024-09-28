@@ -56,5 +56,7 @@ Route::get('order', App\Livewire\Order::class)
 
 Route::get('order-history', App\Livewire\OrderHistory::class)
     ->name('order-history');
+Route::get('view-order/{order}', App\Livewire\ViewOrder::class)
+    ->name('view-order');
 
 require __DIR__ . '/auth.php';
