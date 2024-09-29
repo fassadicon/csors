@@ -6,6 +6,8 @@ use App\Models\Caterer;
 use Livewire\Component;
 use App\Mail\InquiryMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Contact extends Component
 {
@@ -27,6 +29,8 @@ class Contact extends Component
 
     public function send()
     {
+        // dd($this->caterer);
+
         // $this->caterer->email
         Mail::to('audreysgv@gmail.com')->send(new InquiryMail(
             $this->name,
@@ -36,7 +40,9 @@ class Contact extends Component
             $this->caterer->id,
         ));
 
-        redirect()->route('about', ['caterer' => $this->caterer]);
+
+        return redirect()->route('about', ['caterer' => $this->caterer])
+            ->success('Inquiry sent! Please wait for an email response.');
     }
 
     public function render()

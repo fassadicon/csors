@@ -5,6 +5,7 @@ namespace App\Livewire\Layout;
 use App\Models\Caterer;
 use Livewire\Component;
 use Livewire\Attributes\On;
+use Masmerise\Toaster\Toaster;
 use App\Livewire\Actions\Logout;
 
 class Navigation extends Component
@@ -35,6 +36,8 @@ class Navigation extends Component
         $packages = session('cart.packages') ? count(session('cart.packages')) : 0;
 
         $this->cartItemCount = $foods + $utilties + $packages;
+
+        Toaster::success('Item added to cart!');
     }
 
     /**

@@ -21,7 +21,7 @@
         without-arrows />
 
     <x-mary-header title="{{ $caterer->name }}"
-        subtitle="By {{ $caterer->user->name }}"
+        subtitle="By {{ $caterer->user->full_name }}"
         class="!my-2">
         <x-slot:actions>
             <x-mary-button label="Select Caterer"
@@ -53,7 +53,7 @@
         class="!my-4" />
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         @foreach ($packages as $package)
-            <x-mary-card title="{{ $package->name }}"
+            <x-mary-card title="{!! $package->name !!}"
                 class="!pb-0">
                 <x-slot:figure>
                     <img src="{{ asset('images/placeholder.jpg') }}" />

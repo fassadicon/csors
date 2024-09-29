@@ -1,7 +1,7 @@
 <div>
 
     <x-mary-header title="Events"
-        subtitle="By {{ $caterer->user->name }}"
+        subtitle="By {{ $caterer->user->full_name }}"
         class="!my-2">
     </x-mary-header>
 
