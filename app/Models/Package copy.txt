@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+class Package extends Model
+{
+    use SoftDeletes;
+    use \Znck\Eloquent\Traits\BelongsToThrough;
+
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+            'images' => 'array',
+        ];
+    }
+
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class)
+            ->using(EventPackage::class)
+            ->withTimestamps();
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function orderItems(): MorphMany
+    {
+        return $this->morphMany(OrderItem::class, 'orderable');
+    }
+
+    // public function caterer(): \Znck\Eloquent\Relations\BelongsToThrough
+    // {
+    //     return $this->belongsToThrough(Caterer::class, Event::class);
+    // }
+}

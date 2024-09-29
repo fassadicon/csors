@@ -16,6 +16,7 @@ use App\Enums\OrderStatus;
 use Filament\Tables\Table;
 use App\Enums\PaymentStatus;
 use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MorphToSelect;
@@ -41,7 +42,11 @@ class OrderResource extends Resource
             Forms\Components\Section::make([
                 Forms\Components\Select::make('user_id')
                     ->preload()
-                    ->relationship('user', 'name')
+                    ->relationship(
+                        name: 'user',
+                        titleAttribute: 'name',
+                        // modifyQueryUsing: fn(Builder $query) => $query->withTrashed()
+                    )
                     ->required(),
                 Forms\Components\DateTimePicker::make('start')
                     ->date()
@@ -217,7 +222,8 @@ class OrderResource extends Resource
                     ])
                     ->columns(3),
             ])
-                ->visible(fn($record) => $record->cancellationRequest !== null)
+                // ->visible(fn($record) => $record->cancellationRequest !== null)
+                ->visibleOn('edit')
         ];
     }
 
@@ -274,6 +280,9 @@ class OrderResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
+                    ->formatStateUsing(function ($state, Model $record) {
+                        return $state == $record->recipient ? $record->recipient . ' (' . $state . ')' : $state;
+                    })
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('orderItems')

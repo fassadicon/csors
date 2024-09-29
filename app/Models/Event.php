@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Event extends Model
 {
@@ -21,7 +22,7 @@ class Event extends Model
 
     public function packages(): BelongsToMany
     {
-        return $this->belongsToMany(Package::class)
+        return $this->belongsToMany(Package::class, 'event_package')
             ->using(EventPackage::class)
             ->withTimestamps();
     }
@@ -29,5 +30,10 @@ class Event extends Model
     public function caterer(): BelongsTo
     {
         return $this->belongsTo(Caterer::class);
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

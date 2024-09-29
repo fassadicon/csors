@@ -18,8 +18,10 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'caterer_id',
+        'recipient',
         'promo_id',
         'deducted_amount',
+        'recipient',
         'location',
         'remarks',
         'start',

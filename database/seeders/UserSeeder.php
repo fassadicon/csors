@@ -18,7 +18,6 @@ class UserSeeder extends Seeder
     {
         // Create Super Admin
         User::create([
-            'name' => 'fassadicon',
             'last_name' => 'Sadicon',
             'first_name' => 'Frans Audrey',
             'middle_name' => 'Segovia',
@@ -32,7 +31,6 @@ class UserSeeder extends Seeder
 
         // Create Super Admin
         $test_1_caterer = User::create([
-            'name' => 'gdcbitongjr',
             'last_name' => 'Bitong',
             'first_name' => 'Gary',
             'middle_name' => 'Dela Cruz',
@@ -44,9 +42,8 @@ class UserSeeder extends Seeder
         ]);
         $test_1_caterer->assignRole('caterer');
 
-         // Create Super Admin
-         $test_1_customer = User::create([
-            'name' => 'mfssadicon',
+        // Create Super Admin
+        $test_1_customer = User::create([
             'last_name' => 'Sadicon',
             'first_name' => 'Marian Faye',
             'middle_name' => 'Segovia',
@@ -56,55 +53,18 @@ class UserSeeder extends Seeder
             'is_customer' => 1,
             'password' => bcrypt('qwe'),
         ]);
+        $test_1_customer->assignRole('customer');
 
-        // // Create Customer
-        // User::create([
-        //     'name' => 'fassadicon',
-        //     'last_name' => 'Sadicon',
-        //     'first_name' => 'Frans Audrey',
-        //     'middle_name' => 'Segovia',
-        //     'ext_name' => null,
-        //     'contact_number' => '09063406603',
-        //     'email' => 'customer@csors.com',
-        //     'password' => bcrypt('qwe'),
-        // ]);
-
-        // // Create Caterer
-        // $caterer1 = User::create([
-        //     'name' => 'jlmpalado',
-        //     'last_name' => 'Palado',
-        //     'first_name' => 'Justin Luis',
-        //     'middle_name' => 'Montalban',
-        //     'ext_name' => null,
-        //     'contact_number' => '09063406604',
-        //     'email' => 'caterer_1@csors.com',
-        //     'password' => bcrypt('qwe'),
-        // ]);
-        // Caterer::create([
-        //     'user_id' => 3,
-        //     'name' => 'JLM Palado Catering Services',
-        //     'description' => 'Catering Services',
-        //     'color' => 'blue',
-        // ]);
-        // $caterer1->assignRole('caterer');
-
-        // // Create Caterer
-        // $caterer2 = User::create([
-        //     'name' => 'aslcruz',
-        //     'last_name' => 'Cruz',
-        //     'first_name' => 'Alaine Stephen',
-        //     'middle_name' => 'Lopez',
-        //     'ext_name' => null,
-        //     'contact_number' => '09063406605',
-        //     'email' => 'caterer_2@csors.com',
-        //     'password' => bcrypt('qwe'),
-        // ]);
-        // Caterer::create([
-        //     'user_id' => 4,
-        //     'name' => 'Cruz Catering',
-        //     'description' => 'Catering Services',
-        //     'color' => 'red',
-        // ]);
-        // $caterer2->assignRole('caterer');
+        $test_2_customer = User::create([
+            'last_name' => 'Sadicon',
+            'first_name' => 'Mary Frances',
+            'middle_name' => 'Segovia',
+            'ext_name' => null,
+            'phone_number' => '09063406606',
+            'email' => 'customer_2@csors.com',
+            'is_customer' => 1,
+            'password' => bcrypt('qwe'),
+        ]);
+        $test_2_customer->assignRole('customer');
     }
 }

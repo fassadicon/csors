@@ -1,0 +1,21 @@
+<div>
+
+    <x-mary-header title="Events"
+        subtitle="By {{ $caterer->user->full_name }}"
+        class="!my-2">
+    </x-mary-header>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        @foreach ($events as $event)
+            <a href="{{ route('event', ['event' => $event]) }}">
+                <x-mary-card title="{{ $event->name }}"
+                    class="!pb-0">
+                    <x-slot:figure>
+                        <img src="{{ asset('images/placeholder.jpg') }}" />
+                    </x-slot:figure>
+                </x-mary-card>
+            </a>
+        @endforeach
+    </div>
+
+</div>
