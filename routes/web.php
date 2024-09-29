@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('test', function () {
@@ -12,10 +13,6 @@ Route::get('clear', function () {
 
 Route::get('/', App\Livewire\Landing::class)
     ->name('landing');
-
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
 
 // General Caterer
 Route::get('caterers', App\Livewire\Caterers::class)
@@ -49,14 +46,30 @@ Route::get('contact', App\Livewire\Contact::class)
 Route::get('cart', App\Livewire\Cart::class)
     ->name('cart');
 
-Route::get('order', App\Livewire\Order::class)
-    ->middleware(['auth'])
-    ->name('order');
-// ->middleware(['auth', 'verified'])
-
 Route::get('order-history', App\Livewire\OrderHistory::class)
     ->name('order-history');
 Route::get('view-order/{order}', App\Livewire\ViewOrder::class)
     ->name('view-order');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::view('profile', 'profile')
+        ->name('profile');
+
+    Route::get('order', App\Livewire\Order::class)
+        ->name('order');
+
+    Route::get('partial-payment-success', [PaymentController::class, 'successPartial'])
+        ->middleware(['auth'])
+        ->name('partial-payment-success');
+    Route::get('remaining-payment-success', [PaymentController::class, 'successRemaining'])
+        ->middleware(['auth'])
+        ->name('remaining-payment-success');
+    Route::get('full-payment-success', [PaymentController::class, 'successFull'])
+        ->middleware(['auth'])
+        ->name('full-payment-success');
+});
+
+Route::get('payment-cancelled', [PaymentController::class, 'cancelled'])
+    ->name('payment-cancelled');
 
 require __DIR__ . '/auth.php';

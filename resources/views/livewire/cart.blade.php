@@ -9,7 +9,7 @@
             <div>
                 <x-mary-header title="{{ ucwords($categoryName) }}"
                     class="!my-2"
-                    separator />
+                    size="text-xl" />
                 @foreach ($categoryItems as $key => $categoryItem)
                     <x-mary-list-item :item="$categoryItem"
                         no-separator
@@ -64,7 +64,7 @@
                                 class="mt-2" />
                             <x-mary-button icon="o-trash"
                                 class="text-red-500"
-                                wire:click=""
+                                wire:click="remove('{{ $categoryName }}', '{{ $key }}')"
                                 spinner />
                         </x-slot:actions>
                     </x-mary-list-item>
@@ -74,11 +74,17 @@
         <x-mary-header title="Total: {{ $totalAmount }}"
             class="!my-2">
         </x-mary-header>
-        <x-mary-button type="submit"
-            label="Proceed to Checkout"
-            class="btn-primary"
-            spinner />
-    </form>
 
+        @unless ($totalAmount <= 2000)
+            <x-mary-button type="submit"
+                label="Proceed to Checkout"
+                class="btn-primary"
+                spinner />
+        @endunless
+    </form>
+    <a href="{{ route('about', ['caterer' => $caterer]) }}">
+        <x-mary-button label="Add more items"
+            class="btn-secondary" />
+    </a>
 
 </div>

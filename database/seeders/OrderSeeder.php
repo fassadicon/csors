@@ -35,7 +35,7 @@ class OrderSeeder extends Seeder
         foreach ($caterers as $caterer) {
             // FOODS and UTILITIES
             for ($i = 0; $i < 15; $i++) {
-                $user = User::inRandomOrder()->pluck('id')->first();
+                $user = User::inRandomOrder()->first();
                 // $orderedFoods = $foods->random(rand(2, 4));
                 $orderedFoods = Food::whereHas('servingType', function ($query) use ($caterer) {
                     $query->where('caterer_id', $caterer->id);
@@ -70,16 +70,14 @@ class OrderSeeder extends Seeder
                     $utilitiesTotalAmount += $orderedUtility->price * $quantity;
                 }
 
-
-                $direction = rand(0, 1) ? 'before' : 'after'; // Randomly decide whether $start is before or after today
-                $start = ($direction === 'before')
-                    ? Carbon::now()->subDays(rand(0, 14)) // Randomly between 7 and 14 days before today
-                    : Carbon::now()->addDays(rand(0, 14)); // Randomly between 7 and 14 days after today
+                $start = Carbon::now()->subDays(rand(1, 14));
                 $start->setTime(rand(7, 19), [0, 30][rand(0, 1)]); // start between 7am and 7pm, either sharp or 30 minutes past
-                $end = $start->copy()->addHour();
+                $addedHours = rand(1, 6);
+                $end = $start->copy()->addHours($addedHours);
 
                 $order = Order::create([
-                    'user_id' => $user,
+                    'user_id' => $user->id,
+                    'recipient' => $user->full_name,
                     'caterer_id' => $caterer->id,
                     'start' => $start,
                     'end' => $end,
@@ -103,7 +101,7 @@ class OrderSeeder extends Seeder
 
     protected function seedPackageOrders($caterer): void
     {
-        $user = User::inRandomOrder()->pluck('id')->first();
+        $user = User::inRandomOrder()->first();
 
         for ($i = 0; $i < 5; $i++) {
             $package = Package::whereHas('events', function ($query) use ($caterer) {
@@ -119,15 +117,14 @@ class OrderSeeder extends Seeder
                 'amount' => $package->price * $quantity,
             ];
 
-            $direction = rand(0, 1) ? 'before' : 'after'; // Randomly decide whether $start is before or after today
-            $start = ($direction === 'before')
-                ? Carbon::now()->subDays(rand(0, 14)) // Randomly between 7 and 14 days before today
-                : Carbon::now()->addDays(rand(0, 14)); // Randomly between 7 and 14 days after today
+            $start = Carbon::now()->subDays(rand(1, 14));
             $start->setTime(rand(7, 19), [0, 30][rand(0, 1)]); // start between 7am and 7pm, either sharp or 30 minutes past
-            $end = $start->copy()->addHour();
+            $addedHours = rand(1, 6);
+            $end = $start->copy()->addHours($addedHours);
 
             $order = Order::create([
-                'user_id' => $user,
+                'user_id' => $user->id,
+                'recipient' => $user->full_name,
                 'caterer_id' => $caterer->id,
                 'start' => $start,
                 'end' => $end,

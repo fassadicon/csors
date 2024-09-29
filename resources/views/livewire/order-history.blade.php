@@ -11,8 +11,22 @@
         {{-- @row-click="alert($event.detail.name)"  --}}
         {{-- :link="route('users.show', ['username' => ['username'], 'id' => ['id']])" --}}
         {{-- :cell-decoration="$cell_decoration" --}}>
-        @scope('start', $order)
-            {{ \Carbon\Carbon::parse($order->start)->format('F d, Y') }}
+        @scope('cell_total_amount', $order)
+            {{ '₱ ' . $order->total_amount }}
+        @endscope
+        @scope('cell_payment_status', $order)
+            <x-mary-badge :value="$order->payment_status->getLabel()"
+                class="badge-{{ $order->payment_status->getMaryColor() }}" />
+        @endscope
+        @scope('cell_order_status', $order)
+            <x-mary-badge :value="$order->order_status->getLabel()"
+                class="badge-{{ $order->order_status->getMaryColor() }}" />
+        @endscope
+        @scope('cell_start', $order)
+            {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
+        @endscope
+        @scope('cell_end', $order)
+            {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
         @endscope
         @scope('actions', $order)
             <a href="{{ route('view-order', ['order' => $order]) }}">

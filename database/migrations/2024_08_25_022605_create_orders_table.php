@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('promo_id')->nullable();
             $table->dateTime('start');
             $table->dateTime('end');
+            $table->string('recipient');
             $table->string('location');
             $table->decimal('total_amount', 8, 2);
             $table->decimal('deducted_amount', 8, 2)->nullable();

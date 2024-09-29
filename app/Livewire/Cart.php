@@ -27,6 +27,21 @@ class Cart extends Component
         return redirect()->route('order');
     }
 
+    public function remove($categoryName, $key)
+    {
+        unset($this->cart[$categoryName][$key]);
+
+        if (empty($this->cart[$categoryName])) {
+            unset($this->cart[$categoryName]);
+        }
+
+        $this->totalAmount = collect($this->cart)->flatMap(function ($orderItems) {
+            return $orderItems;
+        })->sum('price');
+
+        session()->put('cart', $this->cart);
+    }
+
     public function updateServingType($servingTypeId, $categoryName, $key)
     {
         $food = Food::where('serving_type_id', $servingTypeId)

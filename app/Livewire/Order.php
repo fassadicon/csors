@@ -46,7 +46,7 @@ class Order extends Component
         }
 
         $downPayment = $this->totalAmount * 0.7;
-        $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format(5000, 2)))));
+        $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($downPayment, 2)))));
 
         $data = [
             'data' => [
@@ -75,13 +75,11 @@ class Order extends Component
                     'send_email_receipt' => false,
                     'show_description' => true,
                     'show_line_items' => true,
-                    // 'success_url' => url("/payment-success"),
-                    // 'cancel_url' => url("/payment-cancelled"),
+                    'success_url' => url("partial-payment-success"),
+                    'cancel_url' => url("payment-cancelled"),
                 ],
             ],
         ];
-
-        dd('payment link redirect');
 
         $auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
 
@@ -93,14 +91,19 @@ class Order extends Component
             ->asJson()
             ->post();
 
-        // dd($response->data->attributes->checkout_url);
+        session()->put('checkout', [
+            'recipient' => $this->recipient,
+            'start' => $this->startDateTime,
+            'end' => $this->endDateTime,
+            'location' => $this->location,
+            'remarks' => $this->remarks,
+        ]);
+
         return redirect($response->data->attributes->checkout_url);
-        // return response()->$response->data->attributes->checkout_url;
     }
 
     public function render()
     {
-        // dd($this->cart);
         return view('livewire.order');
     }
 }

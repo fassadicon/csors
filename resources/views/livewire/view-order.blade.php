@@ -3,6 +3,10 @@
         subtitle="# {{ $order->id }} - PHP {{ $order->total_amount }}"
         class="!my-2">
         <x-slot:actions>
+            <x-mary-badge value="Payment: {{ $order->payment_status->getLabel() }}"
+                class="badge-{{ $order->payment_status->getMaryColor() }}" />
+            <x-mary-badge value="Order: {{ $order->order_status->getLabel() }}"
+                class="badge-{{ $order->order_status->getMaryColor() }}" />
             <a href="{{ route('order-history') }}">
                 <x-mary-button label="Back to Order History"
                     class="btn-outline" />
@@ -62,12 +66,14 @@
         Date Ordered: {{ $order->created_at }}
     </p>
 
-    <a href="{{ route('order-history') }}">
-        <x-mary-button label="Cancel Order"
-            class="btn-danger" />
-    </a>
+    @if ($order->payment_status->value == 'pending')
+        <x-primary-button wire:click='payPartial'>{{ __('Pay Partial') }}</x-primary-button>
+        <x-primary-button wire:click='payFull'>{{ __('Pay Full') }}</x-primary-button>
+    @elseif ($order->payment_status->value == 'partial')
+        <x-primary-button wire:click='payRemaining'>{{ __('Pay Remaining Balance') }}</x-primary-button>
+    @endif
 
-    <a href="{{ route('order-history') }}">
-        <x-primary-button>{{ __('Pay Full') }}</x-primary-button>
-    </a>
+    @if ($order->order_status->value == 'pending' || $order->order_status->value == 'confirmed')
+        <x-danger-button wire:click='cancel'>{{ __('Request to Cancel') }}</x-danger-button>
+    @endif
 </div>

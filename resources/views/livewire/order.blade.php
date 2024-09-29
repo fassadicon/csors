@@ -51,7 +51,8 @@
             id="recipient"
             class="block mt-1 w-full"
             type="recipient"
-            name="recipient" />
+            name="recipient"
+            required/>
         <x-input-error :messages="$errors->get('recipient')"
             class="mt-2" />
         <x-input-label for="startDateTime"
@@ -60,7 +61,8 @@
             id="startDateTime"
             class="block mt-1 w-full"
             type="datetime-local"
-            name="startDateTime" />
+            name="startDateTime"
+            required/>
         <x-input-error :messages="$errors->get('startDateTime')"
             class="mt-2" />
         <x-input-label for="endDateTime"
@@ -69,7 +71,8 @@
             id="endDateTime"
             class="block mt-1 w-full"
             type="datetime-local"
-            name="endDateTime" />
+            name="endDateTime"
+            required/>
         <x-input-error :messages="$errors->get('endDateTime')"
             class="mt-2" />
         <x-input-label for="location"
@@ -78,7 +81,8 @@
             id="location"
             class="block mt-1 w-full mb-4"
             type="text"
-            name="location" />
+            name="location"
+            required/>
         <x-input-error :messages="$errors->get('location')"
             class="mt-2" />
 
