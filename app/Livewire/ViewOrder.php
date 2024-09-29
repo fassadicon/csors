@@ -49,12 +49,12 @@ class ViewOrder extends Component
 
     public function payPartial()
     {
-        $downPayment = $this->totalAmount * 0.7;
+        $downPayment = $this->order->total_amount * 0.7;
         $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($downPayment, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route("partial-payment-existing-success");
-        $this->data['data']['attributes']['line_items']['amount'] = $downPayment;
-        $this->data['data']['attributes']['line_items']['name'] = 'Payment 1 of 2';
+        $this->data['data']['attributes']['line_items'][0]['amount'] = $downPayment;
+        $this->data['data']['attributes']['line_items'][0]['name'] = 'Payment 1 of 2';
 
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
             ->withHeader('Content-Type: application/json')
@@ -73,11 +73,11 @@ class ViewOrder extends Component
 
     public function payFull()
     {
-        $fullPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->totalAmount, 2)))));
+        $fullPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->order->total_amount, 2)))));
 
-        $this->data['data']['attributes']['success_url'] = route("full-payment-success");
-        $this->data['data']['attributes']['line_items']['amount'] = $fullPayment;
-        $this->data['data']['attributes']['line_items']['name'] = 'Payment 1 of 1';
+        $this->data['data']['attributes']['success_url'] = route("full-payment-existing-success");
+        $this->data['data']['attributes']['line_items'][0]['amount'] = $fullPayment;
+        $this->data['data']['attributes']['line_items'][0]['name'] = 'Payment 1 of 1';
 
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
             ->withHeader('Content-Type: application/json')
@@ -100,8 +100,8 @@ class ViewOrder extends Component
         $remainingPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($remainingPayment, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route('remaining-payment-success');
-        $this->data['data']['attributes']['line_items']['amount'] = $remainingPayment;
-        $this->data['data']['attributes']['line_items']['name'] = 'Payment 2 of 2';
+        $this->data['data']['attributes']['line_items'][0]['amount'] = $remainingPayment;
+        $this->data['data']['attributes']['line_items'][0]['name'] = 'Payment 2 of 2';
 
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
             ->withHeader('Content-Type: application/json')
