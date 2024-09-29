@@ -30,10 +30,10 @@ enum OrderStatus: string implements HasLabel, HasColor
     public function getMaryColor(): string | array | null
     {
         return match ($this) {
-            self::Pending => 'warning',
+            self::Pending => 'error',
             self::Confirmed => 'primary',
             self::Completed => 'success',
-            self::Cancelled => 'error',
+            self::Cancelled => 'neutral',
         };
     }
 }

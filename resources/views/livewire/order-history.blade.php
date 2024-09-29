@@ -23,6 +23,7 @@
         @scope('cell_payment_status', $order)
             <x-mary-badge :value="$order->payment_status->getLabel()"
                 class="badge-{{ $order->payment_status->getMaryColor() }}" />
+            {{-- class="badge-{{ $order->payment_status->getMaryColor() }}" --}}
         @endscope
         @scope('cell_order_status', $order)
             <x-mary-badge :value="$order->order_status->getLabel()"
