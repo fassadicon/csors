@@ -59,14 +59,16 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('order');
 
     Route::get('partial-payment-success', [PaymentController::class, 'successPartial'])
-        ->middleware(['auth'])
         ->name('partial-payment-success');
-    Route::get('remaining-payment-success', [PaymentController::class, 'successRemaining'])
-        ->middleware(['auth'])
-        ->name('remaining-payment-success');
     Route::get('full-payment-success', [PaymentController::class, 'successFull'])
-        ->middleware(['auth'])
         ->name('full-payment-success');
+
+    Route::get('partial-payment-existing-success', [PaymentController::class, 'successPartialExisting'])
+        ->name('partial-payment-existing-success');
+    Route::get('remaining-payment-success', [PaymentController::class, 'successRemaining'])
+        ->name('remaining-payment-success');
+    Route::get('full-payment-existing-success', [PaymentController::class, 'successFullExisting'])
+        ->name('full-payment-existing-success');
 });
 
 Route::get('payment-cancelled', [PaymentController::class, 'cancelled'])
