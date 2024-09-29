@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 
 class PaymentController extends Controller
 {
@@ -57,7 +57,7 @@ class PaymentController extends Controller
             session()->forget('cart');
             session()->forget('checkout');
 
-            return redirect('order-history')->with('success', 'Payment successful');
+            return redirect('order-history')->with('success', 'Downpayment paid successfully!');
         } else {
             abort(404, 'Unauthorized');
         }
@@ -74,13 +74,13 @@ class PaymentController extends Controller
 
             session()->forget('pay_partial');
 
-            return redirect('order-history')->with('success', 'Payment successful');
+            return redirect('order-history')->with('success', 'Downpayment paid successfully!');
         } else {
             abort(404, 'Unauthorized');
         }
     }
 
-    public function successRemaining()
+    public function successRemaining(): RedirectResponse
     {
         $payRemaining = session()->get('pay_remaining');
 
@@ -91,7 +91,7 @@ class PaymentController extends Controller
 
             session()->forget('pay_remaining');
 
-            return redirect('order-history')->with('success', 'Payment successful');
+            return redirect('order-history')->with('success', 'Remaining balance paid successfully!');
         } else {
             abort(404, 'Unauthorized');
         }
@@ -108,7 +108,7 @@ class PaymentController extends Controller
 
             session()->forget('pay_full');
 
-            return redirect('order-history')->with('success', 'Payment successful');
+            return redirect('order-history')->with('success', 'Full payment paid successfully!');
         } else {
             abort(404, 'Unauthorized');
         }
@@ -116,7 +116,7 @@ class PaymentController extends Controller
 
     public function successFullExisting()
     {
-        $payFull= session()->get('pay_full');
+        $payFull = session()->get('pay_full');
 
         if ($payFull) {
             auth()->user()->orders()->where('id', $payFull['order_id'])->update([
@@ -125,7 +125,7 @@ class PaymentController extends Controller
 
             session()->forget('pay_full');
 
-            return redirect('order-history')->with('success', 'Payment successful');
+            return redirect('order-history')->with('success', 'Full payment paid successfully!');
         } else {
             abort(404, 'Unauthorized');
         }

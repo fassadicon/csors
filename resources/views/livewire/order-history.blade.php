@@ -1,4 +1,10 @@
 <div>
+    @session('success')
+        <x-mary-alert icon="o-banknotes"
+            class="alert-success">
+            {{ session('success') }}
+        </x-mary-alert>
+    @endsession
     <x-mary-header title="My Orders"
         class="!my-2">
     </x-mary-header>

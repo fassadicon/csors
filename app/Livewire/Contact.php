@@ -6,8 +6,6 @@ use App\Models\Caterer;
 use Livewire\Component;
 use App\Mail\InquiryMail;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Contact extends Component
 {
