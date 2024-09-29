@@ -4,14 +4,39 @@ namespace App\Livewire;
 
 use App\Models\Caterer;
 use Livewire\Component;
+use App\Mail\InquiryMail;
+use Illuminate\Support\Facades\Mail;
 
 class Contact extends Component
 {
-    public $catererEmail;
+    public Caterer $caterer;
+    public $name;
+    public $subject;
+    public $content;
+    public $email;
 
     public function mount()
     {
-        $this->catererEmail = Caterer::find(session()->get('caterer'))->first()->pluck('email');
+        $this->caterer = Caterer::find(session()->get('caterer'))->first();
+
+        if (auth()->check()) {
+            $this->name = auth()->user()->full_name;
+            $this->email = auth()->user()->email;
+        }
+    }
+
+    public function send()
+    {
+        // $this->caterer->email
+        Mail::to('audreysgv@gmail.com')->send(new InquiryMail(
+            $this->name,
+            $this->subject,
+            $this->content,
+            $this->email,
+            $this->caterer->id,
+        ));
+
+        redirect()->route('about', ['caterer' => $this->caterer]);
     }
 
     public function render()
