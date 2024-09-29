@@ -11,7 +11,7 @@ class Caterers extends Component
 
     public function mount()
     {
-        $this->caterers = Caterer::get();
+        $this->caterers = Caterer::where('is_verified', 1)->get();
     }
 
     public function render()

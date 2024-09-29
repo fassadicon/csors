@@ -19,6 +19,7 @@ class CatererSeeder extends Seeder
             'email' => 'audreysgv@gmail.com',
             'phone_number' => '09063406603',
             'about' => 'San Mateo\'s Best Catering Service',
+            'is_verified' => 1,
         ]);
 
         Caterer::create([
@@ -27,6 +28,7 @@ class CatererSeeder extends Seeder
             'email' => 'caterer_1@csors.com',
             'phone_number' => '09063406601',
             'about' => 'Test Catering Service',
+            'is_verified' => 0,
         ]);
     }
 }
