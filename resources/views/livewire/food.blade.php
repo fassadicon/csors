@@ -15,10 +15,7 @@
             ];
         @endphp
 
-        <a href="{{ route('menu') }}">
-            <x-mary-button label="Back to Menu"
-                class="btn-outline" />
-        </a>
+        
 
         <x-mary-carousel :slides="$slides"
             class="mt-4"
@@ -40,17 +37,17 @@
             <x-mary-table :headers="$headers"
                 :rows="$foodDetail->servingTypes"
                 striped
-                class="border-collapse border" />
+                class="border border-collapse" />
         </div>
 
         <form wire:submit="addToCart">
-            <div class="flex space-x-4 mt-4">
+            <div class="flex mt-4 space-x-4">
                 <div class="w-3/5">
                     <x-input-label for="servingType"
                         :value="__('Serving Type')" />
                     <select wire:model.live="servingType"
                         id="servingType"
-                        class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                        class="block w-full mt-1 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
                         name="servingType"
                         autofocus
                         required>
@@ -67,7 +64,7 @@
                         :value="__('Quantity')" />
                     <x-text-input wire:model.live="quantity"
                         id="quantity"
-                        class="block mt-1 w-full"
+                        class="block w-full mt-1"
                         type="number"
                         name="quantity"
                         required
@@ -80,7 +77,7 @@
                         :value="__('Price')" />
                     <x-text-input wire:model="price"
                         id="price"
-                        class="block mt-1 w-full"
+                        class="block w-full mt-1"
                         type="number"
                         required
                         readonly
@@ -91,10 +88,13 @@
                         class="mt-2" />
                 </div>
             </div>
-            <div class="flex mt-4">
+            <div class="flex flex-col mt-8 gap-y-4">
                 <x-mary-button type="submit"
                     label="Add to Order"
-                    class="btn-primary w-full" />
+                    class="w-full btn-primary" />
+                <a href="{{ route('menu') }}">
+                    <x-mary-button label="Back to Menu" class="w-full btn-outline" />
+                </a>
             </div>
         </form>
     </div>

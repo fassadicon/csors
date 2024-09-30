@@ -15,6 +15,16 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            // UPDATE COLORS HERE
+            colors: {
+                'jt-primary': '#277F71',
+                'jt-primary-dark': '#226C60',
+                'jt-primary-light': '#D9F2EE',
+                'jt-secondary': '#EB862A',
+                'jt-light': '#FAFAFC',
+                'jt-white': '#FFFFFF',
+                'jt-grey': '#E8EBEA',
+            }
         },
     },
 

@@ -1,16 +1,16 @@
 <div>
     <x-mary-header title="Caterers"
-        class="mb-6"
+        class="!my-4 !mt-8"
         subtitle="Please select your chosen caterer to view their products, services, pricings, and more."
         separator />
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 !text-center">
         @foreach ($caterers as $caterer)
-            <a href="{{ route('about', ['caterer' => $caterer]) }}">
-                <x-mary-card title="{{ $caterer->name }}">
+            <a href="{{ route('about', ['caterer' => $caterer]) }}" >
+                <x-mary-card title="{{ $caterer->name }}" class="flex items-center justify-center">
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, consectetur!
                     <x-mary-badge value="+99"
-                        class="badge-neutral" />
-                    <x-mary-rating />
+                        class="badge-success" />
+                    <x-mary-rating class="!my-4 badge-warning" />
                     <x-slot:figure>
                         <img src="{{ asset('images/placeholder.jpg') }}" />
                     </x-slot:figure>

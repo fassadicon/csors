@@ -13,14 +13,14 @@
         ];
     @endphp
 
-    <x-mary-carousel :slides="$slides"
+    <x-mary-carousel :slides="$slides" class="!bg-jt-primary !rounded-md"
         without-arrows />
 
     <x-mary-header title="{{ $event->name }}"
-        class="!my-2">
+        class="!my-4 !mt-8">
     </x-mary-header>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($event->packages as $package)
             <x-mary-card title="{!! $package->name !!}">
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, consectetur!

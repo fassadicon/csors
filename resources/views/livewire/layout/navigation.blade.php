@@ -6,15 +6,15 @@
 @endphp
 
 <nav x-data="{ open: false }"
-    class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+    class="border-b border-gray-100 bg-jt-primary-dark dark:bg-gray-800 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                <div class="flex items-center shrink-0">
                     <a href="{{ route('landing') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /></a>
+                        <x-application-logo class="block w-auto fill-current text-jt-white h-9 dark:text-gray-200" /></a>
                 </div>
 
 
@@ -22,7 +22,7 @@
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                         <x-nav-dropdown>
-                            <x-slot name="trigger">{{ $caterer->name }}
+                            <x-slot name="trigger"><p class="!text-white text-hover-def cursor-pointer">{{ $caterer->name }}</p>
                             </x-slot>
                             <x-slot name="content">
                                 <x-dropdown-link
@@ -36,7 +36,7 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('caterers')"
                             :active="request()->routeIs('caterers')"
-                            wire:navigate>
+                            wire:navigate class="!text-white text-hover-def">
                             {{ __('Caterers') }}
                         </x-nav-link>
                     </div>
@@ -47,7 +47,7 @@
                     @if ($caterer)
                         <x-nav-dropdown :active="request()->routeIs('events')">
                             <x-slot name="trigger">
-                                <a href="{{ route('events') }}">Events</a>
+                                <a href="{{ route('events') }}" class="!text-white text-hover-def">Events</a>
                             </x-slot>
                             <x-slot name="content">
 
@@ -65,7 +65,7 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('menu')"
                             :active="request()->routeIs('menu')"
-                            wire:navigate>
+                            wire:navigate class="!text-white text-hover-def">
                             {{ __('Menu') }}
                         </x-nav-link>
                     </div>
@@ -73,9 +73,9 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)
-                        <x-nav-dropdown>
-                            <x-slot name="trigger">
-                                <a href="{{ route('utilities') }}">Utilities</a>
+                        <x-nav-dropdown >
+                            <x-slot name="trigger" >
+                                <a href="{{ route('utilities') }}" class="!text-white text-hover-def">Utilities</a>
                             </x-slot>
                             <x-slot name="content">
                                 @foreach ($caterer->utilities as $utility)
@@ -91,43 +91,43 @@
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden space-x-2 sm:flex sm:items-center sm:ms-6">
                 @if ($caterer)
-                    <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0 flex items-center">
+                    <div class="flex items-center space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
                         <a href="{{ route('cart') }}">
                             <x-mary-button icon="o-shopping-cart"
-                                class="btn-circle relative">
+                                class="relative btn-circle">
                                 <x-mary-badge value="{{ $cartItemCount }}"
-                                    class="badge-primary absolute -right-2 -top-2" />
+                                    class="absolute badge-primary -right-2 -top-2" />
                             </x-mary-button>
                         </a>
                     </div>
                 @endif
                 @if (auth()->guest())
                     <a href="{{ route('login') }}"
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                         {{ __('Login') }}
                     </a>
                     <a href="{{ route('register') }}"
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                         {{ __('Register') }}
                     </a>
                 @else
                     <a href="{{ route('order-history') }}"
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                         {{ __('My Orders') }}
                     </a>
                     <x-dropdown align="right"
                         width="48">
                         <x-slot name="trigger">
                             <button
-                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                                 <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}"
                                     x-text="name"
                                     x-on:profile-updated.window="name = $event.detail.name"></div>
 
                                 <div class="ms-1">
-                                    <svg class="fill-current h-4 w-4"
+                                    <svg class="w-4 h-4 fill-current"
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -146,7 +146,7 @@
 
                             <!-- Authentication -->
                             <button wire:click="logout"
-                                class="w-full text-start">
+                                class="w-full bg-white text-start">
                                 <x-dropdown-link>
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
@@ -157,10 +157,10 @@
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="flex items-center -me-2 sm:hidden">
                 <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6"
+                    class="inline-flex items-center justify-center p-2 text-gray-400 transition duration-150 ease-in-out rounded-md dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400">
+                    <svg class="w-6 h-6"
                         stroke="currentColor"
                         fill="none"
                         viewBox="0 0 24 24">
@@ -197,17 +197,17 @@
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             @if (auth()->guest())
                 <a href="{{ route('login') }}"
-                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                     {{ __('Login') }}
                 </a>
             @else
                 <div class="px-4">
 
-                    <div class="font-medium text-base text-gray-800 dark:text-gray-200"
+                    <div class="text-base font-medium text-gray-800 dark:text-gray-200"
                         x-data="{{ json_encode(['name' => auth()->user()->name]) }}"
                         x-text="name"
                         x-on:profile-updated.window="name = $event.detail.name"></div>
-                    <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
+                    <div class="text-sm font-medium text-gray-500">{{ auth()->user()->email }}</div>
                 </div>
 
                 <div class="mt-3 space-y-1">

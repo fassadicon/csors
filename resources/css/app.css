@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+
+
+    button {
+        @apply bg-jt-primary
+    }
+
+    .btn-lite {
+        @apply !bg-jt-white !text-black !border-0 !border-b-4 !border-jt-primary
+    }
+
+    .btn-primary {
+        @apply !bg-jt-primary !text-white !border-transparent
+    }
+
+    .btn-secondary {
+        @apply !bg-jt-secondary !text-white !border-transparent
+    }
+
+    .card {
+        @apply hover:!scale-105 duration-100 ease-in-out
+    }
+
+    .remove-card-animation {
+        @apply hover:!scale-100
+    }
+
+
+
+    /* TEXT HOVERED  */
+    .text-hover-def {
+        @apply text-jt-light hover:text-jt-white duration-200 ease-out
+    }
+}
