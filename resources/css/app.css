@@ -4,6 +4,11 @@
 
 @layer base {
 
+    /* H TAGS  */
+    h1 {
+        @apply text-4xl
+    }
+
 
     button {
         @apply bg-jt-primary

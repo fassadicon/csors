@@ -23,7 +23,7 @@
                 class="!my-4 !mt-8">
             </x-mary-header>
 
-            <div class="px-2 py-1 badge-success w-fit rounded-xl ">
+            <div class="px-2 py-1 text-white badge-success w-fit rounded-xl ">
                 {{ 'PHP ' . $package->price }}
             </div>
             <hr class="my-2">

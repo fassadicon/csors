@@ -15,10 +15,7 @@
             ];
         @endphp
 
-        <a href="{{ route('utilities') }}">
-            <x-mary-button label="Back to Utilities"
-                class="btn-outline" />
-        </a>
+        
 
         <x-mary-carousel :slides="$slides"
             class="mt-4"
@@ -42,13 +39,13 @@
         </div>
 
         <form wire:submit="addToCart">
-            <div class="flex space-x-4 mt-4">
+            <div class="flex mt-4 space-x-4">
                 <div class="w-1/3">
                     <x-input-label for="quantity"
                         :value="__('Quantity')" />
                     <x-text-input wire:model.live="quantity"
                         id="quantity"
-                        class="block mt-1 w-full"
+                        class="block w-full mt-1"
                         type="number"
                         name="quantity"
                         required
@@ -61,7 +58,7 @@
                         :value="__('Price')" />
                     <x-text-input wire:model="price"
                         id="price"
-                        class="block mt-1 w-full"
+                        class="block w-full mt-1"
                         type="number"
                         required
                         readonly
@@ -72,10 +69,14 @@
                         class="mt-2" />
                 </div>
             </div>
-            <div class="flex mt-4">
+            <div class="flex flex-col mt-8 gap-y-4" >
                 <x-mary-button type="submit"
                     label="Add to Order"
-                    class="btn-primary w-full" />
+                    class="w-full btn-primary" />
+                
+                <a href="{{ route('utilities') }}">
+                    <x-mary-button label="Back to Utilities" class="w-full btn-outline" />
+                </a>
             </div>
         </form>
     </div>

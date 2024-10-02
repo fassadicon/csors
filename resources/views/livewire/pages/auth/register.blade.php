@@ -49,68 +49,59 @@ new #[Layout('layouts.guest')] class extends Component {
     }
 }; ?>
 
-<div>
-    <form wire:submit="register">
+
+<div class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-screen overflow-y-auto md:items-start">
+
+    <img draggable="false" src="{{asset('images/bgs/bg1.jpg')}}" alt=""
+        class="absolute z-0 object-cover w-full h-screen overlay">
+    {{-- overlay --}}
+    <div class="absolute w-full h-screen bg-white/25"></div>
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <div
+        class="z-10 px-8 md:px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md md:min-w-[450px] w-[90%] md:w-[30%] space-y-2 ">
+        <div class="flex flex-row items-center justify-center md:justify-start gap-x-2">
+            <div class="inline-flex w-[10px] h-[40px] bg-jt-primary"></div>
+            <h1 class="font-bold">Join Us Today!</h1>
+        </div>
+        <p class="text-center md:text-left">Create your account and get access to seamless catering services, personalized event planning, and exclusive offers.
+        Let’s make your next celebration unforgettable!</p>
+    </div>
+    <form wire:submit="register" class=" z-10 px-4 md:px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md bg-jt-white w-[90%] md:min-w-[450px] md:w-[30%] space-y-4">
+        <div class="flex flex-col md:flex-row gap-y-4 md:gap-x-4">
+            <div class="w-full">
+                <x-input-label for="first_name" :value="__('First Name')" />
+                <x-text-input wire:model="first_name" id="first_name" class="block w-full mt-1" type="text" name="first_name"
+                    required autofocus autocomplete="first_name" />
+                <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
+            </div>
+            <div class="w-full">
+                <x-input-label for="last_name" :value="__('Last Name')" />
+                <x-text-input wire:model="last_name" id="last_name" class="block w-full mt-1" type="text" name="last_name" required
+                    autofocus autocomplete="last_name" />
+                <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row gap-y-4 md:gap-x-4">
+            <div class="w-full">
+                <x-input-label for="middle_name" :value="__('Middle Name')" />
+                <x-text-input wire:model="middle_name" id="middle_name" class="block w-full mt-1" type="text" name="middle_name"
+                    autofocus autocomplete="middle_name" />
+                <x-input-error :messages="$errors->get('middle_name')" class="mt-2" />
+            </div>
+            <div class="w-full">
+                <x-input-label for="ext_name" :value="__('Extension Name')" />
+                <x-text-input wire:model="ext_name" id="ext_name" class="block w-full mt-1" type="text" name="ext_name" autofocus
+                    autocomplete="ext_name" />
+                <x-input-error :messages="$errors->get('ext_name')" class="mt-2" />
+            </div>
+        </div>
         <div>
-            <x-input-label for="first_name"
-                :value="__('First Name')" />
-            <x-text-input wire:model="first_name"
-                id="first_name"
-                class="block mt-1 w-full"
-                type="text"
-                name="first_name"
-                required
-                autofocus
-                autocomplete="first_name" />
-            <x-input-error :messages="$errors->get('first_name')"
-                class="mt-2" />
-        </div>
-        <div class="mt-4">
-            <x-input-label for="last_name"
-                :value="__('Last Name')" />
-            <x-text-input wire:model="last_name"
-                id="last_name"
-                class="block mt-1 w-full"
-                type="text"
-                name="last_name"
-                required
-                autofocus
-                autocomplete="last_name" />
-            <x-input-error :messages="$errors->get('last_name')"
-                class="mt-2" />
-        </div>
-        <div class="mt-4">
-            <x-input-label for="middle_name"
-                :value="__('Middle Name')" />
-            <x-text-input wire:model="middle_name"
-                id="middle_name"
-                class="block mt-1 w-full"
-                type="text"
-                name="middle_name"
-                autofocus
-                autocomplete="middle_name" />
-            <x-input-error :messages="$errors->get('middle_name')"
-                class="mt-2" />
-        </div>
-        <div class="mt-4">
-            <x-input-label for="ext_name"
-                :value="__('Extension Name')" />
-            <x-text-input wire:model="ext_name"
-                id="ext_name"
-                class="block mt-1 w-full"
-                type="text"
-                name="ext_name"
-                autofocus
-                autocomplete="ext_name" />
-            <x-input-error :messages="$errors->get('ext_name')"
-                class="mt-2" />
-        </div>
-        <div class="mt-4">
             <x-input-label for="phone_number"
                 :value="__('Phone Number')" />
             <x-text-input wire:model="phone_number"
                 id="phone_number"
-                class="block mt-1 w-full"
+                class="block w-full mt-1"
                 type="text"
                 name="phone_number"
                 autofocus
@@ -120,12 +111,12 @@ new #[Layout('layouts.guest')] class extends Component {
         </div>
 
         <!-- Email Address -->
-        <div class="mt-4">
+        <div>
             <x-input-label for="email"
                 :value="__('Email')" />
             <x-text-input wire:model="email"
                 id="email"
-                class="block mt-1 w-full"
+                class="block w-full mt-1"
                 type="email"
                 name="email"
                 required
@@ -135,13 +126,13 @@ new #[Layout('layouts.guest')] class extends Component {
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
+        <div>
             <x-input-label for="password"
                 :value="__('Password')" />
 
             <x-text-input wire:model="password"
                 id="password"
-                class="block mt-1 w-full"
+                class="block w-full mt-1"
                 type="password"
                 name="password"
                 required
@@ -152,13 +143,13 @@ new #[Layout('layouts.guest')] class extends Component {
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
+        <div>
             <x-input-label for="password_confirmation"
                 :value="__('Confirm Password')" />
 
             <x-text-input wire:model="password_confirmation"
                 id="password_confirmation"
-                class="block mt-1 w-full"
+                class="block w-full mt-1"
                 type="password"
                 name="password_confirmation"
                 required
@@ -168,14 +159,14 @@ new #[Layout('layouts.guest')] class extends Component {
                 class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+        <div class="flex flex-col-reverse items-center justify-end mt-8 md:mt-0 gap-y-4 md:gap-y-0 md:flex-row">
+            <a class="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 href="{{ route('login') }}"
                 wire:navigate>
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4">
+            <x-primary-button class="ms-4 btn-primary">
                 {{ __('Register') }}
             </x-primary-button>
         </div>

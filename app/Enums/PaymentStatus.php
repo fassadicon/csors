@@ -28,9 +28,9 @@ enum PaymentStatus: string implements HasLabel, HasColor
     public function getMaryColor(): string | null
     {
         return match ($this) {
-            self::Pending => 'error',
-            self::Partial => 'primary',
-            self::Paid => 'neutral',
+            self::Pending => 'warning',
+            self::Partial => 'accent bg-orange-500 border-transparent text-white',
+            self::Paid => 'accent bg-yellow-500 border-transparent ',
         };
     }
 }
