@@ -1,7 +1,7 @@
-<div>
+<div class="p-4 rounded-sm bg-jt-white">
     <x-mary-header title="My Cart"
         subtitle="From {{ $caterer->name }}"
-        class="!my-2">
+        class="!my-4 mt-8">
     </x-mary-header>
 
     <form wire:submit="checkout">
@@ -27,7 +27,7 @@
                                 <select wire:model.live="cart.{{ $categoryName }}.{{ $key }}.servingTypeId"
                                     wire:change="updateServingType($event.target.value, '{{ $categoryName }}', '{{ $key }}')"
                                     id="servingType"
-                                    class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                    class="block w-full mt-1 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
                                     name="servingType"
                                     required>
                                     {{-- <option value="">Select Option</option> --}}
@@ -46,7 +46,7 @@
                             <x-text-input wire:model.defer="cart.{{ $categoryName }}.{{ $key }}.quantity"
                                 wire:change="updateQuantity($event.target.value, '{{ $categoryName }}', '{{ $key }}')"
                                 id="cart.{{ $categoryName }}.{{ $key }}.quantity"
-                                class="block mt-1 w-full"
+                                class="block w-full mt-1"
                                 type="number"
                                 name="name"
                                 required />
@@ -56,7 +56,7 @@
                                 :value="__('Price')" />
                             <x-text-input wire:model.live="cart.{{ $categoryName }}.{{ $key }}.price"
                                 id="cart.{{ $categoryName }}.{{ $key }}.price"
-                                class="block mt-1 w-full"
+                                class="block w-full mt-1"
                                 type="text"
                                 name="name"
                                 required />
@@ -74,17 +74,17 @@
         <x-mary-header title="Total: {{ $totalAmount }}"
             class="!my-2">
         </x-mary-header>
-
+        <hr class="my-4">
         @unless ($totalAmount <= 2000)
             <x-mary-button type="submit"
                 label="Proceed to Checkout"
-                class="btn-primary"
+                class="my-4 btn-primary md:w-[40%]"
                 spinner />
         @endunless
     </form>
     <a href="{{ route('about', ['caterer' => $caterer]) }}">
         <x-mary-button label="Add more items"
-            class="btn-secondary" />
+            class="btn-secondary md:w-[40%]" />
     </a>
 
 </div>
