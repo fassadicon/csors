@@ -24,6 +24,7 @@
         <!-- First Column: Carousel -->
         <div>
             <x-mary-header title="{!! $package->name !!}"
+<<<<<<< Updated upstream
                 class="!my-4 !mt-8">
             </x-mary-header>
 
@@ -34,13 +35,27 @@
             <div>
                 {!! $package->description !!}
             </div>
+=======
+                class="!my-2" />
+            <div>{{ 'PHP ' . $package->price }}</div>
+            <div>{!! $package->description !!}</div>
+>>>>>>> Stashed changes
         </div>
 
         <!-- Second Column: Remaining Content -->
         <div>
-
+<<<<<<< Updated upstream
+            
             <form wire:submit="addToCart">
                 <div class="flex mt-4 space-x-4">
+=======
+            <a href="{{ route('events') }}">
+                <x-mary-button label="Back to Events"
+                    class="btn-outline w-32 mt-4" />
+            </a>
+            <form wire:submit.prevent="addToCart">
+                <div class="flex space-x-4 mt-4">
+>>>>>>> Stashed changes
                     <!-- Quantity - 30% width -->
                     <div class="w-[30%]">
                         <x-input-label for="quantity"
@@ -77,8 +92,7 @@
                         label="Add to Order"
                         class="w-full btn-primary" />
                     <a href="{{ route('events') }}">
-                        <x-mary-button label="Back to Events"
-                            class="w-full mt-4 btn-outline" />
+                        <x-mary-button label="Back to Events" class="w-full mt-4 btn-outline" />
                     </a>
                 </div>
             </form>
