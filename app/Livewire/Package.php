@@ -18,16 +18,6 @@ class Package extends Component
         $this->price = $this->package->price * $this->quantity;
     }
 
-    public function updatedQuantity()
-    {
-        $this->updatePrice();
-    }
-
-    public function updatePrice()
-    {
-        $this->price = $this->package->price * $this->quantity;
-    }
-
     public function addToCart()
     {
         $cart = session()->get('cart.packages');
