@@ -39,7 +39,7 @@
                                     @endforeach
                                 </select>
                                 <x-input-error :messages="$errors->get('servingType')"
-                                    class="mt-2" />
+                                    class="mt-2 " />
                             @endif
                             <x-input-label for="cart.{{ $categoryName }}.{{ $key }}.quantity"
                                 :value="__('Quantity')" />
