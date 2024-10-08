@@ -1,6 +1,6 @@
 <div>
     <x-mary-header title="Caterers"
-        class="!my-4 !mt-8"
+        class="!my-4"
         subtitle="Please select your chosen caterer to view their products, services, pricings, and more."
         separator />
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 !text-center">

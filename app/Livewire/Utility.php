@@ -18,16 +18,6 @@ class Utility extends Component
         $this->price = $this->utility->price * $this->quantity;
     }
 
-    public function updatedQuantity()
-    {
-        $this->updatePrice();
-    }
-
-    public function updatePrice()
-    {
-        $this->price = $this->utility->price * $this->quantity;
-    }
-
     public function addToCart()
     {
         $cart = session()->get('cart.utilities');

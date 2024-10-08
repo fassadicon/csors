@@ -6,7 +6,9 @@
         this.price = this.basePrice * this.quantity;
     }
 }"
-    x-init="updatePrice()"
+    x-init="updatePrice();
+    quantity = 1;
+    price = {{ $package->price }} * quantity"
     x-effect="$wire.set('price', price); $wire.set('quantity', quantity)">
 
     @php
@@ -39,7 +41,7 @@
         <!-- Second Column: Remaining Content -->
         <div>
 
-            <form wire:submit="addToCart">
+            <form wire:submit.prevent="addToCart">
                 <div class="flex mt-4 space-x-4">
                     <!-- Quantity - 30% width -->
                     <div class="w-[30%]">
