@@ -27,13 +27,17 @@
             <x-slot:actions>
                 <x-mary-button label="Select Caterer"
                     class="ml-4 duration-200 ease-in-out btn-lite hover:!bg-jt-primary hover:!text-white"
-                    wire:click="select" /> 
+                    wire:click="select" />
                 <div class="inline-flex w-[10px] h-[50px] bg-jt-primary"></div>
             </x-slot:actions>
         @endif
     </x-mary-header>
 
-    <div class="px-4 py-2 bg-jt-primary w-fit text-jt-white">
+    {{-- <div class="px-4 py-2 bg-jt-primary w-fit text-jt-white">
+        {!! $caterer->about !!}
+    </div> --}}
+
+    <div class="px-4 py-2">
         {!! $caterer->about !!}
     </div>
 

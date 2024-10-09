@@ -10,7 +10,7 @@ use App\Models\ServingType;
 class Food extends Component
 {
     public FoodDetail $foodDetail;
-    public int $servingType;
+    public $servingType = null;
     public int $quantity = 1;
     public float $price = 0.00;
     public $food;
@@ -32,6 +32,8 @@ class Food extends Component
     {
         $this->foodDetail = FoodDetail::with('foodCategory', 'servingTypes')
             ->where('id', $foodDetail->id)->first();
+        $this->servingType = $this->foodDetail->servingTypes->first()->id;
+        $this->price = $this->foodDetail->servingTypes->first()->pivot->price * $this->quantity;
     }
 
     public function updatedQuantity()

@@ -17,49 +17,27 @@
     <!-- Second Column: Remaining Content -->
     <div x-data="{
         quantity: $wire.entangle('quantity').defer,
-        basePrice: {{ $foodDetail->price ?? 0 }},
+        basePrice: {{ $utility->price }},
         price: $wire.entangle('price').defer,
-        servingType: '',
-
         updatePrice() {
-            if (this.servingType) {
-                let selectedServing = @json($foodDetail->servingTypes);
-                let serving = selectedServing.find(s => s.id == this.servingType);
-                if (serving) {
-                    this.price = serving.pivot.price * this.quantity;
-                }
-            }
+            this.price = this.basePrice * this.quantity;
         }
     }"
-        x-init="updatePrice();"
+        x-init="updatePrice();
+        quantity = 1;
+        price = {{ $utility->price }} * quantity"
         x-effect="$wire.set('price', price); $wire.set('quantity', quantity)">
 
-        <x-mary-header title="{{ $foodDetail->name }}"
-            subtitle="{{ $foodDetail->foodCategory->name }}"
+        <x-mary-header title="{{ $utility->name }}"
             class="!my-2" />
 
         <div class="mt-4">
-            {!! $foodDetail->description !!}
+            {!! $utility->description !!}
         </div>
 
         <form wire:submit.prevent="addToCart">
             <div class="flex mt-4 space-x-4">
-                <div class="w-3/5">
-                    <x-input-label for="servingType"
-                        :value="__('Serving Type')" />
-                    <select wire.model="servingType"
-                        {{-- @change="updatePrice()" --}}
-                        id="servingType"
-                        class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        required>
-                        <option value="">Select option</option>
-                        @foreach ($foodDetail->servingTypes as $servingType)
-                            <option value="{{ $servingType->id }}">{{ $servingType->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="w-1/5">
+                <div class="w-[30%]">
                     <x-input-label for="quantity"
                         :value="__('Quantity')" />
                     <x-text-input x-model="quantity"
@@ -72,7 +50,7 @@
                         class="mt-2" />
                 </div>
 
-                <div class="w-2/5">
+                <div class="w-[70%]">
                     <x-input-label for="price"
                         :value="__('Price')" />
                     <x-text-input x-model="price"
@@ -91,9 +69,9 @@
                 <x-mary-button type="submit"
                     label="Add to Order"
                     class="w-full btn-primary" />
-                <a href="{{ route('menu') }}">
-                    <x-mary-button label="Back to Menu"
-                        class="w-full btn-outline" />
+                <a href="{{ route('utilities') }}">
+                    <x-mary-button label="Back to Utilities"
+                        class="w-full mt-4 btn-outline" />
                 </a>
             </div>
         </form>

@@ -1,10 +1,14 @@
 <?php
 
-use App\Http\Controllers\PaymentController;
+use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 
 Route::get('test', function () {
-    return "Hello World";
+    $orderStatuses = array_values(array_filter(OrderStatus::cases(), fn($status) => $status !== OrderStatus::Cancelled || $status !== OrderStatus::Completed));
+
+
+    dd($orderStatuses);
 });
 
 Route::get('clear', function () {
@@ -59,9 +63,6 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('order-history');
     Route::get('view-order/{order}', App\Livewire\ViewOrder::class)
         ->name('view-order');
-
-    Route::get('request-cancellation/{order}', App\Livewire\RequestCancellation::class)
-        ->name('request-cancellation');
 
     Route::prefix('cancellation-request')->group(function () {
         Route::get('create/{order}', App\Livewire\CancellationRequest\Create::class)

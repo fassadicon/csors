@@ -16,7 +16,6 @@
         @endphp
 
 
-
         <x-mary-carousel :slides="$slides"
             class="mt-4"
             without-arrows />
@@ -76,7 +75,7 @@
                 <div class="w-2/5">
                     <x-input-label for="price"
                         :value="__('Price')" />
-                    <x-text-input wire:model="price"
+                    <x-text-input wire:model.live="price"
                         id="price"
                         class="block w-full mt-1"
                         type="number"

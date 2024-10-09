@@ -25,7 +25,10 @@ class OrderSeeder extends Seeder
     public function __construct()
     {
         $this->paymentStatuses = PaymentStatus::cases();
-        $this->orderStatuses = OrderStatus::cases();
+        $this->orderStatuses = [
+            'confirmed',
+            'pending',
+        ];
     }
 
     public function run(): void
