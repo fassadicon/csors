@@ -118,7 +118,10 @@ class ViewOrder extends Component
         return redirect($response->data->attributes->checkout_url);
     }
 
-    public function cancel() {}
+    public function cancel()
+    {
+        return redirect()->route('request-cancellation.create', ['order' => $this->order]);
+    }
 
     public function render()
     {

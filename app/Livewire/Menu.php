@@ -15,9 +15,8 @@ class Menu extends Component
 
     public function mount()
     {
-        // $this->foodCategories = FoodCategory::where('caterer_id', session()->get('caterer'))->get();
-        $this->foodCategories = FoodCategory::where('caterer_id', session()->get('caterer'))->get()->toArray(); // Convert to array
-        // $this->foodDetails = FoodDetail::whereIn('food_category_id', $this->foodCategories->pluck('id')->toArray())->get();
+        $this->foodCategories = FoodCategory::where('caterer_id', session()->get('caterer'))->get();
+        $this->foodDetails = FoodDetail::whereIn('food_category_id', $this->foodCategories->pluck('id')->toArray())->get();
     }
 
     public function updatedSelectedCategories()

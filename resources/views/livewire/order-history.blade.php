@@ -11,7 +11,8 @@
 
     <x-mary-table :headers="$headers"
         :rows="$orders"
-        striped class="!gap-y-4"
+        striped
+        class="!gap-y-4"
         show-empty-text
         empty-text="No orders found"
         {{-- @row-click="alert($event.detail.name)"  --}}
@@ -41,12 +42,6 @@
                     spinner
                     class="btn-sm" />
             </a>
-            @if ($order->order_status != 'completed')
-                <x-mary-button icon="o-x-mark"
-                    wire:click="requestCancellation({{ $order->id }})"
-                    spinner
-                    class="btn-sm btn-error" />
-            @endif
             @if ($order->payment_status == 'partial')
                 <x-mary-button icon="o-credit-card"
                     wire:click="payPartial({{ $order->id }})"

@@ -46,10 +46,7 @@ Route::get('contact', App\Livewire\Contact::class)
 Route::get('cart', App\Livewire\Cart::class)
     ->name('cart');
 
-Route::get('order-history', App\Livewire\OrderHistory::class)
-    ->name('order-history');
-Route::get('view-order/{order}', App\Livewire\ViewOrder::class)
-    ->name('view-order');
+
 
 Route::group(['middleware' => ['auth']], function () {
     Route::view('profile', 'profile')
@@ -57,6 +54,23 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('order', App\Livewire\Order::class)
         ->name('order');
+
+    Route::get('order-history', App\Livewire\OrderHistory::class)
+        ->name('order-history');
+    Route::get('view-order/{order}', App\Livewire\ViewOrder::class)
+        ->name('view-order');
+
+    Route::get('request-cancellation/{order}', App\Livewire\RequestCancellation::class)
+        ->name('request-cancellation');
+
+    Route::prefix('cancellation-request')->group(function () {
+        Route::get('create/{order}', App\Livewire\CancellationRequest\Create::class)
+            ->name('request-cancellation.create');
+        Route::get('edit/{order}', App\Livewire\CancellationRequest\Edit::class)
+            ->name('request-cancellation.edit');
+        Route::get('{order}', App\Livewire\CancellationRequest\View::class)
+            ->name('products.show');
+    });
 
     Route::get('partial-payment-success', [PaymentController::class, 'successPartial'])
         ->name('partial-payment-success');
