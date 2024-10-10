@@ -13,8 +13,8 @@
         :rows="$orders"
         striped
         class="!gap-y-4"
-        show-empty-text
-        empty-text="No orders found"
+        {{-- show-empty-text --}}
+        {{-- empty-text="No orders found" --}}
         {{-- @row-click="alert($event.detail.name)"  --}}
         {{-- :link="route('users.show', ['username' => ['username'], 'id' => ['id']])" --}}
         {{-- :cell-decoration="$cell_decoration" --}}>
@@ -50,4 +50,13 @@
             @endif
         @endscope
     </x-mary-table>
+
+    @if (count($orders) <= 0)
+        <div class="flex items-center justify-center w-full mt-12">
+            <div class="flex flex-col items-center gap-y-4">
+                <img src="{{asset('images/icons/no-order.png')}}" alt="Empty Box" class="w-[100px]">
+                <p>No orders found.</p>
+            </div>
+        </div>
+    @endif
 </div>
