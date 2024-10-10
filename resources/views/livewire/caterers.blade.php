@@ -9,7 +9,7 @@
                 <x-mary-card title="{{ $caterer->name }}" class="flex items-center justify-center">
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, consectetur!
                     <x-mary-badge value="+99"
-                        class="badge-success" />
+                        class="text-white badge-success" />
                     <x-mary-rating class="!my-4 badge-warning" />
                     <x-slot:figure>
                         <img src="{{ asset('images/placeholder.jpg') }}" />
