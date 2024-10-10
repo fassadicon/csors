@@ -50,7 +50,7 @@ new #[Layout('layouts.guest')] class extends Component {
 }; ?>
 
 
-<div class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-screen overflow-y-auto md:items-start">
+<div class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full overflow-y-auto md:h-screen md:items-start">
 
     <img draggable="false" src="{{asset('images/bgs/bg1.jpg')}}" alt=""
         class="absolute z-0 object-cover w-full h-screen overlay">
@@ -59,7 +59,7 @@ new #[Layout('layouts.guest')] class extends Component {
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <div
-        class="z-10 px-8 md:px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md md:min-w-[450px] w-[90%] md:w-[30%] space-y-2 ">
+        class="hidden md:block z-10 px-8 md:px-16  py-8 ml-0 sm:ml-4 md:ml-16 rounded-md md:min-w-[450px] w-[90%] md:w-[30%] space-y-2 ">
         <div class="flex flex-row items-center justify-center md:justify-start gap-x-2">
             <div class="inline-flex w-[10px] h-[40px] bg-jt-primary"></div>
             <h1 class="font-bold">Join Us Today!</h1>
