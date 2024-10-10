@@ -1,8 +1,9 @@
 <div class="p-4 rounded-sm bg-jt-white">
-    <x-mary-header title="My Cart"
-        subtitle="From {{ $caterer->name }}"
-        class="!my-4 mt-8">
-    </x-mary-header>
+    <div class="flex gap-x-4">
+        <img src="{{asset('images/icons/trolley.png')}}" alt="" class="w-[50px] h-[50] object-scale-down">
+        <x-mary-header title="My Cart" subtitle="From {{ $caterer->name }}" class="!my-4 mt-8">
+        </x-mary-header>
+    </div>
 
     <form wire:submit="checkout">
         @foreach ($cart as $categoryName => $categoryItems)
