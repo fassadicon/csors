@@ -28,6 +28,13 @@ class Contact extends Component
     public function send()
     {
         // dd($this->caterer);
+        // validate 
+        $inputs = $this->validate([
+            'name' => ['required', 'min:3', 'max:50'],
+            'subject' => ['required', 'min:3', 'max:50'],
+            'content' => ['required', 'min:3', 'max:150'],
+            'email' => ['required', 'email', 'exists:users,email'],
+        ]);
 
         // $this->caterer->email
         Mail::to('audreysgv@gmail.com')->send(new InquiryMail(

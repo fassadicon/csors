@@ -6,15 +6,15 @@
 
     <x-mary-form wire:submit="send" > 
         <x-mary-input label="Name" class="!border-black/25"
-            wire:model="name" />
+            wire:model="name" required />
         <x-mary-input label="Subject" class="!border-black/25"
-            wire:model="subject" />
+            wire:model="subject" required/>
         <x-mary-input label="Email" class="!border-black/25"
-            wire:model="email" />
+            wire:model="email" required/>
         <x-mary-textarea label="Message" class="!border-black/25"
             wire:model="content"
             placeholder="I want to discuss options..."
-            rows="5" />
+            rows="5" required/>
 
         <x-slot:actions>
             <x-mary-button label="Cancel" />
