@@ -12,6 +12,20 @@ class Cart extends Component
     public $caterer;
     public float $totalAmount;
 
+    public function rules()
+    {
+        return [
+            'cart.*.*.quantity' => 'required|integer|min:1',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'cart.*.*.quantity' => 'Invalid quantity',
+        ];
+    }
+
     public function mount()
     {
         $this->caterer = Caterer::find(session()->get('caterer'));
@@ -63,6 +77,8 @@ class Cart extends Component
 
     public function updateQuantity($quantity, $categoryName, $key)
     {
+        $this->validate();
+
         $this->cart[$categoryName][$key]['price'] = $quantity * $this->cart[$categoryName][$key]['orderItem']->price;
 
         $this->totalAmount = collect($this->cart)->flatMap(function ($orderItems) {

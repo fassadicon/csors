@@ -5,18 +5,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
+use Livewire\WithFileUploads;
 
 new class extends Component {
+    use WithFileUploads;
+
     public string $first_name = '';
     public string $last_name = '';
-    public string $middle_name;
-    public string $ext_name;
+    public string $middle_name = '';
+    public string $ext_name = '';
     public string $phone_number = '';
     public string $email = '';
+    public ?string $verification_image_path = null;
+    public $verification_image; // For file upload
 
-    /**
-     * Mount the component.
-     */
     public function mount(): void
     {
         $this->first_name = Auth::user()->first_name;
@@ -25,11 +27,9 @@ new class extends Component {
         $this->ext_name = Auth::user()->ext_name ?? '';
         $this->phone_number = Auth::user()->phone_number;
         $this->email = Auth::user()->email;
+        $this->verification_image_path = Auth::user()->verification_image_path;
     }
 
-    /**
-     * Update the profile information for the currently authenticated user.
-     */
     public function updateProfileInformation(): void
     {
         $user = Auth::user();
@@ -40,6 +40,7 @@ new class extends Component {
             'middle_name' => ['nullable', 'string', 'max:255'],
             'ext_name' => ['nullable', 'string', 'max:255'],
             'phone_number' => ['nullable', 'string', 'max:255'],
+            'verification_image' => ['image', 'mimes:jpg,jpeg,png', 'max:10240', 'nullable'], // Specific file types
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
         ]);
 
@@ -49,26 +50,30 @@ new class extends Component {
             $user->email_verified_at = null;
         }
 
+        // Handle image upload
+        if ($this->verification_image) {
+            if ($user->verification_image_path) {
+                // Optionally delete the old image
+                \Storage::delete($user->verification_image_path);
+            }
+            $user->verification_image_path = $this->verification_image->store('customer-verification-images', 'public');
+        }
+
         $user->save();
 
-        $this->dispatch('profile-updated', name: $user->name);
+        $this->dispatch('profile-updated', name: $user->full_name);
     }
 
-    /**
-     * Send an email verification notification to the current user.
-     */
     public function sendVerification(): void
     {
         $user = Auth::user();
 
         if ($user->hasVerifiedEmail()) {
             $this->redirectIntended(default: route('landing', absolute: false));
-
             return;
         }
 
         $user->sendEmailVerificationNotification();
-
         Session::flash('status', 'verification-link-sent');
     }
 }; ?>
@@ -153,6 +158,42 @@ new class extends Component {
             <x-input-error class="mt-2"
                 :messages="$errors->get('phone_number')" />
         </div>
+        <div>
+            <x-input-label for="verification_image"
+                :value="__('Upload Valid ID')" />
+
+            <!-- Show existing verification image if available -->
+            @if ($verification_image_path)
+                <div class="mb-2">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('Current Valid ID:') }}</p>
+                    <img src="{{ asset('storage/' . $verification_image_path) }}"
+                        alt="Current Verification Image"
+                        class="mt-2 border rounded"
+                        style="max-width: 200px; max-height: 200px;" />
+                </div>
+            @endif
+
+            <!-- File input for new upload -->
+            <input type="file"
+                wire:model.change="verification_image"
+                id="verification_image"
+                class="mt-1 block w-full" />
+
+            <x-input-error class="mt-2"
+                :messages="$errors->get('verification_image')" />
+
+            {{-- @if ($verification_image)
+                <div class="mt-2">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('Preview:') }}</p>
+                    <img src="{{ $verification_image->temporaryUrl() }}"
+                        alt="Verification Image Preview"
+                        class="mt-2 border rounded"
+                        style="max-width: 200px; max-height: 200px;" />
+                </div>
+            @endif --}}
+        </div>
+
+
         <div>
             <x-input-label for="email"
                 :value="__('Email')" />
