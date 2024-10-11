@@ -20,7 +20,7 @@
             <x-mary-textarea label="Reason for Cancellation"
                 wire:model="reason"
                 placeholder="Notes for the Caterer"
-                rows="4"
+                rows="4" required
                 inline />
         </div>
         <hr class="my-4">

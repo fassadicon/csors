@@ -36,7 +36,10 @@ class Order extends Model
         return [
             'payment_status' => PaymentStatus::class,
             'order_status' => OrderStatus::class,
-            'total_amount' => 'decimal:2'
+            'total_amount' => 'decimal:2',
+            'start' => 'datetime',
+            'end' => 'datetime',
+            'created_at' => 'datetime'
         ];
     }
 
