@@ -15,13 +15,7 @@
         <x-mary-carousel :slides="$slides"
             class="mt-4"
             without-arrows />
-    @else
-        <img src="{{ asset('images/placeholder.jpg') }}"
-            alt="">
     @endif
-
-    <x-mary-carousel :slides="$slides"
-        without-arrows />
 
     <div class="grid grid-cols-2 gap-4 p-4 bg-jt-light">
         <!-- First Column: Carousel -->
