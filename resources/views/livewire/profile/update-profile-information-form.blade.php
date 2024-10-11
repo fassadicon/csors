@@ -39,9 +39,9 @@ new class extends Component {
             'last_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'ext_name' => ['nullable', 'string', 'max:255'],
-            'phone_number' => ['nullable', 'string', 'max:255'],
+            'phone_number' => ['nullable', 'string', 'max:11', 'regex:/^(09)\d{9}$/'],
             'verification_image' => ['image', 'mimes:jpg,jpeg,png', 'max:10240', 'nullable'], // Specific file types
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/', Rule::unique(User::class)->ignore($user->id)],
         ]);
 
         $user->fill($validated);
@@ -151,9 +151,9 @@ new class extends Component {
             <x-text-input wire:model="phone_number"
                 id="phone_number"
                 name="phone_number"
-                type="text"
+                type="number"
                 class="mt-1 block w-full"
-                autofocus
+                autofocus maxlength="11"
                 autocomplete="phone_number" />
             <x-input-error class="mt-2"
                 :messages="$errors->get('phone_number')" />
