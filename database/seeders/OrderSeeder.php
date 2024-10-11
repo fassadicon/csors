@@ -37,64 +37,68 @@ class OrderSeeder extends Seeder
 
         foreach ($caterers as $caterer) {
             // FOODS and UTILITIES
-            for ($i = 0; $i < 15; $i++) {
-                $user = User::inRandomOrder()->first();
-                // $orderedFoods = $foods->random(rand(2, 4));
-                $orderedFoods = Food::whereHas('servingType', function ($query) use ($caterer) {
-                    $query->where('caterer_id', $caterer->id);
-                })->get();
+            $users = User::whereIn('id', [3, 4])->get();
 
-                $orderItems = [];
-                $quantity = rand(25, 100);
+            foreach ($users as $user) {
+                for ($i = 0; $i < 15; $i++) {
 
-                // Foods
-                $foodsTotalAmount = 0;
-                foreach ($orderedFoods as $orderedFood) {
-                    $orderItems[] = [
-                        'orderable_type' => get_class($orderedFood),
-                        'orderable_id' => $orderedFood->id,
-                        'quantity' => $quantity,
-                        'amount' => $orderedFood->price * $quantity,
-                    ];
-                    $foodsTotalAmount += $orderedFood->price * $quantity;
-                }
+                    $orderedFoods = Food::whereHas('servingType', function ($query) use ($caterer) {
+                        $query->where('caterer_id', $caterer->id);
+                    })->get();
 
-                // Utilities
-                $utilities = $caterer->utilities;
-                $orderedUtilities = $utilities->random(rand(1, 2));
-                $utilitiesTotalAmount = 0;
-                foreach ($orderedUtilities as $orderedUtility) {
-                    $orderItems[] = [
-                        'orderable_type' => get_class($orderedUtility),
-                        'orderable_id' => $orderedUtility->id,
-                        'quantity' => $quantity,
-                        'amount' => $orderedUtility->price * $quantity,
-                    ];
-                    $utilitiesTotalAmount += $orderedUtility->price * $quantity;
-                }
+                    $orderItems = [];
+                    $quantity = rand(25, 100);
 
-                $start = Carbon::now()->subDays(rand(1, 14));
-                $start->setTime(rand(7, 19), [0, 30][rand(0, 1)]); // start between 7am and 7pm, either sharp or 30 minutes past
-                $addedHours = rand(1, 6);
-                $end = $start->copy()->addHours($addedHours);
+                    // Foods
+                    $foodsTotalAmount = 0;
+                    foreach ($orderedFoods as $orderedFood) {
+                        $orderItems[] = [
+                            'orderable_type' => get_class($orderedFood),
+                            'orderable_id' => $orderedFood->id,
+                            'quantity' => $quantity,
+                            'amount' => $orderedFood->price * $quantity,
+                        ];
+                        $foodsTotalAmount += $orderedFood->price * $quantity;
+                    }
 
-                $order = Order::create([
-                    'user_id' => $user->id,
-                    'recipient' => $user->full_name,
-                    'caterer_id' => $caterer->id,
-                    'start' => $start,
-                    'end' => $end,
-                    'total_amount' => $foodsTotalAmount,
-                    'location' => 'test',
-                    'payment_status' => $this->paymentStatuses[array_rand($this->paymentStatuses)],
-                    'order_status' => $this->orderStatuses[array_rand($this->orderStatuses)],
-                ]);
+                    // Utilities
+                    $utilities = $caterer->utilities;
+                    $orderedUtilities = $utilities->random(rand(1, 2));
+                    $utilitiesTotalAmount = 0;
+                    foreach ($orderedUtilities as $orderedUtility) {
+                        $orderItems[] = [
+                            'orderable_type' => get_class($orderedUtility),
+                            'orderable_id' => $orderedUtility->id,
+                            'quantity' => $quantity,
+                            'amount' => $orderedUtility->price * $quantity,
+                        ];
+                        $utilitiesTotalAmount += $orderedUtility->price * $quantity;
+                    }
 
-                foreach ($orderItems as $orderItem) {
-                    $orderItem['order_id'] = $order->id;
-                    OrderItem::create($orderItem);
+                    $start = Carbon::now()->subDays(rand(1, 14));
+                    $start->setTime(rand(7, 19), [0, 30][rand(0, 1)]); // start between 7am and 7pm, either sharp or 30 minutes past
+                    $addedHours = rand(1, 6);
+                    $end = $start->copy()->addHours($addedHours);
+
+                    $order = Order::create([
+                        'user_id' => $user->id,
+                        'recipient' => $user->full_name,
+                        'caterer_id' => $caterer->id,
+                        'start' => $start,
+                        'end' => $end,
+                        'total_amount' => $foodsTotalAmount,
+                        'location' => 'test',
+                        'payment_status' => $this->paymentStatuses[array_rand($this->paymentStatuses)],
+                        'order_status' => $this->orderStatuses[array_rand($this->orderStatuses)],
+                    ]);
+
+                    foreach ($orderItems as $orderItem) {
+                        $orderItem['order_id'] = $order->id;
+                        OrderItem::create($orderItem);
+                    }
                 }
             }
+
 
             // Packages
             $this->seedPackageOrders($caterer);
