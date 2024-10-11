@@ -23,7 +23,7 @@ class Create extends Component
             'reason' => $this->reason,
         ]);
 
-        redirect('order-history')->with('info', 'Cancellation request submitted. Please wait to for the response of the caterer. Thank you!');
+        redirect('order-history')->with('warning', 'Cancellation request submitted. Please wait to for the response of the caterer. Thank you!');
     }
 
     public function render()

@@ -22,7 +22,9 @@ class Order extends Component
 
     public $location;
     public $remarks;
+    public $paymentType = 'full';
     public float $totalAmount;
+    public float $downPaymentAmount;
 
     public $recipient;
 
@@ -36,6 +38,8 @@ class Order extends Component
             return $orderItems;
         })->sum('price');
 
+        $this->downPaymentAmount = $this->totalAmount * 0.7;
+
         $this->recipient = auth()->user() ? auth()->user()->full_name : null;
     }
 
@@ -45,8 +49,12 @@ class Order extends Component
             return redirect()->route('login');
         }
 
-        $downPayment = $this->totalAmount * 0.7;
-        $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($downPayment, 2)))));
+
+        $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->totalAmount, 2)))));
+        if ($this->paymentType === 'partial') {
+            $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->downPaymentAmount, 2)))));
+        }
+
 
         $data = [
             'data' => [
@@ -54,7 +62,7 @@ class Order extends Component
                     'line_items' => [
                         [
                             'currency' => 'PHP',
-                            'amount' => $downPayment,
+                            'amount' => $paymentAmount,
                             'name' => 'CSORS test',
                             'quantity' => 1,
                         ]

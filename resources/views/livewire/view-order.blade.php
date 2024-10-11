@@ -66,6 +66,42 @@
         Date Ordered: {{ $order->created_at }}
     </p>
 
+    @if ($order->cancellationRequest)
+        <x-mary-header title="Cancellation Request"
+            class="!my-2"
+            separator />
+        <div class="space-y-2">
+            <p>Status: {{ $cancellationRequestStatus }}</p>
+            @if ($cancellationRequestStatus->value == 'approved' || $cancellationRequestStatus->value == 'declined')
+                <p>Reason: {{ $cancellationRequestReason }}</p>
+            @else
+                <x-mary-textarea label="Reason for Cancellation"
+                    wire:model="cancellationRequestReason"
+                    placeholder="Notes for the Caterer"
+                    rows="4"
+                    inline />
+            @endif
+            <x-mary-textarea label="Reason for Cancellation"
+                wire:model="cancellationRequestResponse"
+                placeholder="Awaiting Reply from the Caterer..."
+                rows="4"
+                inline
+                readonly />
+        </div>
+        <hr class="my-4">
+        @if ($cancellationRequestStatus->value == 'pending')
+            <x-mary-button wire:click='updateCancellationRequest'
+                label="Update Cancellation Request"
+                class="btn-primary"
+                spinner />
+            <x-mary-button wire:click='removeCancellationRequest'
+                label="Cancel Cancellation Request"
+                class="btn-warning"
+                spinner />
+        @endif
+
+    @endif
+
     @if ($order->payment_status->value == 'pending')
         <x-primary-button wire:click='payPartial'>{{ __('Pay Partial') }}</x-primary-button>
         <x-primary-button wire:click='payFull'>{{ __('Pay Full') }}</x-primary-button>
@@ -73,7 +109,10 @@
         <x-primary-button wire:click='payRemaining'>{{ __('Pay Remaining Balance') }}</x-primary-button>
     @endif
 
-    @if ($order->order_status->value == 'pending' || $order->order_status->value == 'confirmed')
-        <x-danger-button wire:click='cancel'>{{ __('Request to Cancel') }}</x-danger-button>
-    @endif
+    @unless ($order->cancellationRequest)
+        @if ($canRequestCancellation)
+            <x-danger-button wire:click='cancel'>{{ __('Request to Cancel') }}</x-danger-button>
+        @endif
+    @endunless
+
 </div>
