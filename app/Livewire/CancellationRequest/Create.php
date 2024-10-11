@@ -18,6 +18,11 @@ class Create extends Component
 
     public function submitCancellation()
     {
+
+        $this->validate([
+            'reason' => ['required', 'min:5']
+        ]);
+
         CancellationRequest::create([
             'order_id' => $this->order->id,
             'reason' => $this->reason,
