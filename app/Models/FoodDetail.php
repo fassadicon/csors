@@ -45,4 +45,18 @@ class FoodDetail extends Model
     {
         return $this->morphMany(Image::class, 'imageable');
     }
+
+
+  public function getFirstImagePath()
+    {
+        if ($this->images == null) {
+            return false;
+        }
+
+        $firstImage = $this->images->first();
+
+        if ($firstImage) {
+            return $firstImage->path;
+        }
+    }
 }

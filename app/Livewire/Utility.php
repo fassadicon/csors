@@ -8,6 +8,7 @@ use Livewire\Component;
 class Utility extends Component
 {
     public UtilityModel $utility;
+    public ?array $slides;
 
     public int $quantity = 1;
     public float $price = 0.00;
@@ -15,7 +16,16 @@ class Utility extends Component
     public function mount()
     {
         $this->utility->load(['images']);
+        // dd($this->utility->images);
         $this->price = $this->utility->price * $this->quantity;
+
+        if (!($this->utility->images->isEmpty())) {
+            $this->slides = $this->utility->images->map(function ($image) {
+                return [
+                    'image' => asset('storage/' . $image->path),
+                ];
+            })->toArray();
+        }
     }
 
     public function addToCart()

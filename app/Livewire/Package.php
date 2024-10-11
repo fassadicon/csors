@@ -12,10 +12,20 @@ class Package extends Component
     public int $quantity = 1;
     public float $price = 0.00;
 
+    public ?array $slides;
+
     public function mount()
     {
         $this->package->load('images');
         $this->price = $this->package->price * $this->quantity;
+
+        if (!($this->package->images->isEmpty())) {
+            $this->slides = $this->package->images->map(function ($image) {
+                return [
+                    'image' => asset('storage/' . $image->path),
+                ];
+            })->toArray();
+        }
     }
 
     public function addToCart()

@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\CatererResource\Pages;
 
-use App\Filament\Resources\CatererResource;
 use Filament\Actions;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\CatererResource;
 
 class EditCaterer extends EditRecord
 {

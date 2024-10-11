@@ -38,7 +38,7 @@ class FoodDetailResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
-                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/foods')
+                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/foods')
                     ->image()
                     ->multiple()
                     ->reorderable()

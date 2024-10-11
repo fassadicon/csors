@@ -48,4 +48,18 @@ class Package extends Model
     {
         return $this->belongsToThrough(Caterer::class, Event::class);
     }
+
+
+    public function getFirstImagePath()
+    {
+        if ($this->images == null) {
+            return false;
+        }
+
+        $firstImage = $this->images->first();
+
+        if ($firstImage) {
+            return $firstImage->path;
+        }
+    }
 }

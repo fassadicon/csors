@@ -11,13 +11,14 @@
     price = {{ $package->price }} * quantity"
     x-effect="$wire.set('price', price); $wire.set('quantity', quantity)">
 
-    @php
-        $slides = [
-            ['image' => asset('images/about-header-1.jpg')],
-            ['image' => asset('images/about-header-2.jpg')],
-            ['image' => asset('images/about-header-3.jpg')],
-        ];
-    @endphp
+    @if ($slides)
+        <x-mary-carousel :slides="$slides"
+            class="mt-4"
+            without-arrows />
+    @else
+        <img src="{{ asset('images/placeholder.jpg') }}"
+            alt="">
+    @endif
 
     <x-mary-carousel :slides="$slides"
         without-arrows />

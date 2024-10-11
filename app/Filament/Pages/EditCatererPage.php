@@ -48,7 +48,10 @@ class EditCatererPage extends Page implements HasForms
             TinyEditor::make('about')
                 ->columnSpanFull(),
             Forms\Components\FileUpload::make('logo_path')
+                ->directory('caterers/' . auth()->user()->caterer->id . '/images/logo')
                 ->label('Logo')
+                ->image()
+                ->nullable()
                 ->image(),
             Forms\Components\FileUpload::make('images')
                 ->directory('caterers/' . auth()->user()->caterer->id . '/images/profile')
@@ -60,7 +63,11 @@ class EditCatererPage extends Page implements HasForms
                 ->uploadingMessage('Uploading images...')
                 ->nullable(),
             Forms\Components\FileUpload::make('requirements_path')
-                ->label('Business Requirements (.zip)'),
+                ->label('Business Requirements (.zip)')
+                ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
+                ->label('Business Requirements (.zip)')
+                ->nullable()
+                ->visibleOn('edit'),
 
         ])
             ->statePath('data')

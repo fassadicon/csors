@@ -1,24 +1,12 @@
 <div>
-    @php
-        $slides = [
-            [
-                'image' => asset('images/about-header-1.jpg'),
-                // 'title' => $caterer->name,
-                // 'description' => 'We love last week frameworks.',
-                // 'url' => '/docs/installation',
-                // 'urlText' => 'Get started',
-            ],
-            [
-                'image' => asset('images/about-header-2.jpg'),
-            ],
-            [
-                'image' => asset('images/about-header-3.jpg'),
-            ],
-        ];
-    @endphp
-
-    <x-mary-carousel class="!bg-jt-primary !rounded-md" :slides="$slides"
-        without-arrows />
+    @if ($slides)
+        <x-mary-carousel :slides="$slides"
+            class="mt-4"
+            without-arrows />
+    @else
+        <img src="{{ asset('images/placeholder.jpg') }}"
+            alt="">
+    @endif
 
     <x-mary-header title="{{ $caterer->name }}"
         subtitle="By {{ $caterer->user->full_name }}"
@@ -42,94 +30,129 @@
     </div>
 
     <div class="flex items-center gap-x-4">
-        <img src="{{asset('images/icons/event.png')}}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Events" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <img src="{{ asset('images/icons/event.png') }}"
+            alt=""
+            class="mt-4 w-[40px] h-[40] object-scale-down">
+        <x-mary-header title="Events"
+            subtitle="lorem ipsum"
+            class="!my-4 !mt-8"
+            size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($events as $event)
             <x-mary-card title="{{ $event->name }}"
                 class=" !pb-0  !flex !flex-col !justify-center !items-center">
                 <x-slot:figure>
-                    <img src="{{ asset('images/placeholder.jpg') }}" />
+                    <img
+                        src="{{ $event->getFirstImagePath() ? asset('storage/' . $event->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
     </div>
 
     <div class="flex items-center gap-x-4">
-        <img src="{{asset('images/icons/food-package.png')}}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Packages" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <img src="{{ asset('images/icons/food-package.png') }}"
+            alt=""
+            class="mt-4 w-[40px] h-[40] object-scale-down">
+        <x-mary-header title="Packages"
+            subtitle="lorem ipsum"
+            class="!my-4 !mt-8"
+            size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($packages as $package)
             <x-mary-card title="{!! $package->name !!}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center">
                 <x-slot:figure>
-                    <img src="{{ asset('images/placeholder.jpg') }}" />
+                    <img
+                        src="{{ $package->getFirstImagePath() ? asset('storage/' . $package->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
     </div>
 
     <div class="flex items-center gap-x-4">
-        <img src="{{asset('images/icons/burger.png')}}" alt="" class="w-[40px] mt-4 h-[40] object-scale-down">
-        <x-mary-header title="Food Categories" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <img src="{{ asset('images/icons/burger.png') }}"
+            alt=""
+            class="w-[40px] mt-4 h-[40] object-scale-down">
+        <x-mary-header title="Food Categories"
+            subtitle="lorem ipsum"
+            class="!my-4 !mt-8"
+            size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($foodCategories as $foodCategory)
             <x-mary-card title="{{ $foodCategory->name }}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center">
                 <x-slot:figure>
-                    <img src="{{ asset('images/placeholder.jpg') }}" />
+                    <img
+                        src="{{ $foodCategory->getFirstImagePath() ? asset('storage/' . $foodCategory->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
     </div>
 
     <div class="flex items-center gap-x-4">
-        <img src="{{asset('images/icons/menu.png')}}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Menu" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <img src="{{ asset('images/icons/menu.png') }}"
+            alt=""
+            class="mt-4 w-[40px] h-[40] object-scale-down">
+        <x-mary-header title="Menu"
+            subtitle="lorem ipsum"
+            class="!my-4 !mt-8"
+            size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($foodDetails as $foodDetail)
             <x-mary-card title="{{ $foodDetail->name }}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center">
                 <x-slot:figure>
-                    <img src="{{ asset('images/placeholder.jpg') }}" />
+                    <img
+                        src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
     </div>
 
     <div class="flex items-center gap-x-4">
-        <img src="{{asset('images/icons/buffet.png')}}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Serving Types" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <img src="{{ asset('images/icons/buffet.png') }}"
+            alt=""
+            class="mt-4 w-[40px] h-[40] object-scale-down">
+        <x-mary-header title="Serving Types"
+            subtitle="lorem ipsum"
+            class="!my-4 !mt-8"
+            size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($servingTypes as $servingType)
             <x-mary-card title="{{ $servingType->name }}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center">
                 <x-slot:figure>
-                    <img src="{{ asset('images/placeholder.jpg') }}" />
+                    <img
+                        src="{{ $servingType->getFirstImagePath() ? asset('storage/' . $servingType->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
     </div>
 
     <div class="flex items-center gap-x-4">
-        <img src="{{asset('images/icons/balloons.png')}}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Utilities" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <img src="{{ asset('images/icons/balloons.png') }}"
+            alt=""
+            class="mt-4 w-[40px] h-[40] object-scale-down">
+        <x-mary-header title="Utilities"
+            subtitle="lorem ipsum"
+            class="!my-4 !mt-8"
+            size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($utilities as $utility)
             <x-mary-card title="{{ $utility->name }}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center">
                 <x-slot:figure>
-                    <img src="{{ asset('images/placeholder.jpg') }}" />
+                    <img
+                        src="{{ $utility->getFirstImagePath() ? asset('storage/' . $utility->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
     </div>
-
 
 </div>

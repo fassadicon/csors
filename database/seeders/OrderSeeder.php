@@ -37,7 +37,7 @@ class OrderSeeder extends Seeder
 
         foreach ($caterers as $caterer) {
             // FOODS and UTILITIES
-            $users = User::whereIn('id', [3, 4])->get();
+            $users = User::whereIn('id', [4, 5])->get();
 
             foreach ($users as $user) {
                 for ($i = 0; $i < 15; $i++) {

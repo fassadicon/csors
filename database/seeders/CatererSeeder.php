@@ -14,18 +14,18 @@ class CatererSeeder extends Seeder
     public function run(): void
     {
         Caterer::create([
-            'user_id' => 1,
+            'user_id' => 2,
             'name' => 'Bitong Catering Services',
-            'email' => 'audreysgv@gmail.com',
+            'email' => 'caterer_1@gmail.com',
             'phone_number' => '09063406603',
             'about' => 'San Mateo\'s Best Catering Service',
             'is_verified' => 1,
         ]);
 
         Caterer::create([
-            'user_id' => 2,
+            'user_id' => 3,
             'name' => 'Test Caterer',
-            'email' => 'caterer_1@csors.com',
+            'email' => 'caterer_2@csors.com',
             'phone_number' => '09063406601',
             'about' => 'Test Catering Service',
             'is_verified' => 0,

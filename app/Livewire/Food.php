@@ -14,6 +14,7 @@ class Food extends Component
     public int $quantity = 1;
     public float $price = 0.00;
     public $food;
+    public ?array $slides;
 
     public array $headers = [
         [
@@ -34,6 +35,14 @@ class Food extends Component
             ->where('id', $foodDetail->id)->first();
         $this->servingType = $this->foodDetail->servingTypes->first()->id;
         $this->price = $this->foodDetail->servingTypes->first()->pivot->price * $this->quantity;
+
+        if (!($this->foodDetail->images->isEmpty())) {
+            $this->slides = $this->foodDetail->images->map(function ($image) {
+                return [
+                    'image' => asset('storage/' . $image->path),
+                ];
+            })->toArray();
+        }
     }
 
     public function updatedQuantity()
