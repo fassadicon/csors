@@ -3,9 +3,6 @@
         <x-mary-carousel :slides="$slides"
             class="mt-4"
             without-arrows />
-    @else
-        <img src="{{ asset('images/placeholder.jpg') }}"
-            alt="">
     @endif
 
     <x-mary-header title="{{ $caterer->name }}"
