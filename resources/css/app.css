@@ -35,7 +35,7 @@
     }
 
     .btn-primary {
-        @apply !bg-jt-primary !text-white !border-transparent
+        @apply !bg-jt-primary !text-white !border-transparent hover:bg-jt-primary-dark
     }
 
     .btn-secondary {
