@@ -50,7 +50,7 @@ class PaymentController extends Controller
                 }
             }
 
-            // Add Payment Creation here
+            // Add Payment Creation here but only put the amount paid (partial or full) - replicate to other methods
 
             $order = Order::create([
                 'user_id' => $user->id,
