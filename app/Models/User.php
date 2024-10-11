@@ -36,6 +36,7 @@ class User extends Authenticatable implements FilamentUser
         'middle_name',
         'ext_name',
         'phone_number',
+        'verification_image_path',
         'is_verified',
         'is_customer',
     ];
