@@ -15,6 +15,11 @@
                 <div class="flex items-center shrink-0">
                     <a href="{{ route('landing') }}">
                         <x-application-logo class="block w-auto fill-current text-jt-white h-9 dark:text-gray-200" /></a>
+                    @if ($caterer->logo_path)
+                        <img src="{{ asset('storage/' . $caterer->logo_path) }}"
+                            alt="{{ $caterer->name }}"
+                            class="w-12 h-12" />
+                    @endif
                 </div>
 
 
@@ -22,7 +27,8 @@
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                         <x-nav-dropdown>
-                            <x-slot name="trigger"><p class="!text-white text-hover-def cursor-pointer">{{ $caterer->name }}</p>
+                            <x-slot name="trigger">
+                                <p class="!text-white text-hover-def cursor-pointer">{{ $caterer->name }}</p>
                             </x-slot>
                             <x-slot name="content">
                                 <x-dropdown-link
@@ -36,7 +42,8 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('caterers')"
                             :active="request()->routeIs('caterers')"
-                            wire:navigate class="!text-white text-hover-def">
+                            wire:navigate
+                            class="!text-white text-hover-def">
                             {{ __('Caterers') }}
                         </x-nav-link>
                     </div>
@@ -47,7 +54,8 @@
                     @if ($caterer)
                         <x-nav-dropdown :active="request()->routeIs('events')">
                             <x-slot name="trigger">
-                                <a href="{{ route('events') }}" class="!text-white text-hover-def">Events</a>
+                                <a href="{{ route('events') }}"
+                                    class="!text-white text-hover-def">Events</a>
                             </x-slot>
                             <x-slot name="content">
 
@@ -65,7 +73,8 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('menu')"
                             :active="request()->routeIs('menu')"
-                            wire:navigate class="!text-white text-hover-def">
+                            wire:navigate
+                            class="!text-white text-hover-def">
                             {{ __('Menu') }}
                         </x-nav-link>
                     </div>
@@ -73,9 +82,10 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)
-                        <x-nav-dropdown >
-                            <x-slot name="trigger" >
-                                <a href="{{ route('utilities') }}" class="!text-white text-hover-def">Utilities</a>
+                        <x-nav-dropdown>
+                            <x-slot name="trigger">
+                                <a href="{{ route('utilities') }}"
+                                    class="!text-white text-hover-def">Utilities</a>
                             </x-slot>
                             <x-slot name="content">
                                 @foreach ($caterer->utilities as $utility)

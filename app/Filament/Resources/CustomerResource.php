@@ -87,7 +87,7 @@ class CustomerResource extends Resource
                     ->color(fn($record) => $record->is_verified == 1 ? 'success' : 'danger')
                     ->label('Verified'),
                 Tables\Columns\TextColumn::make('orders_count')
-                ->label('# of Orders'),
+                    ->label('# of Orders'),
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime()
                 //     ->sortable(),
@@ -152,6 +152,6 @@ class CustomerResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getModel()::where('is_customer', 1)->count();
     }
 }

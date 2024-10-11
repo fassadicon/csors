@@ -39,7 +39,7 @@ class UtilityResource extends Resource
                 TinyEditor::make('description')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
-                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/utilities')
+                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/utilities')
                     ->image()
                     ->multiple()
                     ->reorderable()
@@ -62,7 +62,7 @@ class UtilityResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
+                    ->money('php')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

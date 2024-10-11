@@ -24,9 +24,9 @@ class Caterer extends Model
         'is_verified',
     ];
 
-    protected $casts = [
-        'images' => 'array',
-    ];
+    // protected $casts = [
+    //     'images' => 'array',
+    // ];
 
     public function user(): BelongsTo
     {

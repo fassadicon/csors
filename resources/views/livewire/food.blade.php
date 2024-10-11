@@ -1,24 +1,14 @@
 <div class="grid grid-cols-2 gap-4">
     <!-- First Column: Carousel -->
     <div>
-        @php
-            $slides = [
-                [
-                    'image' => asset('images/about-header-1.jpg'),
-                ],
-                [
-                    'image' => asset('images/about-header-2.jpg'),
-                ],
-                [
-                    'image' => asset('images/about-header-3.jpg'),
-                ],
-            ];
-        @endphp
-
-
-        <x-mary-carousel :slides="$slides"
-            class="mt-4"
-            without-arrows />
+        @if ($slides)
+            <x-mary-carousel :slides="$slides"
+                class="mt-4"
+                without-arrows />
+        @else
+            <img src="{{ asset('images/placeholder.jpg') }}"
+                alt="">
+        @endif
     </div>
 
     <!-- Second Column: Remaining Content -->

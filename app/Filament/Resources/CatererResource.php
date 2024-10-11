@@ -48,18 +48,18 @@ class CatererResource extends Resource
                 TinyEditor::make('about')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('logo_path')
-                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/logo')
+                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/logo')
                     ->label('Logo')
                     ->image()
                     ->nullable()
                     ->visibleOn('edit'),
-                Forms\Components\FileUpload::make('requirements_path')
-                    ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
-                    ->label('Business Requirements (.zip)')
-                    ->nullable()
-                    ->visibleOn('edit'),
+                // Forms\Components\FileUpload::make('requirements_path')
+                //     ->directory(fn($record) => 'caterers/' . $record->id . '/requirements')
+                //     ->label('Business Requirements (.zip)')
+                //     ->nullable()
+                //     ->visibleOn('edit'),
                 Forms\Components\FileUpload::make('images')
-                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/profile')
+                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/profile')
                     ->image()
                     ->multiple()
                     ->reorderable()
