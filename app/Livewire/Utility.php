@@ -19,7 +19,7 @@ class Utility extends Component
         // dd($this->utility->images);
         $this->price = $this->utility->price * $this->quantity;
 
-        if (!($this->utility->images->isEmpty())) {
+        if ($this->utility->images != null) {
             $this->slides = $this->utility->images->map(function ($image) {
                 return [
                     'image' => asset('storage/' . $image->path),

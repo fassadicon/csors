@@ -104,7 +104,22 @@
                 placeholder="Notes for the Caterer"
                 rows="4"
                 inline />
-
+            @if ($promos)
+                <x-input-label for="promo"
+                    :value="__('Promos')" />
+                <select wire:model.live="promo"
+                    id="promo"
+                    class="block w-full mt-1 mb-4"
+                    type="text"
+                    name="promo">
+                    <option value="">Select promo</option>
+                    @foreach ($promos as $promo)
+                        <option value="{{ $promo->id }}">{{ $promo->name }}</option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('discount')"
+                    class="mt-2" />
+            @endif
             <x-input-label for="paymentType"
                 :value="__('Payment Type')" />
             <select wire:model.live="paymentType"

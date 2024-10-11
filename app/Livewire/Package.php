@@ -19,7 +19,7 @@ class Package extends Component
         $this->package->load('images');
         $this->price = $this->package->price * $this->quantity;
 
-        if (!($this->package->images->isEmpty())) {
+        if ($this->package->images != null) {
             $this->slides = $this->package->images->map(function ($image) {
                 return [
                     'image' => asset('storage/' . $image->path),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Promo;
 use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -18,7 +19,7 @@ class PaymentController extends Controller
         if ($checkout && $cart && $user) {
 
             $orderItems = [];
-            $totalAmount = 0.00;
+            $originalTotalAmount = 0.00;
 
             foreach ($cart as $categoryItems) {
                 foreach ($categoryItems as $item) {
@@ -30,16 +31,33 @@ class PaymentController extends Controller
 
                     array_push($orderItems, $orderItem);
 
-                    $totalAmount += $item['price'];
+                    $originalTotalAmount += $item['price'];
                 }
             }
+
+            $totalAmount = $originalTotalAmount;
+            $deductedAmount = 0.00;
+            $promo_id = $checkout['promo_id'];
+
+            if ($promo_id != '') {
+                $promo = Promo::find($promo_id);
+                if ($promo->type == 'fixed') {
+                    $deductedAmount = $promo->value;
+                    $totalAmount = $originalTotalAmount - $deductedAmount;
+                } else {
+                    $deductedAmount = $originalTotalAmount * $promo->value;
+                    $totalAmount = $originalTotalAmount - $deductedAmount;
+                }
+            }
+
+            // Add Payment Creation here
 
             $order = Order::create([
                 'user_id' => $user->id,
                 'recipient' => $user->full_name,
                 'caterer_id' => session()->get('caterer'),
-                'promo_id' => null,
-                'deducted_amount' => null,
+                'promo_id' => $promo_id,
+                'deducted_amount' => $deductedAmount,
                 'location' => $checkout['location'],
                 'remarks' => $checkout['remarks'],
                 'start' => $checkout['start'],

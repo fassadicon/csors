@@ -36,7 +36,7 @@ class Food extends Component
         $this->servingType = $this->foodDetail->servingTypes->first()->id;
         $this->price = $this->foodDetail->servingTypes->first()->pivot->price * $this->quantity;
 
-        if (!($this->foodDetail->images->isEmpty())) {
+        if ($this->foodDetail->images != null) {
             $this->slides = $this->foodDetail->images->map(function ($image) {
                 return [
                     'image' => asset('storage/' . $image->path),

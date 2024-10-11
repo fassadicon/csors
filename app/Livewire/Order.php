@@ -22,9 +22,14 @@ class Order extends Component
 
     public $location;
     public $remarks;
+    public $promo;
     public $paymentType = 'full';
+
     public float $totalAmount;
     public float $downPaymentAmount;
+    public float $originalTotalAmount;
+
+    public $promos;
 
     public $recipient;
 
@@ -32,13 +37,17 @@ class Order extends Component
     {
         $this->caterer = Caterer::find(session()->get('caterer'));
 
+        $this->promos = $this->caterer->promos; // Add start and end conditions
+
         $this->cart = session()->get('cart') ?? [];
 
-        $this->totalAmount = collect($this->cart)->flatMap(function ($orderItems) {
+        $this->originalTotalAmount = collect($this->cart)->flatMap(function ($orderItems) {
             return $orderItems;
         })->sum('price');
 
-        $this->downPaymentAmount = $this->totalAmount * 0.7;
+        $this->totalAmount = $this->originalTotalAmount;
+
+        $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
 
         $this->recipient = auth()->user() ? auth()->user()->full_name : null;
     }
@@ -115,9 +124,32 @@ class Order extends Component
             'end' => $this->endDateTime,
             'location' => $this->location,
             'remarks' => $this->remarks,
+            'promo_id' => $this->promo,
         ]);
 
         return redirect($response->data->attributes->checkout_url);
+    }
+
+    public function updatedPromo()
+    {
+        if ($this->promo != '') {
+            $promo = $this->promos->find($this->promo);
+            if ($promo->type == 'fixed') {
+                $this->originalTotalAmount = $this->originalTotalAmount - $promo->value;
+                $this->totalAmount = $this->originalTotalAmount;
+                $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
+            } else {
+                $this->originalTotalAmount = $this->originalTotalAmount - ($this->originalTotalAmount * $promo->value);
+                $this->totalAmount = $this->originalTotalAmount;
+                $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
+            }
+        } else {
+            $this->originalTotalAmount = collect($this->cart)->flatMap(function ($orderItems) {
+                return $orderItems;
+            })->sum('price');
+            $this->totalAmount = $this->originalTotalAmount;
+            $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
+        }
     }
 
     public function render()
