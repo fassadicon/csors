@@ -43,6 +43,16 @@ class Order extends Component
         $this->recipient = auth()->user() ? auth()->user()->full_name : null;
     }
 
+    public function updatedEndDateTime()
+    {
+        $this->validateOnly('startDateTime');
+    }
+
+    public function updatedStartDateTime()
+    {
+        $this->validateOnly('endDateTime');
+    }
+
     public function pay()
     {
         if (auth()->guest()) {

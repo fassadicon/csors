@@ -1,10 +1,16 @@
 <div class="p-4 rounded-sm bg-jt-white">
     <div class="flex gap-x-4">
-        <img src="{{asset('images/icons/trolley.png')}}" alt="" class="w-[50px] h-[50] object-scale-down">
-        <x-mary-header title="My Cart" subtitle="From {{ $caterer->name }}" class="!my-4 mt-8">
+        <img src="{{ asset('images/icons/trolley.png') }}"
+            alt=""
+            class="w-[50px] h-[50] object-scale-down">
+        <x-mary-header title="My Cart"
+            subtitle="From {{ $caterer->name }}"
+            class="!my-4 mt-8">
         </x-mary-header>
     </div>
-
+    <div wire:loading>
+        Calculating...
+    </div>
     <form wire:submit="checkout">
         @foreach ($cart as $categoryName => $categoryItems)
             <div>
@@ -44,15 +50,16 @@
                             @endif
                             <x-input-label for="cart.{{ $categoryName }}.{{ $key }}.quantity"
                                 :value="__('Quantity')" />
-                            <x-text-input wire:model.defer="cart.{{ $categoryName }}.{{ $key }}.quantity"
+                            <x-text-input wire:model.live="cart.{{ $categoryName }}.{{ $key }}.quantity"
                                 wire:change="updateQuantity($event.target.value, '{{ $categoryName }}', '{{ $key }}')"
                                 id="cart.{{ $categoryName }}.{{ $key }}.quantity"
                                 class="block w-full mt-1"
                                 type="number"
                                 min="1"
-                                name="name"
+                                step="1"
+                                name="cart.{{ $categoryName }}.{{ $key }}.quantity"
                                 required />
-                            <x-input-error :messages="$errors->get('name')"
+                            <x-input-error :messages="$errors->get('cart.' . $categoryName . '.' . $key . '.quantity')"
                                 class="mt-2" />
                             <x-input-label for="cart.{{ $categoryName }}.{{ $key }}.price"
                                 :value="__('Price')" />
@@ -60,9 +67,10 @@
                                 id="cart.{{ $categoryName }}.{{ $key }}.price"
                                 class="block w-full mt-1"
                                 type="text"
-                                name="name"
+                                name="cart.{{ $categoryName }}.{{ $key }}.price"
+                                readonly
                                 required />
-                            <x-input-error :messages="$errors->get('name')"
+                            <x-input-error :messages="$errors->get('cart.' . $categoryName . '.' . $key . '.price')"
                                 class="mt-2" />
                             <x-mary-button icon="o-trash"
                                 class="text-red-500"
@@ -90,3 +98,53 @@
     </a>
 
 </div>
+
+<script>
+    // Function to attach event listeners to number inputs
+    function addNumberInputListeners() {
+        const numberInputs = document.querySelectorAll('input[type="number"]');
+
+        numberInputs.forEach(input => {
+            // Prevent adding the event listener multiple times
+            if (!input.dataset.listenerAttached) {
+                input.dataset.listenerAttached = true; // Mark this input as having a listener
+
+                input.addEventListener('keydown', function(e) {
+                    // Allow: backspace, delete, tab, escape, enter, and arrow keys
+                    if (
+                        [8, 46, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+                        (e.keyCode >= 37 && e.keyCode <= 40)
+                    ) {
+                        return;
+                    }
+                    // Ensure that it's a number key or numpad key
+                    if (
+                        (e.keyCode < 48 || e.keyCode > 57) && // Numbers 0-9 on the keyboard
+                        (e.keyCode < 96 || e.keyCode > 105) // Numbers 0-9 on the numpad
+                    ) {
+                        e.preventDefault(); // Prevent the keypress
+                    }
+                });
+            }
+        });
+    }
+
+    // Initial call to add listeners
+    addNumberInputListeners();
+
+    // Create a MutationObserver to watch for DOM changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach(mutation => {
+            if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                addNumberInputListeners(); // Reapply listeners if DOM changes
+            }
+        });
+    });
+
+    // Start observing the document body for changes to the DOM
+    observer.observe(document.body, {
+        childList: true, // Watch for changes to child nodes
+        subtree: true, // Watch for changes in all descendants
+        attributes: true // Watch for attribute changes (optional)
+    });
+</script>

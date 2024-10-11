@@ -59,7 +59,7 @@
             separator />
         <x-input-label for="recipient"
             :value="__('Recipient Name')" />
-        <x-text-input wire:model.live="recipient"
+        <x-text-input wire:model.change="recipient"
             id="recipient"
             class="block w-full my-4"
             type="recipient"
@@ -70,7 +70,7 @@
                 class="mt-2" />
             <x-input-label for="startDateTime"
                 :value="__('Start')" />
-            <x-text-input wire:model.live="startDateTime"
+            <x-text-input wire:model.change="startDateTime"
                 id="startDateTime"
                 class="block w-full mt-1"
                 type="datetime-local"
@@ -80,7 +80,7 @@
                 class="mt-2" />
             <x-input-label for="endDateTime"
                 :value="__('End')" />
-            <x-text-input wire:model.live="endDateTime"
+            <x-text-input wire:model.change="endDateTime"
                 id="endDateTime"
                 class="block w-full mt-1"
                 type="datetime-local"
