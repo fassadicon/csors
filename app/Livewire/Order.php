@@ -103,7 +103,7 @@ class Order extends Component
                     'send_email_receipt' => false,
                     'show_description' => true,
                     'show_line_items' => true,
-                    'success_url' => url("partial-payment-success"), // full or partial
+                    'success_url' => $this->paymentType === 'partial' ? url("partial-payment-success") : url("full-payment-success"),
                     'cancel_url' => url("cart"),
                 ],
             ],
