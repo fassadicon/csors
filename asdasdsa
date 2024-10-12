@@ -1,0 +1,288 @@
+[33mcommit 803f159f6f882fb6314b19c9c56dcaaef38ffb55[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Merge: 172d3a4 e005d77
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Fri Oct 11 17:30:32 2024 +0800
+
+    Merge branch 'master' of https://github.com/fassadicon/csors
+
+[33mcommit e005d771d558cf8e26bdfa57d0070f2d0125c9d3[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Fri Oct 11 16:56:14 2024 +0800
+
+    base cancellation request conditions
+
+[33mcommit 172d3a483b373e7f6c8150f98c842959151bddbe[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Fri Oct 11 16:52:52 2024 +0800
+
+    fixed contact form
+
+[33mcommit 1e44d92e6f005cbb1644b7dc3962ea92f8dabaa3[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Fri Oct 11 14:29:57 2024 +0800
+
+    update images
+
+[33mcommit 12d9c7658a43df5cd582e75518662c3e6101d517[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Thu Oct 10 22:21:47 2024 +0800
+
+    added icon to my order
+
+[33mcommit a30c187f5b5b36f67d0e221759af07f88645abc1[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Thu Oct 10 19:36:01 2024 +0800
+
+    fixed register view bug
+
+[33mcommit 0fe3a6183bf781aa18f176b58e83fc4dc2168c1b[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Thu Oct 10 19:24:34 2024 +0800
+
+    added icons to about and cart
+
+[33mcommit 7d7dfeaf0caad5feaa6ba0cb875c10fe6c4226f4[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Thu Oct 10 18:51:02 2024 +0800
+
+    added animation to landing page
+
+[33mcommit fd68872a34cca13de364f9faaecabf974209354d[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Thu Oct 10 16:04:13 2024 +0800
+
+    added design to landing page
+
+[33mcommit 75dcbcb916e84f9f0c9622896c28ff229c88fa94[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Thu Oct 10 11:05:16 2024 +0800
+
+    added food images to public/images
+
+[33mcommit 92c53e15cef40e4779af8445a4dc9aba461c11ea[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Wed Oct 9 22:12:46 2024 +0800
+
+    .
+
+[33mcommit 4f0565ab7893131ac5cc21ea222b1a3349eea27e[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Wed Oct 9 18:09:40 2024 +0800
+
+    base request cancellation
+
+[33mcommit 2580765809f4772eef2b4f50ea13f74b17e981aa[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Tue Oct 8 22:35:19 2024 +0800
+
+    .
+
+[33mcommit d50d5b8494dd5c51dd1c29b562ccf0b8e377cf43[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Mon Oct 7 17:17:34 2024 +0800
+
+    .
+
+[33mcommit 39138562aee46d42fe81b189243ad2d3daa896b3[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Mon Oct 7 17:15:06 2024 +0800
+
+    .
+
+[33mcommit 4eb48b15ef092b7ed5c78a8e5abf4ea6361ffe73[m
+Merge: 2315f04 e16bab5
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Mon Oct 7 14:44:52 2024 +0800
+
+    Fixed merge issues
+
+[33mcommit 2315f04f9bb25fe2c0354b59d19119101bd95764[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Mon Oct 7 13:10:02 2024 +0800
+
+    backup commit
+
+[33mcommit f37d1f24137a1dd7633a95fc0921451a65bee5cd[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Wed Oct 2 13:54:04 2024 +0800
+
+    backup - before editing profile, order, payment
+
+[33mcommit 842a07810ac328329827bca946a2ad6530f82937[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Tue Oct 1 07:42:54 2024 +0800
+
+    added ui design except cart, order, profile, auth
+
+[33mcommit 4cfa74a6a5429120936765cbb67a6a5736eb442c[m
+Author: jaytalla <jay.ray.talla06102000@gmail.com>
+Date:   Mon Sep 30 20:45:02 2024 +0800
+
+    initial - before adding design
+
+[33mcommit e16bab5edb9bdc5f74832338dae4e5e14fe53e61[m
+Merge: 23142ae 5b0b89b
+Author: snarf <69708631+fassadicon@users.noreply.github.com>
+Date:   Sun Sep 29 20:38:30 2024 +0800
+
+    Merge pull request #2 from fassadicon/test/maryui
+    
+    Base client side
+
+[33mcommit 5b0b89b89d1b1a884b76999b144a586989158fb3[m[33m ([m[1;31morigin/test/maryui[m[33m)[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 29 19:44:01 2024 +0800
+
+    misc
+
+[33mcommit e347c1ee92d648944d7716def80965dad64f0725[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 29 19:27:19 2024 +0800
+
+    tempo badge colors
+
+[33mcommit 6aeb95fa4d1be959676c6d67b5c52dde95a47bf7[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 29 19:09:28 2024 +0800
+
+    flash
+
+[33mcommit 50e6af56f5b1713a281496a6cce8085fc500f292[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 29 18:15:45 2024 +0800
+
+    toaster base
+
+[33mcommit 197d0984fdce27776dd0653211e311efa6fabda1[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 29 17:01:44 2024 +0800
+
+    base email
+
+[33mcommit 7105b7795f570c45a80b7b7bd9a37d6ec4ad432d[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 29 16:09:52 2024 +0800
+
+    base payments 1.2
+
+[33mcommit 2304063373d730be2920c168bf289886658ff13d[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 29 15:48:12 2024 +0800
+
+    base payments 1.1
+
+[33mcommit a8474626258a22b597d9064f4dcc1f871893d0a8[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 29 15:25:17 2024 +0800
+
+    base payments
+
+[33mcommit 48e52b3939be017d9e064a2ccf5f3d6a3c85e7a8[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sat Sep 28 22:35:06 2024 +0800
+
+    base order view
+
+[33mcommit 6dae94f89715d5bb3dbb6754a23c87f129731fd2[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Fri Sep 27 22:04:31 2024 +0800
+
+    base order history
+
+[33mcommit bd9a59ca4ab4db8c6a2e55ca8609205244bce28e[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Fri Sep 27 21:34:08 2024 +0800
+
+    base login first before proceed payment
+
+[33mcommit db7ae4ebd74f49f6af74ccd75e4ccb3439a2f8e4[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Fri Sep 27 20:15:44 2024 +0800
+
+    payment base
+
+[33mcommit ee2595453acd65f341320930a82aad32f06529e9[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Thu Sep 26 23:34:52 2024 +0800
+
+    base paymongo
+
+[33mcommit 75017ebec79a41623d21aec7371708d7bef9ecd6[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Wed Sep 25 22:05:53 2024 +0800
+
+    x
+
+[33mcommit 1906220c45c75a1edb9d3c831c499b086b2123c8[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Tue Sep 24 21:51:36 2024 +0800
+
+    base date validation
+
+[33mcommit 30212d2651611f7f6156f3f00efa0ac49c7126fc[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Tue Sep 24 21:37:06 2024 +0800
+
+    base order page
+
+[33mcommit 66cad6c93ae4c71cd24583e154a4434f31ff96e6[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Mon Sep 23 23:27:01 2024 +0800
+
+    base order component no functionality
+
+[33mcommit 873ff5f1846a95ba3e2583fc4365b42ed659502b[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Mon Sep 23 23:18:44 2024 +0800
+
+    updating serving type
+
+[33mcommit 95d4222a72590e36a8aa69f653b0b7b6378981ce[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Mon Sep 23 11:31:09 2024 +0800
+
+    update quantity 1.0
+
+[33mcommit 5bb34ecfc719605977003c272f5d959ea29bee23[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sun Sep 22 21:08:30 2024 +0800
+
+    brute forced serving type id in cart
+
+[33mcommit 0a7cecd4cfc865d198eb860843e3d4ecfa9f5eaa[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sat Sep 21 23:11:36 2024 +0800
+
+    Base navigation, pages, and add to cart functionality
+
+[33mcommit a4a9d4e7160cfb4321c5d8a86a03b13a7a541c34[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Sat Sep 21 11:26:51 2024 +0800
+
+    Food Details 1.0
+
+[33mcommit e0e9aadc52e8ab80372d407b4801ebba2afc0f9d[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Fri Sep 20 18:48:08 2024 +0800
+
+    menu issue
+
+[33mcommit b6607990a168c3cf12613015489232ae2c8a900e[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Fri Sep 20 17:59:59 2024 +0800
+
+    menu base
+
+[33mcommit fdf938beb27d32d5851506ffe05d9a8a7d81a518[m
+Author: snarf <fa.sadicon@gmail.com>
+Date:   Thu Sep 19 18:50:14 2024 +0800
+
+    Added utilities nav items
+
+[33mcommit 10480abf416e941c1e10fc7075c28865265cc5f9[m
+Author: fassadicon <fa.sadicon@gmail.com>
+Date:   Wed Sep 18 21:34:41 2024 +0800
+
+    publicized images
+
+[33mcommit 4fe2005f2eaf8fb71f014495ac05af46

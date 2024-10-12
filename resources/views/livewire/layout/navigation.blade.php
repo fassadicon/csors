@@ -193,34 +193,40 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{ 'block': open, 'hidden': !open }"
-        class="hidden sm:hidden">
+    <div :class="{ 'flex flex-col justify-start items-center': open, 'hidden': !open }"
+        class="fixed hidden p-4 right-5 top-[5%] bg-jt-primary sm:hidden !h-[50%] min-w-[250px]">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('landing')"
+            <x-responsive-nav-link :href="route('landing')" class="!text-white hover:!text-black active:!bg-jt-primary !bg-transparent focus:!bg-jt-primary"
                 :active="request()->routeIs('landing')"
                 wire:navigate>
                 {{ __('CSORS') }}
             </x-responsive-nav-link>
         </div>
 
+        {{-- ADD NAVIGATION HERE ` --}}
+        <x-mobile-nav :caterer="$caterer" :navClasses="$navClasses" :cartItemCount="$cartItemCount" />
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+        <div class="absolute pt-4 pb-1 border-t border-gray-200 bottom-4 dark:border-gray-600">
             @if (auth()->guest())
                 <a href="{{ route('login') }}"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                     {{ __('Login') }}
                 </a>
+                <a href="{{ route('register') }}"
+                    class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
+                    {{ __('Register') }}
+                </a>
             @else
-                <div class="px-4">
+                {{-- <div class="px-4">
 
                     <div class="text-base font-medium text-gray-800 dark:text-gray-200"
                         x-data="{{ json_encode(['name' => auth()->user()->name]) }}"
                         x-text="name"
                         x-on:profile-updated.window="name = $event.detail.name"></div>
                     <div class="text-sm font-medium text-gray-500">{{ auth()->user()->email }}</div>
-                </div>
+                </div> --}}
 
-                <div class="mt-3 space-y-1">
+                {{-- <div class="mt-3 space-y-1">
                     <x-responsive-nav-link :href="route('profile')"
                         wire:navigate>
                         {{ __('Profile') }}
@@ -233,7 +239,7 @@
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>
                     </button>
-                </div>
+                </div> --}}
             @endif
         </div>
     </div>
