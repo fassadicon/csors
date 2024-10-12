@@ -40,7 +40,7 @@ class OrderSeeder extends Seeder
             $users = User::whereIn('id', [4, 5])->get();
 
             foreach ($users as $user) {
-                for ($i = 0; $i < 15; $i++) {
+                for ($i = 0; $i < 5; $i++) {
 
                     $orderedFoods = Food::whereHas('servingType', function ($query) use ($caterer) {
                         $query->where('caterer_id', $caterer->id);
@@ -110,7 +110,7 @@ class OrderSeeder extends Seeder
     {
         $user = User::inRandomOrder()->first();
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             $package = Package::whereHas('events', function ($query) use ($caterer) {
                 $query->where('caterer_id', $caterer->id);
             })

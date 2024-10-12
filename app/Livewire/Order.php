@@ -49,6 +49,8 @@ class Order extends Component
 
         $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
 
+        $this->updatedPromo();
+
         $this->recipient = auth()->user() ? auth()->user()->full_name : null;
     }
 
@@ -73,7 +75,6 @@ class Order extends Component
         if ($this->paymentType === 'partial') {
             $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->downPaymentAmount, 2)))));
         }
-
 
         $data = [
             'data' => [
@@ -103,7 +104,7 @@ class Order extends Component
                     'show_description' => true,
                     'show_line_items' => true,
                     'success_url' => url("partial-payment-success"), // full or partial
-                    'cancel_url' => url("payment-cancelled"),
+                    'cancel_url' => url("cart"),
                 ],
             ],
         ];
@@ -125,6 +126,7 @@ class Order extends Component
             'location' => $this->location,
             'remarks' => $this->remarks,
             'promo_id' => $this->promo,
+            'checkout_id' => $response->data->id,
         ]);
 
         return redirect($response->data->attributes->checkout_url);
@@ -135,20 +137,17 @@ class Order extends Component
         if ($this->promo != '') {
             $promo = $this->promos->find($this->promo);
             if ($promo->type == 'fixed') {
-                $this->originalTotalAmount = $this->originalTotalAmount - $promo->value;
-                $this->totalAmount = $this->originalTotalAmount;
-                $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
+                $this->totalAmount = $this->originalTotalAmount - $promo->value;
+                $this->downPaymentAmount = $this->totalAmount * 0.7;
             } else {
-                $this->originalTotalAmount = $this->originalTotalAmount - ($this->originalTotalAmount * $promo->value);
-                $this->totalAmount = $this->originalTotalAmount;
-                $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
+                $this->totalAmount = $this->originalTotalAmount - ($this->originalTotalAmount * (floatval($promo->value) / 100));
+                $this->downPaymentAmount = $this->totalAmount * 0.7;
             }
         } else {
-            $this->originalTotalAmount = collect($this->cart)->flatMap(function ($orderItems) {
+            $this->totalAmount = collect($this->cart)->flatMap(function ($orderItems) {
                 return $orderItems;
             })->sum('price');
-            $this->totalAmount = $this->originalTotalAmount;
-            $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
+            $this->downPaymentAmount = $this->totalAmount * 0.7;
         }
     }
 

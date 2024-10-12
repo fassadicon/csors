@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('amount');
             $table->string('reference_no')->nullable();
             $table->string('remarks')->nullable();
+            $table->json('data')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

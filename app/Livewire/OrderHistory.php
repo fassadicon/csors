@@ -19,7 +19,7 @@ class OrderHistory extends Component
     {
         $this->customer = User::find(auth()->id());
         $this->orders = Order::where('user_id', $this->customer->id)
-            ->orderByDesc('start')
+            ->orderByDesc('created_at')
             ->get();
 
         $this->headers = [
