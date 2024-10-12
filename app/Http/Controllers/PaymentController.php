@@ -109,31 +109,73 @@ class PaymentController extends Controller
     {
         $payPartial = session()->get('pay_partial');
 
+        $auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
+
+        $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions/' . $payPartial['checkout_id'])
+            ->withHeader('Content-Type: application/json')
+            ->withHeader('accept: application/json')
+            ->withHeader('Authorization: Basic ' . $auth_paymongo)
+            ->asJson()
+            ->get();
+
         if ($payPartial) {
-            auth()->user()->orders()->where('id', $payPartial['order_id'])->update([
-                'payment_status' => 'partial',
-            ]);
+            if (count($response->data->attributes->payments) > 0) {
+                $order =  auth()->user()->orders()->where('id', $payPartial['order_id'])->first();
+                $order->update([
+                    'payment_status' => 'partial',
+                ]);
 
-            session()->forget('pay_partial');
+                Payment::create([
+                    'order_id' => $order->id,
+                    'type' => 'online',
+                    'method' => $response->data->attributes->payment_method_used,
+                    'amount' => $order->total_amount * 0.7,
+                    'reference_no' => $response->data->id,
+                    'remarks' => 'Downpayment',
+                ]);
 
-            return redirect('order-history')->with('success', 'Downpayment paid successfully!');
+                session()->forget('pay_partial');
+
+                return redirect('order-history')->with('success', 'Downpayment paid successfully!');
+            }
         } else {
             abort(404, 'Unauthorized');
         }
     }
 
-    public function successRemaining(): RedirectResponse
+    public function successRemaining()
     {
         $payRemaining = session()->get('pay_remaining');
 
+        $auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
+
+        $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions/' . $payRemaining['checkout_id'])
+            ->withHeader('Content-Type: application/json')
+            ->withHeader('accept: application/json')
+            ->withHeader('Authorization: Basic ' . $auth_paymongo)
+            ->asJson()
+            ->get();
+
         if ($payRemaining) {
-            auth()->user()->orders()->where('id', $payRemaining['order_id'])->update([
-                'payment_status' => 'paid',
-            ]);
+            if (count($response->data->attributes->payments) > 0) {
+                $order =  auth()->user()->orders()->where('id', $payRemaining['order_id'])->first();
+                $order->update([
+                    'payment_status' => 'paid',
+                ]);
 
-            session()->forget('pay_remaining');
+                Payment::create([
+                    'order_id' => $order->id,
+                    'type' => 'online',
+                    'method' => $response->data->attributes->payment_method_used,
+                    'amount' => $order->total_amount * 0.7,
+                    'reference_no' => $response->data->id,
+                    'remarks' => 'Remaining Payment',
+                ]);
 
-            return redirect('order-history')->with('success', 'Remaining balance paid successfully!');
+                session()->forget('pay_remaining');
+
+                return redirect('order-history')->with('success', 'Remaining payment paid successfully!');
+            }
         } else {
             abort(404, 'Unauthorized');
         }
@@ -236,14 +278,35 @@ class PaymentController extends Controller
     {
         $payFull = session()->get('pay_full');
 
+        $auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
+
+        $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions/' . $payFull['checkout_id'])
+            ->withHeader('Content-Type: application/json')
+            ->withHeader('accept: application/json')
+            ->withHeader('Authorization: Basic ' . $auth_paymongo)
+            ->asJson()
+            ->get();
+
         if ($payFull) {
-            auth()->user()->orders()->where('id', $payFull['order_id'])->update([
-                'payment_status' => 'paid',
-            ]);
+            if (count($response->data->attributes->payments) > 0) {
+                $order =  auth()->user()->orders()->where('id', $payFull['order_id'])->first();
+                $order->update([
+                    'payment_status' => 'paid',
+                ]);
 
-            session()->forget('pay_full');
+                Payment::create([
+                    'order_id' => $order->id,
+                    'type' => 'online',
+                    'method' => $response->data->attributes->payment_method_used,
+                    'amount' => $order->total_amount * 0.7,
+                    'reference_no' => $response->data->id,
+                    'remarks' => 'Full Payment',
+                ]);
 
-            return redirect('order-history')->with('success', 'Full payment paid successfully!');
+                session()->forget('pay_full');
+
+                return redirect('order-history')->with('success', 'Full payment paid successfully!');
+            }
         } else {
             abort(404, 'Unauthorized');
         }

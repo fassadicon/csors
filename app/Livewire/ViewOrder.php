@@ -80,7 +80,7 @@ class ViewOrder extends Component
 
         $this->data['data']['attributes']['success_url'] = route("partial-payment-existing-success");
         $this->data['data']['attributes']['line_items'][0]['amount'] = $downPayment;
-        $this->data['data']['attributes']['line_items'][0]['name'] = 'Payment 1 of 2';
+        $this->data['data']['attributes']['line_items'][0]['name'] = 'Downpayment';
 
         $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
             ->withHeader('Content-Type: application/json')
@@ -92,6 +92,7 @@ class ViewOrder extends Component
 
         session()->put('pay_partial', [
             'order_id' => $this->order->id,
+            'checkout_id' => $response->data->id,
         ]);
 
         return redirect($response->data->attributes->checkout_url);
@@ -115,6 +116,7 @@ class ViewOrder extends Component
 
         session()->put('pay_full', [
             'order_id' => $this->order->id,
+            'checkout_id' => $response->data->id,
         ]);
 
         return redirect($response->data->attributes->checkout_url);
@@ -139,6 +141,7 @@ class ViewOrder extends Component
 
         session()->put('pay_remaining', [
             'order_id' => $this->order->id,
+            'checkout_id' => $response->data->id,
         ]);
 
         return redirect($response->data->attributes->checkout_url);
