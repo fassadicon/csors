@@ -34,13 +34,12 @@ class ServingTypeResource extends Resource
                     ->maxLength(255),
                 TinyEditor::make('description')
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('images')
-                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/serving-types')
+                    Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/images/serving-types')
                     ->image()
                     ->multiple()
                     ->reorderable()
                     ->openable()
-                    ->preserveFilenames()
                     ->panelLayout('grid')
                     ->uploadingMessage('Uploading images...')
                     ->nullable()

@@ -19,9 +19,14 @@ class FoodDetail extends Model
         'description',
     ];
 
-    protected $casts = [
-        'images' => 'array',
-    ];
+    // protected $casts = [
+    //     'images' => 'array',
+    // ];
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 
     public function servingTypes(): BelongsToMany
     {
@@ -41,13 +46,10 @@ class FoodDetail extends Model
         return $this->belongsToThrough(Caterer::class, FoodCategory::class);
     }
 
-    public function images(): MorphMany
-    {
-        return $this->morphMany(Image::class, 'imageable');
-    }
 
 
-  public function getFirstImagePath()
+
+    public function getFirstImagePath()
     {
         if ($this->images == null) {
             return false;

@@ -38,12 +38,11 @@ class UtilityResource extends Resource
                 TinyEditor::make('description')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
-                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/utilities')
+                    ->directory('caterers/images/utilities')
                     ->image()
                     ->multiple()
                     ->reorderable()
                     ->openable()
-                    ->preserveFilenames()
                     ->panelLayout('grid')
                     ->uploadingMessage('Uploading images...')
                     ->nullable()

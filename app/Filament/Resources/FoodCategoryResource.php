@@ -34,6 +34,16 @@ class FoodCategoryResource extends Resource
                     ->maxLength(255),
                 TinyEditor::make('description')
                     ->columnSpanFull(),
+                Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/images/food-categories')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->openable()
+                    ->panelLayout('grid')
+                    ->uploadingMessage('Uploading images...')
+                    ->nullable()
+                    ->columnSpanFull(),
             ]);
     }
 

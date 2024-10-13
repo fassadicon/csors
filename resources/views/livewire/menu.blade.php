@@ -23,7 +23,8 @@
                     <x-mary-card title="{{ $foodDetail->name }}"
                         class="!pb-0 flex justify-center items-center">
                         <x-slot:figure>
-                            <img src="{{ asset('images/placeholder.jpg') }}" />
+                            <img
+                                src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                         </x-slot:figure>
                         <x-slot:actions>
                             <div

@@ -18,4 +18,14 @@ class CreateFoodCategory extends CreateRecord
 
         return $data;
     }
+
+    protected function afterCreate(): void
+    {
+        $data = $this->form->getRawState();
+        $record = $this->record;
+        $attachments = $data['images'];
+        foreach ($attachments as $path) {
+            $record->images()->create(['path' => $path]);
+        }
+    }
 }

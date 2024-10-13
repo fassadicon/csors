@@ -35,6 +35,16 @@ class EventResource extends Resource
                 TinyEditor::make('description')
                     ->columnSpanFull()
                     ->nullable(),
+                Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/images/events')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->openable()
+                    ->panelLayout('grid')
+                    ->uploadingMessage('Uploading images...')
+                    ->nullable()
+                    ->columnSpanFull(),
             ]);
     }
 

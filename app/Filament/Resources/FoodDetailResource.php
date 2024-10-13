@@ -29,6 +29,7 @@ class FoodDetailResource extends Resource
                     ->relationship(
                         name: 'foodCategory',
                         titleAttribute: 'name',
+                        // modifyQueryUsing: fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id),
                         modifyQueryUsing: fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id),
                     )
                     ->required(),
@@ -38,12 +39,11 @@ class FoodDetailResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
-                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/foods')
+                    ->directory('caterers/images/food-details')
                     ->image()
                     ->multiple()
                     ->reorderable()
                     ->openable()
-                    ->preserveFilenames()
                     ->panelLayout('grid')
                     ->uploadingMessage('Uploading images...')
                     ->nullable()
