@@ -19,6 +19,36 @@ class ViewOrder extends Component
     public $canRequestCancellation = false;
     public $canPay = false;
 
+    public $payments;
+
+    public array $headers = [
+        [
+            'key' => 'type',
+            'label' => 'Type',
+            'class' => 'p-1'
+        ],
+        [
+            'key' => 'method',
+            'label' => 'Method',
+            'class' => 'p-1'
+        ],
+        [
+            'key' => 'amount',
+            'label' => 'Amount',
+            'class' => 'p-1'
+        ],
+        [
+            'key' => 'reference_no',
+            'label' => 'Reference No',
+            'class' => 'p-1'
+        ],
+        [
+            'key' => 'created_at',
+            'label' => 'Date',
+            'class' => 'p-1'
+        ],
+    ];
+
     public function mount(Order $order)
     {
         $this->order = $order->load('caterer', 'orderItems', 'cancellationRequest');
@@ -43,8 +73,9 @@ class ViewOrder extends Component
             $this->canPay = true;
         }
 
-
-
+        if ($this->order->payments) {
+            $this->payments = $this->order->payments;
+        }
 
         $this->auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
         $this->data = [

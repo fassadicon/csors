@@ -31,6 +31,7 @@ class OrderHistory extends Component
             ['key' => 'location', 'label' => 'Location'],
             ['key' => 'start', 'label' => 'Start'],
             ['key' => 'end', 'label' => 'End'],
+            ['key' => 'created_at', 'label' => 'Date Ordered'],
         ];
 
         // $this->cell_decoration = [

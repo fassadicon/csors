@@ -14,17 +14,14 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained();
-            $table->string('status')->default('paid');
             $table->enum('type', [
                 'cash',
                 'online',
-                'manual',
             ]);
             $table->string('method')->nullable();
             $table->string('amount');
             $table->string('reference_no')->nullable();
             $table->string('remarks')->nullable();
-            $table->json('data')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

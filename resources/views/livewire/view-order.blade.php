@@ -47,6 +47,14 @@
     {{-- <x-mary-header title="Total: {{ $totalAmount }}"
         class="!my-2"
         separator /> --}}
+    @if ($payments)
+        <h1>Payments</h1>
+        <x-mary-table :headers="$headers"
+            :rows="$payments"
+            striped
+            show-empty-text
+            class="border border-collapse" />
+    @endif
     <div class="flex justify-between items-end">
         <div>
             <x-mary-header title="Customer Information"
@@ -110,6 +118,7 @@
                 @endif
 
             @endif
+
         </div>
 
         <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] mt-4">
@@ -143,4 +152,6 @@
             </a>
         </div>
     </div>
+
+
 </div>

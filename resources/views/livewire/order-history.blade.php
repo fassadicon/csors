@@ -36,6 +36,9 @@
         @scope('cell_end', $order)
             {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
         @endscope
+        @scope('cell_created_at', $order)
+            {{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y g:i A') }}
+        @endscope
         @scope('actions', $order)
             <a href="{{ route('view-order', ['order' => $order]) }}">
                 <x-mary-button icon="o-eye"
