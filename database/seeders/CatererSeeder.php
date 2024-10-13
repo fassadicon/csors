@@ -16,7 +16,7 @@ class CatererSeeder extends Seeder
         Caterer::create([
             'user_id' => 2,
             'name' => 'Bitong Catering Services',
-            'email' => 'caterer_1@gmail.com',
+            'email' => 'audreysgv@gmail.com',
             'phone_number' => '09063406603',
             'about' => 'San Mateo\'s Best Catering Service',
             'is_verified' => 1,
@@ -24,11 +24,11 @@ class CatererSeeder extends Seeder
 
         Caterer::create([
             'user_id' => 3,
-            'name' => 'Test Caterer',
-            'email' => 'caterer_2@csors.com',
+            'name' => 'Omsim Catering Services',
+            'email' => 'jjarts1028@gmail.com',
             'phone_number' => '09063406601',
             'about' => 'Test Catering Service',
-            'is_verified' => 0,
+            'is_verified' => 1,
         ]);
     }
 }

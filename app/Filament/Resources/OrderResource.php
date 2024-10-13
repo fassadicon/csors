@@ -441,11 +441,11 @@ class OrderResource extends Resource
             ->when(auth()->user()->hasRole('caterer'), function ($query) {
                 $query->where('caterer_id', auth()->user()->caterer->id);
             })
-            ->where(function ($query) {
-                $query->where('order_status', OrderStatus::Pending)
-                    ->orWhere('payment_status', PaymentStatus::Pending)
-                    ->orWhereIn('payment_status', [PaymentStatus::Pending, PaymentStatus::Partial]);
-            })
+            // ->where(function ($query) {
+            //     $query->where('order_status', OrderStatus::Pending)
+            //         ->orWhere('payment_status', PaymentStatus::Pending)
+            //         ->orWhereIn('payment_status', [PaymentStatus::Pending, PaymentStatus::Partial]);
+            // })
             ->count();
     }
 }
