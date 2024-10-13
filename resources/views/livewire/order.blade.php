@@ -52,7 +52,7 @@
 
     </div>
 
-    <form wire:submit='pay'
+    <form wire:submit='submitOrder'
         class="p-4 rounded-sm bg-jt-white">
         <x-mary-header title="Customer Information"
             class="!my-2"
@@ -136,7 +136,7 @@
         </div>
         <hr class="my-4">
         <x-mary-button type="submit"
-            label="Proceed to Payment"
+            label="Submit Order"
             class="btn-primary"
             spinner />
     </form>

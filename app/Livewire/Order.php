@@ -3,8 +3,10 @@
 namespace App\Livewire;
 
 use Carbon\Carbon;
+use App\Models\Order as OrderModel;
 use App\Models\Caterer;
 use Livewire\Component;
+use App\Models\OrderItem;
 use Ixudra\Curl\Facades\Curl;
 use Livewire\Attributes\Validate;
 
@@ -28,6 +30,7 @@ class Order extends Component
     public float $totalAmount;
     public float $downPaymentAmount;
     public float $originalTotalAmount;
+    public float $deductedAmount;
 
     public $promos;
 
@@ -64,72 +67,46 @@ class Order extends Component
         $this->validateOnly('endDateTime');
     }
 
-    public function pay()
+    public function submitOrder()
     {
         if (auth()->guest()) {
             return redirect()->route('login');
         }
 
+        $orderItems = [];
+        foreach ($this->cart as $categoryItems) {
+            foreach ($categoryItems as $item) {
+                $orderItem = new OrderItem();
+                $orderItem->orderable_type = get_class($item['orderItem']);
+                $orderItem->orderable_id = $item['orderItem']->id;
+                $orderItem->quantity = $item['quantity'];
+                $orderItem->amount = $item['price'];
 
-        $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->totalAmount, 2)))));
-        if ($this->paymentType === 'partial') {
-            $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->downPaymentAmount, 2)))));
+                array_push($orderItems, $orderItem);
+            }
         }
 
-        $data = [
-            'data' => [
-                'attributes' => [
-                    'line_items' => [
-                        [
-                            'currency' => 'PHP',
-                            'amount' => $paymentAmount,
-                            'name' => 'CSORS test',
-                            'quantity' => 1,
-                        ]
-                    ],
-                    'payment_method_types' => [
-                        'card',
-                        'gcash',
-                        'grab_pay',
-                        'paymaya',
-                        'brankas_landbank',
-                        'brankas_metrobank',
-                        'billease',
-                        'dob',
-                        'dob_ubp',
-                        'qrph',
-                    ],
-                    'description' => 'test',
-                    'send_email_receipt' => false,
-                    'show_description' => true,
-                    'show_line_items' => true,
-                    'success_url' => $this->paymentType === 'partial' ? url("partial-payment-success") : url("full-payment-success"),
-                    'cancel_url' => url("cart"),
-                ],
-            ],
-        ];
-
-        $auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
-
-        $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
-            ->withHeader('Content-Type: application/json')
-            ->withHeader('accept: application/json')
-            ->withHeader('Authorization: Basic ' . $auth_paymongo)
-            ->withData($data)
-            ->asJson()
-            ->post();
-
-        session()->put('checkout', [
+        $order = OrderModel::create([
+            'user_id' => auth()->id(),
             'recipient' => $this->recipient,
-            'start' => $this->startDateTime,
-            'end' => $this->endDateTime,
+            'caterer_id' => session()->get('caterer'),
+            'promo_id' => $this->promo,
+            'deducted_amount' => $this->deductedAmount,
             'location' => $this->location,
             'remarks' => $this->remarks,
-            'promo_id' => $this->promo,
-            'checkout_id' => $response->data->id,
+            'start' => $this->startDateTime,
+            'end' => $this->endDateTime,
+            'total_amount' => $this->totalAmount
         ]);
 
-        return redirect($response->data->attributes->checkout_url);
+        foreach ($orderItems as $orderItem) {
+            $orderItem->order_id = $order->id;
+            $orderItem->save();
+        }
+
+        session()->forget('cart');
+
+        return redirect()->route('view-order', ['order' => $order->id])->with('success', 'Order has been successfully placed.');
     }
 
     public function updatedPromo()
@@ -137,9 +114,11 @@ class Order extends Component
         if ($this->promo != '') {
             $promo = $this->promos->find($this->promo);
             if ($promo->type == 'fixed') {
-                $this->totalAmount = $this->originalTotalAmount - $promo->value;
+                $this->deductedAmount = $promo->value;
+                $this->totalAmount = $this->originalTotalAmount - $this->deductedAmount;
                 $this->downPaymentAmount = $this->totalAmount * 0.7;
             } else {
+                $this->deductedAmount = ($this->originalTotalAmount * (floatval($promo->value) / 100));
                 $this->totalAmount = $this->originalTotalAmount - ($this->originalTotalAmount * (floatval($promo->value) / 100));
                 $this->downPaymentAmount = $this->totalAmount * 0.7;
             }
@@ -148,6 +127,7 @@ class Order extends Component
                 return $orderItems;
             })->sum('price');
             $this->downPaymentAmount = $this->totalAmount * 0.7;
+            $this->deductedAmount = 0.0;
         }
     }
 
@@ -155,4 +135,73 @@ class Order extends Component
     {
         return view('livewire.order');
     }
+
+    // public function pay()
+    // {
+    //     if (auth()->guest()) {
+    //         return redirect()->route('login');
+    //     }
+
+
+    //     $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->totalAmount, 2)))));
+    //     if ($this->paymentType === 'partial') {
+    //         $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->downPaymentAmount, 2)))));
+    //     }
+
+    //     $data = [
+    //         'data' => [
+    //             'attributes' => [
+    //                 'line_items' => [
+    //                     [
+    //                         'currency' => 'PHP',
+    //                         'amount' => $paymentAmount,
+    //                         'name' => 'CSORS test',
+    //                         'quantity' => 1,
+    //                     ]
+    //                 ],
+    //                 'payment_method_types' => [
+    //                     'card',
+    //                     'gcash',
+    //                     'grab_pay',
+    //                     'paymaya',
+    //                     'brankas_landbank',
+    //                     'brankas_metrobank',
+    //                     'billease',
+    //                     'dob',
+    //                     'dob_ubp',
+    //                     'qrph',
+    //                 ],
+    //                 'description' => 'test',
+    //                 'send_email_receipt' => false,
+    //                 'show_description' => true,
+    //                 'show_line_items' => true,
+    //                 'success_url' => $this->paymentType === 'partial' ? url("partial-payment-success") : url("full-payment-success"),
+    //                 'cancel_url' => url("cart"),
+    //             ],
+    //         ],
+    //     ];
+
+    //     $auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
+
+    //     $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
+    //         ->withHeader('Content-Type: application/json')
+    //         ->withHeader('accept: application/json')
+    //         ->withHeader('Authorization: Basic ' . $auth_paymongo)
+    //         ->withData($data)
+    //         ->asJson()
+    //         ->post();
+
+    //     session()->put('checkout', [
+    //         'recipient' => $this->recipient,
+    //         'start' => $this->startDateTime,
+    //         'end' => $this->endDateTime,
+    //         'location' => $this->location,
+    //         'remarks' => $this->remarks,
+    //         'promo_id' => $this->promo,
+    //         'checkout_id' => $response->data->id,
+    //     ]);
+
+    //     return redirect($response->data->attributes->checkout_url);
+    // }
+
 }

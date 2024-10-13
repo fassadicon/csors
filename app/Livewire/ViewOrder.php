@@ -17,6 +17,7 @@ class ViewOrder extends Component
     public $cancellationRequestResponse;
     public $cancellationRequestStatus;
     public $canRequestCancellation = false;
+    public $canPay = false;
 
     public function mount(Order $order)
     {
@@ -26,13 +27,9 @@ class ViewOrder extends Component
             $this->cancellationRequestResponse = $this->order->cancellationRequest->response;
             $this->cancellationRequestStatus = $this->order->cancellationRequest->status;
         } else {
-            if (
-                $this->order->order_status->value === 'pending'
-            ) {
+            if ($this->order->order_status->value === 'pending') {
                 $this->canRequestCancellation = true;
-            } else if (
-                $this->order->order_status->value === 'confirmed'
-            ) {
+            } else if ($this->order->order_status->value === 'confirmed') {
                 if (
                     $this->order->payment_status->value === 'pending' ||
                     $this->order->payment_status->value === 'partial'
@@ -41,6 +38,14 @@ class ViewOrder extends Component
                 }
             }
         }
+
+        if ($this->order->order_status->value === 'confirmed') {
+            $this->canPay = true;
+        }
+
+
+
+
         $this->auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
         $this->data = [
             'data' => [

@@ -32,7 +32,8 @@ return new class extends Migration
                 'confirmed',
                 'completed',
                 'cancelled'
-            ]);
+            ])
+                ->default('pending');
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();
