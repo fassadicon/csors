@@ -47,12 +47,11 @@ class PackageResource extends Resource
                     ->nullable()
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
-                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/packages')
+                    ->directory('caterers/images/packages')
                     ->image()
                     ->multiple()
                     ->reorderable()
                     ->openable()
-                    ->preserveFilenames()
                     ->panelLayout('grid')
                     ->uploadingMessage('Uploading images...')
                     ->nullable()

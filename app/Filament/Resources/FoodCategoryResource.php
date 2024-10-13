@@ -27,11 +27,22 @@ class FoodCategoryResource extends Resource
             ->schema([
                 Forms\Components\Select::make('caterer_id')
                     ->relationship('caterer', 'name')
+                    ->visible(auth()->user()->hasRole('superadmin'))
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 TinyEditor::make('description')
+                    ->columnSpanFull(),
+                Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/images/food-categories')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->openable()
+                    ->panelLayout('grid')
+                    ->uploadingMessage('Uploading images...')
+                    ->nullable()
                     ->columnSpanFull(),
             ]);
     }

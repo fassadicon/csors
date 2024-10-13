@@ -37,12 +37,14 @@ class CancellationRequestResource extends Resource
                                 ->whereIn('order_status', [OrderStatus::Confirmed, OrderStatus::Pending]);
                         }
                     )
+                    ->disabled(fn($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord)
                     ->required(),
                 Forms\Components\Select::make('status')
                     ->default(CancellationRequestStatus::Pending)
                     ->options(CancellationRequestStatus::class)
                     ->required(),
                 Forms\Components\Textarea::make('reason')
+                    ->disabled(fn($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord)
                     ->required(),
                 Forms\Components\Textarea::make('response')
                     ->nullable(),

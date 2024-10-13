@@ -20,12 +20,11 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Authorization';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    // protected static ?string $navigationGroup = 'Authorization';
     protected static ?string $navigationLabel = 'Customers';
     protected static ?string $breadcrumb = 'Customers';
     public static ?string $pluralModelLabel = 'Customers';
-
 
     public static function canCreate(): bool
     {
@@ -143,6 +142,11 @@ class CustomerResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                $query->whereHas('orders', function ($query) {
+                    $query->where('caterer_id', auth()->user()->caterer->id);
+                });
+            })
             ->where('is_customer', 1)
             ->withCount('orders')
             ->withoutGlobalScopes([

@@ -7,6 +7,7 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Support\Exceptions\Halt;
 use Filament\Forms\Contracts\HasForms;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
@@ -27,8 +28,10 @@ class EditCatererPage extends Page implements HasForms
 
     public function mount(): void
     {
+        $data = auth()->user()->caterer->attributesToArray();
+        $data['images'] = auth()->user()->caterer->images()->pluck('path')->toArray();
         $this->form->fill(
-            auth()->user()->caterer->attributesToArray()
+            $data
         );
     }
 
@@ -53,6 +56,12 @@ class EditCatererPage extends Page implements HasForms
                 ->image()
                 ->nullable()
                 ->image(),
+            Forms\Components\FileUpload::make('requirements_path')
+                ->columnSpan(2)
+                ->label('Business Requirements (.zip)')
+                ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
+                ->label('Business Requirements (.zip)')
+                ->nullable(),
             Forms\Components\FileUpload::make('images')
                 ->directory('caterers/' . auth()->user()->caterer->id . '/images/profile')
                 ->image()
@@ -60,14 +69,10 @@ class EditCatererPage extends Page implements HasForms
                 ->reorderable()
                 ->openable()
                 ->preserveFilenames()
+                ->panelLayout('grid')
                 ->uploadingMessage('Uploading images...')
-                ->nullable(),
-            Forms\Components\FileUpload::make('requirements_path')
-                ->label('Business Requirements (.zip)')
-                ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
-                ->label('Business Requirements (.zip)')
                 ->nullable()
-                ->visibleOn('edit'),
+                ->columnSpanFull(),
 
         ])
             ->statePath('data')
@@ -81,6 +86,33 @@ class EditCatererPage extends Page implements HasForms
                 ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
                 ->submit('save'),
         ];
+    }
+
+    protected function afterSave(): void
+    {
+        $data = $this->form->getRawState();
+        $record = $this->record;
+        $images = $data['images'];
+        $this->handleImages($record, $images);
+    }
+
+    protected function handleImages(Model $record, array $images): void
+    {
+        $existingImages = $record->images()->get();
+
+        foreach ($images as $path) {
+            $existingAttachment = $existingImages->where('path', $path)->first();
+
+            if (! $existingAttachment) {
+                $record->images()->create(['path' => $path]);
+            }
+        }
+
+        $imagesToRemove = $existingImages->reject(fn($attachment) => in_array($attachment->path, $images));
+
+        foreach ($imagesToRemove as $image) {
+            $image->delete();
+        }
     }
 
     public function save(): void

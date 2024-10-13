@@ -26,7 +26,6 @@ class UtilityResource extends Resource
             ->schema([
                 Forms\Components\Select::make('caterer_id')
                     ->relationship('caterer', 'name')
-                    ->default(auth()->user()->hasRole('caterer') ? auth()->user()->caterer->id : null)
                     ->visible(auth()->user()->hasRole('superadmin'))
                     ->required(),
                 Forms\Components\TextInput::make('name')
@@ -39,12 +38,11 @@ class UtilityResource extends Resource
                 TinyEditor::make('description')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
-                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/utilities')
+                    ->directory('caterers/images/utilities')
                     ->image()
                     ->multiple()
                     ->reorderable()
                     ->openable()
-                    ->preserveFilenames()
                     ->panelLayout('grid')
                     ->uploadingMessage('Uploading images...')
                     ->nullable()
@@ -57,6 +55,7 @@ class UtilityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
+                    ->visible(auth()->user()->hasRole('Superadmin'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')

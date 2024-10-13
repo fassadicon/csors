@@ -39,7 +39,7 @@ new class extends Component {
             'last_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'ext_name' => ['nullable', 'string', 'max:255'],
-            'phone_number' => ['nullable', 'string', 'max:11', 'regex:/^(09)\d{9}$/'],
+            'phone_number' => ['nullable', 'string', 'max:11', 'regex:/^(09)\d{9}$/', Rule::unique(User::class)->ignore($user->id)],
             'verification_image' => ['image', 'mimes:jpg,jpeg,png', 'max:10240', 'nullable'], // Specific file types
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/', Rule::unique(User::class)->ignore($user->id)],
         ]);

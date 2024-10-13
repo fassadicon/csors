@@ -23,7 +23,7 @@ class Package extends Model
     {
         return [
             'price' => 'decimal:2',
-            'images' => 'array',
+            // 'images' => 'array',
         ];
     }
 

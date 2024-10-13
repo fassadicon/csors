@@ -27,19 +27,19 @@ class ServingTypeResource extends Resource
             ->schema([
                 Forms\Components\Select::make('caterer_id')
                     ->relationship('caterer', 'name')
+                    ->visible(auth()->user()->hasRole('superadmin'))
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 TinyEditor::make('description')
                     ->columnSpanFull(),
-                Forms\Components\FileUpload::make('images')
-                    ->directory('caterers/' . auth()->user()->caterer->id . '/images/serving-types')
+                    Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/images/serving-types')
                     ->image()
                     ->multiple()
                     ->reorderable()
                     ->openable()
-                    ->preserveFilenames()
                     ->panelLayout('grid')
                     ->uploadingMessage('Uploading images...')
                     ->nullable()

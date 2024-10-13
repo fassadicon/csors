@@ -19,6 +19,14 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Authorization';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        if (auth()->user()->hasRole('superadmin')) {
+            return true;
+        }
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

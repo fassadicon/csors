@@ -27,7 +27,6 @@ class EventResource extends Resource
             ->schema([
                 Forms\Components\Select::make('caterer_id')
                     ->relationship('caterer', 'name')
-                    ->default(auth()->user()->hasRole('caterer') ? auth()->user()->caterer->id : null)
                     ->visible(auth()->user()->hasRole('superadmin'))
                     ->required(),
                 Forms\Components\TextInput::make('name')
@@ -36,6 +35,16 @@ class EventResource extends Resource
                 TinyEditor::make('description')
                     ->columnSpanFull()
                     ->nullable(),
+                Forms\Components\FileUpload::make('images')
+                    ->directory('caterers/images/events')
+                    ->image()
+                    ->multiple()
+                    ->reorderable()
+                    ->openable()
+                    ->panelLayout('grid')
+                    ->uploadingMessage('Uploading images...')
+                    ->nullable()
+                    ->columnSpanFull(),
             ]);
     }
 

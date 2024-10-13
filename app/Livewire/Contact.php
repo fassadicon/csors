@@ -28,7 +28,7 @@ class Contact extends Component
     public function send()
     {
         // dd($this->caterer);
-        // validate 
+        // validate
         $inputs = $this->validate([
             'name' => ['required', 'min:3', 'max:50'],
             'subject' => ['required', 'min:3', 'max:50'],
@@ -37,7 +37,7 @@ class Contact extends Component
         ]);
 
         // $this->caterer->email
-        Mail::to('audreysgv@gmail.com')->send(new InquiryMail(
+        Mail::to($this->caterer->email)->send(new InquiryMail(
             $this->name,
             $this->subject,
             $this->content,

@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use Filament\Forms;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -40,12 +41,14 @@ class EditProfilePage extends Page implements HasForms
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
+                    ->unique(table: User::class, ignoreRecord: true)
                     ->email()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\DateTimePicker::make('email_verified_at')
                     ->readOnly(),
                 Forms\Components\TextInput::make('phone_number')
+                    ->unique(table: User::class, ignoreRecord: true)
                     ->nullable()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('first_name')

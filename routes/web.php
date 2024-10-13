@@ -3,12 +3,13 @@
 use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
+use App\Models\FoodDetail;
 
 Route::get('test', function () {
-    $orderStatuses = array_values(array_filter(OrderStatus::cases(), fn($status) => $status !== OrderStatus::Cancelled || $status !== OrderStatus::Completed));
+    // $foodDetail = FoodDetail::find(1);
+    // dd($foodDetail->images);
 
-
-    dd($orderStatuses);
+    dd(auth()->user()->hasRole('superadmin'));
 });
 
 Route::get('clear', function () {
