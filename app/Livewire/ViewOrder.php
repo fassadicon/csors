@@ -60,10 +60,12 @@ class ViewOrder extends Component
             if ($this->order->order_status->value === 'pending') {
                 $this->canRequestCancellation = true;
             } else if ($this->order->order_status->value === 'confirmed') {
-                if (
-                    $this->order->payment_status->value === 'pending' ||
-                    $this->order->payment_status->value === 'partial'
-                ) {
+                if ($this->order->payment_status->value === 'pending') {
+                    $this->canRequestCancellation = true;
+                } else if ($this->order->payment_status->value === 'partial') {
+                    if ($this->order->created_at < $this->order->created_at->addDay()) {
+                        $this->canRequestCancellation = true;
+                    }
                     $this->canRequestCancellation = true;
                 }
             }
@@ -103,7 +105,7 @@ class ViewOrder extends Component
                     'send_email_receipt' => false,
                     'show_description' => true,
                     'show_line_items' => true,
-                    'cancel_url' => url("payment-cancelled"),
+                    'cancel_url' => url("view-order", ['order' => $this->order->id]),
                 ],
             ],
         ];
