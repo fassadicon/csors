@@ -161,6 +161,21 @@ class OrderResource extends Resource
                 Forms\Components\Select::make('order_status')
                     ->default(OrderStatus::Pending)
                     ->options(OrderStatus::class)
+                    ->disableOptionWhen(function (string $value, Model $record) {
+                        if ($record->order_status === OrderStatus::Completed) {
+                            return in_array($value, ['pending', 'confirmed', 'cancelled']);
+                        }
+
+                        if ($record->order_status === OrderStatus::Confirmed) {
+                            return in_array($value, ['pending']);
+                        }
+
+                        if ($record->order_status === OrderStatus::Cancelled) {
+                            return in_array($value, ['pending', 'confirmed', 'completed']);
+                        }
+
+                        return false;
+                    })
                     ->required(),
             ])
                 ->columns(2),
@@ -236,7 +251,7 @@ class OrderResource extends Resource
                     ->columns(3),
             ])
                 ->visible(fn($record) => $record->cancellationRequest !== null)
-                // ->visibleOn('edit')
+            // ->visibleOn('edit')
         ];
     }
 
