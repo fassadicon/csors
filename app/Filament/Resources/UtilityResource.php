@@ -55,6 +55,7 @@ class UtilityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
+                    ->visible(auth()->user()->hasRole('Superadmin'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')

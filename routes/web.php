@@ -6,8 +6,10 @@ use App\Http\Controllers\PaymentController;
 use App\Models\FoodDetail;
 
 Route::get('test', function () {
-    $foodDetail = FoodDetail::find(1);
-    dd($foodDetail->images);
+    // $foodDetail = FoodDetail::find(1);
+    // dd($foodDetail->images);
+
+    dd(auth()->user()->hasRole('superadmin'));
 });
 
 Route::get('clear', function () {

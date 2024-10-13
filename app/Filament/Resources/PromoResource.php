@@ -25,8 +25,8 @@ class PromoResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('caterer_id')
-                    ->relationship('caterer', 'name')
                     ->visible(auth()->user()->hasRole('superadmin'))
+                    ->relationship('caterer', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
@@ -43,10 +43,10 @@ class PromoResource extends Resource
                     })
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('minimum')
-                    ->prefix('₱')
-                    ->required()
-                    ->numeric(),
+                // Forms\Components\TextInput::make('minimum')
+                //     ->prefix('₱')
+                //     ->required()
+                //     ->numeric(),
                 Forms\Components\DatePicker::make('start_date')
                     ->required(),
                 Forms\Components\DatePicker::make('end_date')
@@ -59,7 +59,7 @@ class PromoResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
-                    ->numeric()
+                    ->visible(auth()->user()->hasRole('superadmin'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
@@ -67,10 +67,10 @@ class PromoResource extends Resource
                 Tables\Columns\TextColumn::make('value')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('minimum')
-                    ->money('php')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('minimum')
+                //     ->money('php')
+                //     ->numeric()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->date()
                     ->sortable(),

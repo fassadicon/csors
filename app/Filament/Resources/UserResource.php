@@ -21,7 +21,7 @@ class UserResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        if (auth()->user()->hasRole('Superadmin')) {
+        if (auth()->user()->hasRole('superadmin')) {
             return true;
         }
         return false;
