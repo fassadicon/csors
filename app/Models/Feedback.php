@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Feedback extends Model
 {
     use SoftDeletes;
-
+    protected $table = 'feedbacks';
     protected $fillable = [
         'caterer_id',
-        'user_id,',
+        'user_id',
         'rating',
         'comment'
     ];
 
-    public function users() : BelongsTo
+    public function users(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

@@ -243,4 +243,8 @@
             @endif
         </div>
     </div>
+
+    @if ($this->checkToReview())
+        <livewire:feedback.feedback-popup :order="$this->checkToReview()" />
+    @endif
 </nav>

@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Layout;
 
+use App\Enums\OrderStatus;
 use App\Models\Caterer;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Masmerise\Toaster\Toaster;
 use App\Livewire\Actions\Logout;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class Navigation extends Component
 {
@@ -16,6 +19,9 @@ class Navigation extends Component
 
     public function mount(): void
     {
+        // check if has order to To_Review
+        // dd($this->checkToReview());
+
         $this->caterer = false;
         if (session()->has('caterer') != null) {
             $this->caterer = Caterer::with(['events', 'utilities'])->find(session()->get('caterer'));
@@ -46,8 +52,17 @@ class Navigation extends Component
     public function logout(Logout $logout): void
     {
         $logout();
-
         $this->redirect('/', navigate: true);
+    }
+
+    public function checkToReview()
+    {
+        $order = Auth::user()->orders()->where('order_status', OrderStatus::To_Review)->get()->first();
+        if ($order) {
+            return $order;
+        } else {
+            return false;
+        }
     }
 
     public function render()
