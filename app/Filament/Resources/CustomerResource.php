@@ -143,6 +143,11 @@ class CustomerResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                $query->whereHas('orders', function ($query) {
+                    $query->where('caterer_id', auth()->user()->caterer->id);
+                });
+            })
             ->where('is_customer', 1)
             ->withCount('orders')
             ->withoutGlobalScopes([
