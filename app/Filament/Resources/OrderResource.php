@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\CancellationRequestStatus;
 use Filament\Forms;
 use App\Models\Food;
 use Filament\Tables;
@@ -45,7 +46,7 @@ class OrderResource extends Resource
                     ->relationship(
                         name: 'user',
                         titleAttribute: 'name',
-                        // modifyQueryUsing: fn(Builder $query) => $query->withTrashed()
+                        modifyQueryUsing: fn(Builder $query) => $query->where('is_customer', 1)
                     )
                     ->required(),
                 Forms\Components\DateTimePicker::make('start')
@@ -166,11 +167,29 @@ class OrderResource extends Resource
                 ->columns(2),
             Forms\Components\Section::make([
                 Forms\Components\Select::make('payment_status')
-                    ->default(PaymentStatus::Pending)
                     ->options(PaymentStatus::class)
+                    ->default(PaymentStatus::Pending)
                     ->live()
-                    ->required(),
+                    ->required()
+                    ->disableOptionWhen(function (string $value, Model $record) {
+
+                        // If the current status is 'paid', disable all other options
+                        if ($record->payment_status === PaymentStatus::Paid) {
+                            return $value !== 'paid';
+                        }
+
+                        // If the current status is 'partial', disable all options except 'partial' and 'paid'
+                        if ($record->payment_status === PaymentStatus::Partial) {
+                            return !in_array($value, ['partial', 'paid']);
+                        }
+
+                        // No options are disabled in other cases
+                        return false;
+                    }),
                 Forms\Components\Repeater::make('payments')
+                    ->disabled(function ($get) {
+                        return $get('payment_status') == 'paid';
+                    })
                     ->hidden(function ($get) {
                         return $get('payment_status') === PaymentStatus::Pending;
                     })
@@ -185,7 +204,6 @@ class OrderResource extends Resource
                             ->options([
                                 'cash' => 'Cash',
                                 'online' => 'Online',
-                                'manual' => 'Manual',
                             ])
                             ->required(),
                         Forms\Components\TextInput::make('method')
@@ -208,11 +226,7 @@ class OrderResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('status')
                             ->label('Cancellation Status')
-                            ->options([
-                                0 => 'Pending',
-                                1 => 'Declined',
-                                2 => 'Accepted',
-                            ])
+                            ->options(CancellationRequestStatus::class)
                             ->required(),
                         Forms\Components\Textarea::make('reason')
                             ->readOnlyOn('edit')
@@ -222,8 +236,8 @@ class OrderResource extends Resource
                     ])
                     ->columns(3),
             ])
-                // ->visible(fn($record) => $record->cancellationRequest !== null)
-                ->visibleOn('edit')
+                ->visible(fn($record) => $record->cancellationRequest !== null)
+                // ->visibleOn('edit')
         ];
     }
 

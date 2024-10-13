@@ -28,6 +28,11 @@ class Caterer extends Model
     //     'images' => 'array',
     // ];
 
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -86,10 +91,5 @@ class Caterer extends Model
     public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);
-    }
-
-    public function images(): MorphMany
-    {
-        return $this->morphMany(Image::class, 'imageable');
     }
 }

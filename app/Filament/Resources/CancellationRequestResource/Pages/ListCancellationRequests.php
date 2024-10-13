@@ -29,8 +29,10 @@ class ListCancellationRequests extends ListRecords
     {
         return [
             'all' => Tab::make()
-                ->badge(CancellationRequest::query()->whereHas('order', function ($query) {
-                    $query->where('caterer_id', auth()->user()->caterer->id);
+                ->badge(CancellationRequest::query()->when(auth()->user()->hasRole('caterer'), function ($query) {
+                    $query->whereHas('order', function ($query) {
+                        $query->where('caterer_id', auth()->user()->caterer->id);
+                    });
                 })->count())
                 ->badgeColor('gray'),
             'pending' => Tab::make()
@@ -51,8 +53,10 @@ class ListCancellationRequests extends ListRecords
     protected function getOrderByCancellationRequestStatus($cancellationRequestStatus)
     {
         return CancellationRequest::query()
-            ->whereHas('order', function ($query) {
-                $query->where('caterer_id', auth()->user()->caterer->id);
+            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                $query->whereHas('order', function ($query) {
+                    $query->where('caterer_id', auth()->user()->caterer->id);
+                });
             })
             ->where('status', $cancellationRequestStatus);
     }

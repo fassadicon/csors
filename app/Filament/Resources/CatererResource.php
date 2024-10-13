@@ -53,11 +53,10 @@ class CatererResource extends Resource
                     ->image()
                     ->nullable()
                     ->visibleOn('edit'),
-                // Forms\Components\FileUpload::make('requirements_path')
-                //     ->directory(fn($record) => 'caterers/' . $record->id . '/requirements')
-                //     ->label('Business Requirements (.zip)')
-                //     ->nullable()
-                //     ->visibleOn('edit'),
+                Forms\Components\FileUpload::make('requirements_path')
+                    ->directory(fn($record) => 'caterers/' . $record->id . '/requirements')
+                    ->label('Business Requirements (.zip)')
+                    ->nullable(),
                 Forms\Components\FileUpload::make('images')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/images/profile')
                     ->image()
