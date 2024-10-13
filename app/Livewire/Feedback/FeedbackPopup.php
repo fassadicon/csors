@@ -3,6 +3,7 @@
 namespace App\Livewire\Feedback;
 
 use App\Models\Feedback;
+use App\Models\ReportedUser;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -47,7 +48,18 @@ class FeedbackPopup extends Component
         $this->validate([
             'comment' => ['required', 'min:5'],
         ]);
-        dd("send report!");
+
+        ReportedUser::create([
+            'user_id' => $this->order->user_id,
+            'reported_user' => $this->order->caterer_id,
+            'comment' => $this->comment
+        ]);
+
+        // Update Order Status
+        $this->order->update([
+            'order_status' => 'completed'
+        ]);
+        $this->dispatch('report');
     }
 
 
