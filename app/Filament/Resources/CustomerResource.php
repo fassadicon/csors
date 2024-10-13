@@ -20,12 +20,11 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Authorization';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    // protected static ?string $navigationGroup = 'Authorization';
     protected static ?string $navigationLabel = 'Customers';
     protected static ?string $breadcrumb = 'Customers';
     public static ?string $pluralModelLabel = 'Customers';
-
 
     public static function canCreate(): bool
     {
