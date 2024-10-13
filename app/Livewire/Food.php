@@ -34,6 +34,9 @@ class Food extends Component
         $this->foodDetail = FoodDetail::with('foodCategory', 'servingTypes')
             ->where('id', $foodDetail->id)->first();
         $this->servingType = $this->foodDetail->servingTypes->first()->id;
+        $this->food = FoodModel::where('food_detail_id', $this->foodDetail->id)
+            ->where('serving_type_id', $this->servingType)
+            ->first();
         $this->price = $this->foodDetail->servingTypes->first()->pivot->price * $this->quantity;
 
         if ($this->foodDetail->images != null) {
