@@ -244,7 +244,9 @@
         </div>
     </div>
 
-    @if ($this->checkToReview())
-        <livewire:feedback.feedback-popup :order="$this->checkToReview()" />
-    @endif
+    @auth
+        @if ( $this->checkToReview())
+            <livewire:feedback.feedback-popup :order="$this->checkToReview()" />
+        @endif    
+    @endauth
 </nav>
