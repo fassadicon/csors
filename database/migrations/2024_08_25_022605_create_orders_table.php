@@ -30,6 +30,7 @@ return new class extends Migration
             $table->enum('order_status', [
                 'pending',
                 'confirmed',
+                'to_review',
                 'completed',
                 'cancelled'
             ])

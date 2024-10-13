@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('caterer_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->integer('rating')->constrained();
+            $table->text('comment')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });
