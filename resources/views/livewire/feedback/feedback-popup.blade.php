@@ -27,7 +27,8 @@
             x-transition:leave-end="opacity-0 scale-90" 
             x-show="tabOpen == 'review'" 
             class="min-w-[250px] flex flex-col items-center w-[90%] md:w-[40%] justify-center p-4 bg-white rounded-md gap-y-4">
-            {{-- <h3>Order ID: {{$orderID}}</h3> --}}
+            <h5>Order ID: {{$order->id}}</h5>
+            <h3>{{$order->caterer->name}}</h3>
             <x-mary-header title="Congratulations on your last event!"
                 subtitle="What do you think of the service of the caterer?" class="!my-4 !mt-8"></x-mary-header>
             <x-mary-rating wire:model="rate" class="-mt-4 bg-amber-400 focus:!bg-amber-400 !text-amber-400" required/>
@@ -50,9 +51,14 @@
             x-transition:leave="transition-all ease-in duration-300" 
             x-transition:leave-start="opacity-100 scale-100"
             class="flex flex-col items-center w-[90%] md:w-[40%] justify-center p-4 px-2 min-w-[250px] md:px-10 bg-white rounded-md gap-y-4">
+            
+            <h5>Order ID: {{$order->id}}</h5>
+            <h3>{{$order->caterer->name}}</h3>
+            
             <x-mary-header title="We’re Sorry for the Inconvenience!"
                 subtitle="At CSORS, we strive to provide the best service possible. If your experience didn’t meet your expectations, please let us know. Your feedback is invaluable in helping us improve our offerings and ensure a delightful experience for all our clients."
                 class="!my-4 !mt-8"></x-mary-header>
+            
             <x-mary-textarea wire:model="comment" placeholder="Your feedback..." hint="Max 1000 chars" rows="3" inline
                 class="min-w-[250px]" />
             <button type="submit" class="px-4 py-2 text-white bg-red-500">SEND REPORT</button>
