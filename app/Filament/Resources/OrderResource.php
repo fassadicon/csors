@@ -60,7 +60,6 @@ class OrderResource extends Resource
                 Forms\Components\Select::make('caterer_id')
                     ->preload()
                     ->relationship('caterer', 'name')
-                    ->default(auth()->user()->caterer->id)
                     ->hidden(auth()->user()->hasRole('caterer'))
                     ->required(),
                 Forms\Components\Textarea::make('location')

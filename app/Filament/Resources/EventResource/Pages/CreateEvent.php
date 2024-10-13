@@ -9,4 +9,13 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateEvent extends CreateRecord
 {
     protected static string $resource = EventResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        if (auth()->user()->hasRole('caterer')) {
+            $data['caterer_id'] = auth()->user()->caterer->id;
+        }
+
+        return $data;
+    }
 }

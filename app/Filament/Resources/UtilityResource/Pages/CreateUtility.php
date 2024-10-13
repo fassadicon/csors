@@ -2,13 +2,23 @@
 
 namespace App\Filament\Resources\UtilityResource\Pages;
 
-use App\Filament\Resources\UtilityResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\UtilityResource;
 
 class CreateUtility extends CreateRecord
 {
     protected static string $resource = UtilityResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        if (auth()->user()->hasRole('caterer')) {
+            $data['caterer_id'] = auth()->user()->caterer->id;
+        }
+
+        return $data;
+    }
 
     protected function afterCreate(): void
     {
@@ -18,5 +28,11 @@ class CreateUtility extends CreateRecord
         foreach ($attachments as $path) {
             $record->images()->create(['path' => $path]);
         }
+
+        // auth()->user()->notify(
+        //     Notification::make()
+        //         ->title('Saved successfully')
+        //         ->toDatabase(),
+        // );
     }
 }
