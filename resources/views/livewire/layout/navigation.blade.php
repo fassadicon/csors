@@ -15,6 +15,8 @@
                 <div class="flex items-center shrink-0">
                     <a href="{{ route('landing') }}">
                         <x-application-logo class="block w-auto fill-current text-jt-white h-9 dark:text-gray-200" /></a>
+                    {{-- vertical line --}}
+                    <div class="h-[80%] w-[2px] bg-white mx-2"></div>
                     @if ($caterer && $caterer->logo_path)
                         <img src="{{ asset('storage/' . $caterer->logo_path) }}"
                             alt="{{ $caterer->name }}"
