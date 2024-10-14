@@ -245,9 +245,9 @@ class OrderResource extends Resource
                             ->columnSpan(2),
                     ])
                     ->reorderable()
-                    ->deleteAction(
-                        fn(Action $action) => $action->requiresConfirmation(),
-                    )
+                    // ->deleteAction(
+                    //     fn(Action $action) => $action->requiresConfirmation(),
+                    // )
                     ->columns(6)
             ]),
             Forms\Components\Section::make([
@@ -457,7 +457,7 @@ class OrderResource extends Resource
             ->defaultSort('created_at', 'desc');
     }
 
-    // FOR REPORTING 
+    // FOR REPORTING
     // Method to open the modal
     protected function openReportModal(Order $order)
     {

@@ -10,17 +10,25 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Order;
 
-class OrderUpdateEmail extends Mailable
+class OrderUpdateMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected Order $order;
+    public $order;
     /**
      * Create a new message instance.
      */
     public function __construct($order)
     {
-        $this->order = $order;
+        $this->order = Order::find($order);
+
+        $this->order->load([
+            'caterer',
+            'orderItems',
+            'payments',
+            'orderItems',
+            'user',
+        ]);
     }
 
     /**

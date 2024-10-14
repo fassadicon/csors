@@ -124,6 +124,8 @@ class ViewOrder extends Component
             ->withHeader('Content-Type: application/json')
             ->withHeader('accept: application/json')
             ->withHeader('Authorization: Basic ' . $this->auth_paymongo)
+            ->withTimeout(300)
+            ->withConnectTimeout(300)
             ->withData($this->data)
             ->asJson()
             ->post();

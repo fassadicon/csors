@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\OrderResource\Pages;
 
-use App\Filament\Resources\OrderResource;
 use Filament\Actions;
+use App\Mail\OrderUpdateMail;
+use Illuminate\Support\Facades\Mail;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\OrderResource;
 
 class EditOrder extends EditRecord
 {
@@ -18,5 +20,12 @@ class EditOrder extends EditRecord
             Actions\ForceDeleteAction::make(),
             Actions\RestoreAction::make(),
         ];
+    }
+
+    protected function afterSave()
+    {
+        Mail::to('audreysgv@gmail.com')->send(new OrderUpdateMail(
+            $this->record->id,
+        ));
     }
 }
