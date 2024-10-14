@@ -37,6 +37,10 @@
         <main class="py-6 pt-24 mx-auto max-w-7xl sm:px-2 lg:px-4">
             {{ $slot }}
         </main>
+
+        <footer class="w-full h-[30%]">
+            <x-footer />
+        </footer>
     </div>
     <x-toaster-hub />
 </body>
