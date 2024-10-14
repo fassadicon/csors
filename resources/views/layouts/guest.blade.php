@@ -22,13 +22,15 @@
                 </a>
             </div>
 
-            <div class="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-md dark:bg-gray-800 sm:rounded-lg">
+            <div class="w-full !min-h-screen px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-md dark:bg-gray-800 sm:rounded-lg">
                 {{ $slot }}
             </div>
 
-            <footer class="w-full h-[30%]">
-                <x-footer />
-            </footer>
+            @if (!request()->is('/'))
+                <footer class="w-full h-[30%]">
+                    <x-footer />
+                </footer>
+            @endif
         </div>
     </body>
 </html>

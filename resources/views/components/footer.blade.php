@@ -1,4 +1,4 @@
-<div class="flex justify-center flex-col absolute top-[100%] w-full text-white p-10 gap-y-4 md:gap-y-0 !pb-4 h-fit bg-slate-900">
+<div class="flex justify-center flex-col  bottom-0 w-full text-white p-10 gap-y-4 md:gap-y-0 !pb-4 h-fit bg-slate-900">
     <div class="flex flex-col justify-between pt-24 mx-auto max-w-7xl sm:px-2 lg:px-4 md:py-0 md:flex-row gap-y-4 md:gap-y-0 md:gap-x-10">
         <div class="flex flex-col items-center justify-center gap-y-4">
             <h3>CSORS</h3>

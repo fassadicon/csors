@@ -6,7 +6,7 @@
     <div style="background-image: url('{{ asset('images/bgs/landing-min.jpg') }}');" 
         class="absolute top-0 left-0 w-full h-screen bg-black bg-center bg-cover">
         {{-- OVERLAY  --}}
-        <div class="absolute top-0 left-0 w-full h-screen text-white bg-black/70 ">
+        <div class="left-0 w-full h-screen text-white atop-0 bg-black/70 ">
             {{-- MAIN CONTAINER - WIDTH CONSTRAINT  --}}
             <div class="flex flex-col-reverse items-center justify-center h-screen py-6 mx-auto md:flex-row md:items-center max-w-7xl sm:px-2 lg:px-4">
                 {{-- CONTENT --}}
@@ -36,5 +36,6 @@
                 </x-animate.transition-op>
             </div>
         </div>
+        <x-footer />
     </div>
 </div>
