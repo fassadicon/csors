@@ -97,9 +97,9 @@ class ReportedUserResource extends Resource
                 // Actions for the table
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
@@ -117,8 +117,8 @@ class ReportedUserResource extends Resource
     {
         return [
             'index' => Pages\ListReportedUsers::route('/'),
-            'create' => Pages\CreateReportedUser::route('/create'),
-            'edit' => Pages\EditReportedUser::route('/{record}/edit'),
+            // 'create' => Pages\CreateReportedUser::route('/create'),
+            // 'edit' => Pages\EditReportedUser::route('/{record}/edit'),
         ];
     }
 }
