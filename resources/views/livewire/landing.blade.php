@@ -1,4 +1,4 @@
-<div  class="">
+<div  class="overflow-x-hidden">
     {{--
     <x-mary-header title="CSORS" class="mb-6" subtitle="Catering Service Ordering and Reservation System" separator /> --}}
     {{-- <h1>Add a touch of simple landing page design</h1> --}}
