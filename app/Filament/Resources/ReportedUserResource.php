@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ReportedUserResource\Pages;
 use App\Models\Caterer;
 use App\Models\ReportedUser;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -31,7 +32,9 @@ class ReportedUserResource extends Resource
         }
 
         // For other users, filter based on user_id
-        return $query->where('user_id', auth()->id());
+        $query->where('user_id', auth()->id());
+        // dd($query->get());
+        return $query;
     }
 
 
@@ -50,8 +53,13 @@ class ReportedUserResource extends Resource
         return $table
             ->columns([
                 // for caterer 
-                TextColumn::make('user.name')
+                TextColumn::make('reported_user')
                     ->label('Reported Customer')
+                    ->getStateUsing(function ($record) {
+                        // return $record->reported_user->name;
+                        // dd($record['reported_user']);
+                        return User::findOrFail($record['reported_user'])->name;
+                    })
                     ->visible(!auth()->user()->hasRole('superadmin')),
 
                 // for super admin
@@ -70,7 +78,7 @@ class ReportedUserResource extends Resource
                     })
                     ->visible(auth()->user()->hasRole('superadmin')),
 
-                TextColumn::make('reported_user')
+                TextColumn::make('reported')
                     ->label('Reported User')
                     ->getStateUsing(function ($record) {
                         return $record->user->is_customer === 1

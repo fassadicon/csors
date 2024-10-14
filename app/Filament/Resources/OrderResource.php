@@ -18,12 +18,20 @@ use Filament\Tables\Table;
 use App\Enums\PaymentStatus;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\MorphToSelect;
-use Filament\Forms\Components\Actions\Action;
-use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\MorphToSelect;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use App\Filament\Resources\OrderResource\Pages;
+use App\Models\ReportedUser;
+use App\Models\User;
+use Filament\Notifications;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Button;
+use Filament\Forms\Components\Modal;
+use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 
 class OrderResource extends Resource
 {
@@ -36,6 +44,16 @@ class OrderResource extends Resource
         return $form
             ->schema(static::getFormSchema());
     }
+
+
+    public static $reportReasons = [
+        "Abusive behavior" => "Abusive behavior towards staff or other users.",
+        "Fraudulent activity" => "Fraudulent activity, such as using stolen credit cards.",
+        "Repeated cancellations" => "Repeated cancellations without valid reasons.",
+        "Failure to pay" => "Failure to pay for services rendered.",
+        "Inappropriate requests" => "Inappropriate requests that violate company policies."
+    ];
+
 
     public static function getFormSchema(): array
     {
@@ -392,7 +410,37 @@ class OrderResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+
                 ActionGroup::make([
+                    Action::make('user_id')->label('Report Customer')
+                        ->form([
+                            Select::make('comment') // Ensure this is the correct key for the selected reason
+                                ->label('Reason')
+                                ->options(self::$reportReasons)
+                                ->required(),
+                        ])
+                        ->action(function ($record, array $data): void {
+                            // Create the reported user record
+                            ReportedUser::create([
+                                'user_id' => auth()->user()->id, // Assuming this is the reporter's user ID
+                                'reported_user' => $record->user_id, // Assuming this is the user being reported
+                                'comment' => $data['comment'], // Capture the selected reason
+                            ]);
+
+                            // Add a success notification
+                            Notification::make()
+                                ->title('Report Submitted')
+                                ->body('The report has been successfully submitted.')
+                                ->success() // You can also use error() for error notifications
+                                ->send();
+                        })
+                        ->visible(function ($record) {
+                            // Check if the user has already reported this customer
+                            return !ReportedUser::where('user_id', auth()->user()->id)
+                                ->where('reported_user', $record->user_id)
+                                ->exists();
+                        }),
+
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
@@ -408,6 +456,35 @@ class OrderResource extends Resource
             ])
             ->defaultSort('created_at', 'desc');
     }
+
+    // FOR REPORTING 
+    // Method to open the modal
+    protected function openReportModal(Order $order)
+    {
+        $this->modalData['order'] = $order; // Store order data in a property
+
+        // Show the modal
+        $this->dispatch('open-modal');
+    }
+
+    // Define the modal
+    public function getModalContent(): array
+    {
+        return [
+            Modal::make('Report User')
+                ->form([
+                    Textarea::make('comment')
+                        ->label('Comment')
+                        ->required(),
+                    Button::make('Submit')
+                        ->action('submitReport')
+                        ->color('primary'),
+                ])
+                ->action('submitReport'),
+        ];
+    }
+
+
 
     public static function getRelations(): array
     {
