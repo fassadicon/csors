@@ -43,7 +43,7 @@
     }
 
     .card {
-        @apply hover:!scale-105 duration-100 ease-in-out
+        @apply hover:!scale-105 duration-100 ease-in-out max-h-[300px]
     }
 
     .remove-card-animation {
@@ -52,7 +52,7 @@
 
 
     .card-img {
-        @apply max-h-[200px] object-cover
+        @apply !max-h-[100px] object-cover !h-5
     }
 
 
