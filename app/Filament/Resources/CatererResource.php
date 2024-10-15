@@ -34,29 +34,29 @@ class CatererResource extends Resource
                             });
                         }
                     )
-                    ->required(),
+                    ->required()->disabled(),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\TextInput::make('phone_number')
                     ->tel()
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 TinyEditor::make('about')
-                    ->columnSpanFull(),
+                    ->columnSpanFull()->disabled(),
                 Forms\Components\FileUpload::make('logo_path')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/images/logo')
                     ->label('Logo')
                     ->image()
                     ->nullable()
-                    ->visibleOn('edit'),
+                    ->visibleOn('edit')->disabled(),
                 Forms\Components\FileUpload::make('requirements_path')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/requirements')
                     ->label('Business Requirements (.zip)')
-                    ->nullable(),
+                    ->nullable()->disabled(),
                 Forms\Components\FileUpload::make('images')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/images/profile')
                     ->image()
@@ -68,7 +68,7 @@ class CatererResource extends Resource
                     ->uploadingMessage('Uploading images...')
                     ->nullable()
                     ->columnSpanFull()
-                    ->visibleOn('edit'),
+                    ->visibleOn('edit')->disabled(),
                 Forms\Components\Toggle::make('is_verified')
                     ->label('Verified?')
                     ->required()

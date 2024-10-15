@@ -55,6 +55,9 @@ class FoodDetailResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('caterer.name')
+                    ->searchable()
+                    ->sortable()->visible(auth()->user()->hasRole('superadmin')),
                 Tables\Columns\TextColumn::make('foodCategory.name')
                     ->searchable()
                     ->sortable(),
@@ -92,6 +95,15 @@ class FoodDetailResource extends Resource
             ])
             ->defaultSort('created_at', 'desc');
     }
+
+    public static function canCreate(): bool
+    {
+        if (auth()->user()->hasRole('superadmin')) {
+            return false;
+        }
+        return true;
+    }
+
 
     public static function getRelations(): array
     {

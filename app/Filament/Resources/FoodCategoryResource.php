@@ -89,6 +89,14 @@ class FoodCategoryResource extends Resource
             ->defaultSort('created_at', 'desc');
     }
 
+    public static function canCreate(): bool
+    {
+        if (auth()->user()->hasRole('superadmin')) {
+            return false;
+        }
+        return true;
+    }
+
     public static function getRelations(): array
     {
         return [

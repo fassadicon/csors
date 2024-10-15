@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use \Znck\Eloquent\Traits\BelongsToThrough;
 
 class Package extends Model
 {
     use SoftDeletes;
-    use \Znck\Eloquent\Traits\BelongsToThrough;
+    use BelongsToThrough;
 
     protected $fillable = [
         'name',

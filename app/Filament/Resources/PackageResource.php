@@ -63,6 +63,11 @@ class PackageResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('events.caterer.name')
+                    ->label('Caterer')
+                    ->searchable()
+                    ->visible(auth()->user()->hasRole('superadmin')),
+
                 Tables\Columns\TextColumn::make('events.name')
                     ->label('Events')
                     ->searchable(),
@@ -108,6 +113,14 @@ class PackageResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        if (auth()->user()->hasRole('superadmin')) {
+            return false;
+        }
+        return true;
     }
 
     public static function getPages(): array
