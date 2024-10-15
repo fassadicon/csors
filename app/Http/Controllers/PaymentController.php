@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ReceiptMail;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Promo;
 use App\Models\Payment;
+use App\Mail\ReceiptMail;
 use App\Models\OrderItem;
 use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use Filament\Notifications\Notification;
 
 class PaymentController extends Controller
 {
@@ -48,7 +50,18 @@ class PaymentController extends Controller
                     'partial'
                 ));
 
-                session()->forget('pay_partial');
+                $catererReceipient = User::whereHas('caterer', function ($query) use ($order) {
+                    $query->where('id', $order->caterer_id);
+                })->first();
+                $notification = 'Order #' . $order->id . ' has been paid partially ';
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase($catererReceipient);
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase(auth()->user());
+
+                // session()->forget('pay_partial');
 
                 return redirect('order-history')->with('success', 'Downpayment paid successfully!');
             }

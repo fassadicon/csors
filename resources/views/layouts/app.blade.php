@@ -43,7 +43,7 @@
                 <x-footer />
             </footer>
         @endif
-        
+
     </div>
     <x-toaster-hub />
 </body>

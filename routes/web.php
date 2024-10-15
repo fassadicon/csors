@@ -9,7 +9,6 @@ Route::get('test', function () {
     // $foodDetail = FoodDetail::find(1);
     // dd($foodDetail->images);
 
-    dd(auth()->user()->hasRole('superadmin'));
 });
 
 Route::get('clear', function () {

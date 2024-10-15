@@ -120,7 +120,7 @@
                 <x-input-error :messages="$errors->get('discount')"
                     class="mt-2" />
             @endif
-            <x-input-label for="paymentType"
+            {{-- <x-input-label for="paymentType"
                 :value="__('Payment Type')" />
             <select wire:model.live="paymentType"
                 id="paymentType"
@@ -132,7 +132,7 @@
                 <option value="partial">Partial (PHP {{ $downPaymentAmount }})</option>
             </select>
             <x-input-error :messages="$errors->get('paymentType')"
-                class="mt-2" />
+                class="mt-2" /> --}}
         </div>
         <hr class="my-4">
         <x-mary-button type="submit"

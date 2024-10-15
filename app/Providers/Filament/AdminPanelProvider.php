@@ -124,7 +124,8 @@ class AdminPanelProvider extends PanelProvider
 
             ])
             ->sidebarWidth('16rem')
-            ->sidebarCollapsibleOnDesktop();
+            ->sidebarCollapsibleOnDesktop()
+            ->databaseNotifications();
         // ->topNavigation();
     }
 }

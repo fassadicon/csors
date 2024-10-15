@@ -9,6 +9,8 @@ use Livewire\Component;
 use App\Models\OrderItem;
 use Ixudra\Curl\Facades\Curl;
 use Livewire\Attributes\Validate;
+use Filament\Notifications\Notification;
+use App\Models\User;
 
 class Order extends Component
 {
@@ -103,6 +105,15 @@ class Order extends Component
             $orderItem->order_id = $order->id;
             $orderItem->save();
         }
+
+        $recipient = User::whereHas('caterer', function ($query) {
+            $query->where('id', session()->get('caterer'));
+        })->first();
+
+        $notification = 'New order #' . $order->id . ' from ' . auth()->user()->full_name;
+        Notification::make()
+            ->title($notification)
+            ->sendToDatabase($recipient);
 
         session()->forget('cart');
 

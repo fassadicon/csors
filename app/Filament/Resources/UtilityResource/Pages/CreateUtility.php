@@ -4,6 +4,7 @@ namespace App\Filament\Resources\UtilityResource\Pages;
 
 use Filament\Actions;
 use Filament\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\UtilityResource;
 
@@ -31,7 +32,8 @@ class CreateUtility extends CreateRecord
 
         // auth()->user()->notify(
         //     Notification::make()
-        //         ->title('Saved successfully')
+        //         ->title('Utility - ' . $record->name . ' created successfully')
+        //         ->success()
         //         ->toDatabase(),
         // );
     }

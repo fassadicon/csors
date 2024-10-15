@@ -16,11 +16,17 @@ class Navigation extends Component
     public $caterer;
 
     public $cartItemCount;
+    public ?array $notifications = [];
 
     public function mount(): void
     {
-        // check if has order to To_Review
-        // dd($this->checkToReview());
+        if (auth()->user()) {
+            $unformattedNotifications = auth()->user()->unreadNotifications;
+            foreach ($unformattedNotifications as $notification) {
+                $notificationTitle = $notification->data['title'];
+                array_push($this->notifications, $notificationTitle);
+            }
+        }
 
         $this->caterer = false;
         if (session()->has('caterer') != null) {

@@ -131,6 +131,15 @@
                         class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">
                         {{ __('My Orders') }}
                     </a>
+                    <style>
+                        .notifications-wrapper {
+                            width: 300px;
+                            overflow-x: hidden;
+                        }
+                    </style>
+                    {{-- <div class="notifications-wrapper">
+                        @livewire('database-notifications')
+                    </div> --}}
                     <x-dropdown align="right"
                         width="48">
                         <x-slot name="trigger">
@@ -208,7 +217,9 @@
         </div> --}}
 
         {{-- ADD NAVIGATION HERE ` --}}
-        <x-mobile-nav :caterer="$caterer" :navClasses="$navClasses" :cartItemCount="$cartItemCount" />
+        <x-mobile-nav :caterer="$caterer"
+            :navClasses="$navClasses"
+            :cartItemCount="$cartItemCount" />
         <!-- Responsive Settings Options -->
         <div class="absolute pt-4 pb-1 border-t border-gray-200 bottom-4 dark:border-gray-600">
             @if (auth()->guest())
@@ -249,8 +260,8 @@
     </div>
 
     @auth
-        @if ( $this->checkToReview())
+        @if ($this->checkToReview())
             <livewire:feedback.feedback-popup :order="$this->checkToReview()" />
-        @endif    
+        @endif
     @endauth
 </nav>
