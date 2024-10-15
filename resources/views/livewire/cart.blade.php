@@ -85,10 +85,12 @@
             class="!my-2">
         </x-mary-header>
         <hr class="my-4">
+        @if (count($cart) > 0)
             <x-mary-button type="submit"
                 label="Proceed to Checkout"
                 class="my-4 btn-primary md:w-[40%]"
                 spinner />
+        @endif
     </form>
     <a href="{{ route('about', ['caterer' => $caterer]) }}">
         <x-mary-button label="Add more items"
