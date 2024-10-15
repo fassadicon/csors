@@ -199,13 +199,13 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'flex flex-col justify-start items-center': open, 'hidden': !open }"
         class="fixed hidden p-4 right-5 top-[5%] bg-jt-primary sm:hidden !h-[50%] min-w-[250px]">
-        <div class="pt-2 pb-3 space-y-1">
+        {{-- <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('landing')" class="!text-white hover:!text-black active:!bg-jt-primary !bg-transparent focus:!bg-jt-primary"
                 :active="request()->routeIs('landing')"
                 wire:navigate>
                 {{ __('CSORS') }}
             </x-responsive-nav-link>
-        </div>
+        </div> --}}
 
         {{-- ADD NAVIGATION HERE ` --}}
         <x-mobile-nav :caterer="$caterer" :navClasses="$navClasses" :cartItemCount="$cartItemCount" />
