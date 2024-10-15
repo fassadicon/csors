@@ -2,7 +2,7 @@ name: Publish Website to CSORS
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   FTP-Deploy-Action:
