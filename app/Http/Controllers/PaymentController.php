@@ -45,7 +45,7 @@ class PaymentController extends Controller
                     'remarks' => 'Downpayment',
                 ]);
 
-                Mail::to('audreysgv@gmail.com')->send(new ReceiptMail(
+                Mail::to('sa.csors.offical@gmail.com')->send(new ReceiptMail(
                     $order->id,
                     'partial'
                 ));
@@ -99,10 +99,21 @@ class PaymentController extends Controller
                     'remarks' => 'Remaining Payment',
                 ]);
 
-                Mail::to('audreysgv@gmail.com')->send(new ReceiptMail(
+                Mail::to('sa.csors.offical@gmail.com')->send(new ReceiptMail(
                     $order->id,
                     'paid'
                 ));
+
+                $catererReceipient = User::whereHas('caterer', function ($query) use ($order) {
+                    $query->where('id', $order->caterer_id);
+                })->first();
+                $notification = 'Order #' . $order->id . ' has been paid completely ';
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase($catererReceipient);
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase(auth()->user());
 
                 session()->forget('pay_remaining');
 
@@ -142,10 +153,21 @@ class PaymentController extends Controller
                     'remarks' => 'Full Payment',
                 ]);
 
-                Mail::to('audreysgv@gmail.com')->send(new ReceiptMail(
+                Mail::to('sa.csors.offical@gmail.com')->send(new ReceiptMail(
                     $order->id,
                     'paid'
                 ));
+
+                $catererReceipient = User::whereHas('caterer', function ($query) use ($order) {
+                    $query->where('id', $order->caterer_id);
+                })->first();
+                $notification = 'Order #' . $order->id . ' has been paid completely ';
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase($catererReceipient);
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase(auth()->user());
 
                 session()->forget('pay_full');
 

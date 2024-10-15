@@ -71,8 +71,7 @@ class CatererResource extends Resource
                     ->visibleOn('edit')->disabled(),
                 Forms\Components\Toggle::make('is_verified')
                     ->label('Verified?')
-                    ->required()
-                    ->visibleOn('edit'),
+                    ->required(),
             ]);
     }
 

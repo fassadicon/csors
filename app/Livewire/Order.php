@@ -114,6 +114,10 @@ class Order extends Component
         Notification::make()
             ->title($notification)
             ->sendToDatabase($recipient);
+        $notification = 'New order #' . $order->id . ' has been submitted';
+        Notification::make()
+            ->title($notification)
+            ->sendToDatabase(auth()->user());
 
         session()->forget('cart');
 
