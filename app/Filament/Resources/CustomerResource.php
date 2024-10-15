@@ -39,25 +39,25 @@ class CustomerResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Username')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('phone_number')
                     ->nullable()
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\TextInput::make('first_name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\TextInput::make('last_name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\TextInput::make('middle_name')
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\TextInput::make('ext_name')
-                    ->maxLength(255),
+                    ->maxLength(255)->readOnly(),
                 Forms\Components\Toggle::make('is_verified')
                     ->visible(auth()->user()->hasRole('superadmin')),
                 // ->columnSpan(2),
@@ -65,7 +65,7 @@ class CustomerResource extends Resource
                     ->label('Valid ID')
                     ->directory('users/' . auth()->id() . '/verification')
                     ->nullable()
-                    ->columnSpan(3),
+                    ->columnSpan(3)->disabled(),
             ]);
     }
 
@@ -107,7 +107,7 @@ class CustomerResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),

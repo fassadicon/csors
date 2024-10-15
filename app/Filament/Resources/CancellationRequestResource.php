@@ -62,6 +62,9 @@ class CancellationRequestResource extends Resource
                 Tables\Columns\TextColumn::make('order.user.name')
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('order.caterer.name')
+                    ->badge()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->sortable(),
@@ -116,6 +119,11 @@ class CancellationRequestResource extends Resource
             'view' => Pages\ViewCancellationRequest::route('/{record}'),
             'edit' => Pages\EditCancellationRequest::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return false; // Disable creating new records
     }
 
     public static function getEloquentQuery(): Builder
