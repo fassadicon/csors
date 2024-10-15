@@ -55,7 +55,7 @@ class UtilityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
-                    ->visible(auth()->user()->hasRole('Superadmin'))
+                    ->visible(auth()->user()->hasRole('superadmin'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
@@ -98,6 +98,15 @@ class UtilityResource extends Resource
         return [
             //
         ];
+    }
+
+
+    public static function canCreate(): bool
+    {
+        if (auth()->user()->hasRole('superadmin')) {
+            return false;
+        }
+        return true;
     }
 
     public static function getPages(): array

@@ -34,7 +34,7 @@ class ServingTypeResource extends Resource
                     ->maxLength(255),
                 TinyEditor::make('description')
                     ->columnSpanFull(),
-                    Forms\Components\FileUpload::make('images')
+                Forms\Components\FileUpload::make('images')
                     ->directory('caterers/images/serving-types')
                     ->image()
                     ->multiple()
@@ -93,6 +93,14 @@ class ServingTypeResource extends Resource
         return [
             FoodDetailsRelationManager::class,
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        if (auth()->user()->hasRole('superadmin')) {
+            return false;
+        }
+        return true;
     }
 
     public static function getPages(): array

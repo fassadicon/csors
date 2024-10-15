@@ -29,10 +29,8 @@ class ListOrders extends ListRecords
 
     public function getTabs(): array
     {
-        return [
-            'all' => Tab::make()
-                ->badge(Order::query()->where('caterer_id', auth()->user()->caterer->id)->count())
-                ->badgeColor('gray'),
+
+        $tabs = [
             'pending' => Tab::make()
                 ->modifyQueryUsing(fn() => $this->getOrderByOrderStatus(OrderStatus::Pending))
                 ->badge($this->getOrderByOrderStatus(OrderStatus::Pending)->count())
@@ -62,19 +60,50 @@ class ListOrders extends ListRecords
                 ->badge($this->getOrderByPaymentStatus(PaymentStatus::Paid)->count())
                 ->badgeColor('success'),
         ];
+
+        // Add the 'all' tab
+        if (auth()->user()->hasRole('superadmin')) {
+            $allTab = [
+                'all' => Tab::make()
+                    ->badge(Order::get()->count())
+                    ->badgeColor('gray')
+            ];
+        } else {
+            $allTab = [
+                'all' => Tab::make()
+                    ->badge(Order::query()->where('caterer_id', auth()->user()->caterer->id)->count())
+                    ->badgeColor('red')
+            ];
+        }
+
+        $tabs = array_merge($allTab, $tabs);
+
+        return $tabs;
     }
 
     protected function getOrderByOrderStatus($orderStatus): Builder
     {
-        return Order::query()
-            ->where('caterer_id', auth()->user()->caterer->id)
-            ->where('order_status', $orderStatus);
+        if (auth()->user()->hasRole('superadmin')) {
+            return Order::query()
+                // ->where('caterer_id', auth()->user()->caterer->id)
+                ->where('order_status', $orderStatus);
+        } else {
+            return Order::query()
+                ->where('caterer_id', auth()->user()->caterer->id)
+                ->where('order_status', $orderStatus);
+        }
     }
 
     protected function getOrderByPaymentStatus($paymentStatus): Builder
     {
-        return Order::query()
-            ->where('caterer_id', auth()->user()->caterer->id)
-            ->where('payment_status', $paymentStatus);
+        if (auth()->user()->hasRole('superadmin')) {
+            return Order::query()
+                // ->where('caterer_id', auth()->user()->caterer->id)
+                ->where('payment_status', $paymentStatus);
+        } else {
+            return Order::query()
+                ->where('caterer_id', auth()->user()->caterer->id)
+                ->where('payment_status', $paymentStatus);
+        }
     }
 }

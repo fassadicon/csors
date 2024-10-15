@@ -115,7 +115,13 @@ class PromoResource extends Resource
             //
         ];
     }
-
+    public static function canCreate(): bool
+    {
+        if (auth()->user()->hasRole('superadmin')) {
+            return false;
+        }
+        return true;
+    }
     public static function getPages(): array
     {
         return [

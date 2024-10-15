@@ -45,7 +45,6 @@ class OrderResource extends Resource
             ->schema(static::getFormSchema());
     }
 
-
     public static $reportReasons = [
         "Abusive behavior" => "Abusive behavior towards staff or other users.",
         "Fraudulent activity" => "Fraudulent activity, such as using stolen credit cards.",
