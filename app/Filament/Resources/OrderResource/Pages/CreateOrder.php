@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\OrderResource\Pages;
 
-use App\Filament\Resources\OrderResource;
 use Filament\Actions;
+use App\Mail\OrderUpdateMail;
+use Illuminate\Support\Facades\Mail;
+use App\Filament\Resources\OrderResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateOrder extends CreateRecord
@@ -19,5 +21,12 @@ class CreateOrder extends CreateRecord
         }
 
         return $data;
+    }
+
+    protected function afterCreate()
+    {
+        Mail::to('audreysgv@gmail.com')->send(new OrderUpdateMail(
+            $this->record->id,
+        ));
     }
 }
