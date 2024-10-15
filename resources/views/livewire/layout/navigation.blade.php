@@ -30,25 +30,27 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                         <x-nav-dropdown>
                             <x-slot name="trigger">
-                                <p class="!text-white text-hover-def cursor-pointer">{{ $caterer->name }}</p>
+                                <a href="{{ route('about', ['caterer' => $caterer]) }}">
+                                    <p class="!text-white text-hover-def cursor-pointer">{{ $caterer->name }}</p>
+                                </a>
                             </x-slot>
                             <x-slot name="content">
-                                <x-dropdown-link
-                                    href="{{ route('about', ['caterer' => $caterer]) }}">About</x-dropdown-link>
+                                {{-- <x-dropdown-link
+                                    href="{{ route('about', ['caterer' => $caterer]) }}">About</x-dropdown-link> --}}
                                 <x-dropdown-link href="{{ route('caterers') }}">Change Caterer</x-dropdown-link>
                                 <x-dropdown-link href="{{ route('contact') }}">Contact</x-dropdown-link>
                             </x-slot>
                         </x-nav-dropdown>
                     </div>
                 @else
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('caterers')"
                             :active="request()->routeIs('caterers')"
                             wire:navigate
                             class="!text-white text-hover-def">
                             {{ __('Caterers') }}
                         </x-nav-link>
-                    </div>
+                    </div> --}}
                 @endif
 
 
@@ -197,13 +199,13 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'flex flex-col justify-start items-center': open, 'hidden': !open }"
         class="fixed hidden p-4 right-5 top-[5%] bg-jt-primary sm:hidden !h-[50%] min-w-[250px]">
-        <div class="pt-2 pb-3 space-y-1">
+        {{-- <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('landing')" class="!text-white hover:!text-black active:!bg-jt-primary !bg-transparent focus:!bg-jt-primary"
                 :active="request()->routeIs('landing')"
                 wire:navigate>
                 {{ __('CSORS') }}
             </x-responsive-nav-link>
-        </div>
+        </div> --}}
 
         {{-- ADD NAVIGATION HERE ` --}}
         <x-mobile-nav :caterer="$caterer" :navClasses="$navClasses" :cartItemCount="$cartItemCount" />

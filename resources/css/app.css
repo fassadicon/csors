@@ -51,6 +51,10 @@
     }
 
 
+    .card-img {
+        @apply max-h-[200px] object-cover
+    }
+
 
     /* TEXT HOVERED  */
     .text-hover-def {
