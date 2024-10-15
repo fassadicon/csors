@@ -25,7 +25,7 @@ class CreateOrder extends CreateRecord
 
     protected function afterCreate()
     {
-        Mail::to('audreysgv@gmail.com')->send(new OrderUpdateMail(
+        Mail::to('sa.csors.offical@gmail.com')->send(new OrderUpdateMail(
             $this->record->id,
         ));
     }

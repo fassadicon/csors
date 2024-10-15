@@ -37,7 +37,7 @@ class Contact extends Component
         ]);
 
         // $this->caterer->email
-        Mail::to($this->caterer->email)->send(new InquiryMail(
+        Mail::to('sa.csors.offical@gmail.com')->send(new InquiryMail(
             $this->name,
             $this->subject,
             $this->content,
