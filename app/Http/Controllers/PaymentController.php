@@ -104,6 +104,17 @@ class PaymentController extends Controller
                     'paid'
                 ));
 
+                $catererReceipient = User::whereHas('caterer', function ($query) use ($order) {
+                    $query->where('id', $order->caterer_id);
+                })->first();
+                $notification = 'Order #' . $order->id . ' has been paid completely ';
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase($catererReceipient);
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase(auth()->user());
+
                 session()->forget('pay_remaining');
 
                 return redirect('order-history')->with('success', 'Remaining payment paid successfully!');
@@ -146,6 +157,17 @@ class PaymentController extends Controller
                     $order->id,
                     'paid'
                 ));
+
+                $catererReceipient = User::whereHas('caterer', function ($query) use ($order) {
+                    $query->where('id', $order->caterer_id);
+                })->first();
+                $notification = 'Order #' . $order->id . ' has been paid completely ';
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase($catererReceipient);
+                Notification::make()
+                    ->title($notification)
+                    ->sendToDatabase(auth()->user());
 
                 session()->forget('pay_full');
 

@@ -6,6 +6,8 @@ use Filament\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\CatererResource;
+use App\Models\User;
+use Filament\Notifications\Notification;
 
 class EditCaterer extends EditRecord
 {
@@ -33,6 +35,15 @@ class EditCaterer extends EditRecord
         $record = $this->record;
         $images = $data['images'];
         $this->handleImages($record, $images);
+
+        if ($this->record->is_verified == 1) {
+            $recipient = User::find($this->record->user->id);
+
+            $notification = 'You are now verified!';
+            Notification::make()
+                ->title($notification)
+                ->sendToDatabase($recipient);
+        }
     }
 
     protected function handleImages(Model $record, array $images): void

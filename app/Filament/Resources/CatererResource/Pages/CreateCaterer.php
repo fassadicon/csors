@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\CatererResource\Pages;
 
-use App\Filament\Resources\CatererResource;
+use App\Models\User;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\CatererResource;
 
 class CreateCaterer extends CreateRecord
 {
@@ -17,6 +19,15 @@ class CreateCaterer extends CreateRecord
         $attachments = $data['images'];
         foreach ($attachments as $path) {
             $record->images()->create(['path' => $path]);
+        }
+
+        if ($this->record->is_verified == 1) {
+            $recipient = User::find($this->record->user->id);
+
+            $notification = 'You are now verified!';
+            Notification::make()
+                ->title($notification)
+                ->sendToDatabase($recipient);
         }
     }
 }
