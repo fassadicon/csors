@@ -23,7 +23,7 @@
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($event->packages as $package)
             <x-mary-card title="{!! $package->name !!}">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, consectetur!
+                {!! $package->description !!}
                 <x-slot:figure>
                     <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>

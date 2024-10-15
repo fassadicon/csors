@@ -6,7 +6,7 @@
     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         @foreach ($utilities as $utility)
             <x-mary-card title="{{ $utility->name }}">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa, consectetur!
+                {{ $utility->description }}
                 <x-slot:figure>
                     <img src="{{ asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
