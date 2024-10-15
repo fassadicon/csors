@@ -1,14 +1,13 @@
 <?php
 
+use App\Models\Order;
 use App\Enums\OrderStatus;
+use App\Models\FoodDetail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
-use App\Models\FoodDetail;
 
 Route::get('test', function () {
-    // $foodDetail = FoodDetail::find(1);
-    // dd($foodDetail->images);
-
+    dd('BOOM!');
 });
 
 Route::get('clear', function () {

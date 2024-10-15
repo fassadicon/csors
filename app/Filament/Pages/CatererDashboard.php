@@ -2,8 +2,9 @@
 
 namespace App\Filament\Pages;
 
-use Filament\Pages\Dashboard;
 use Filament\Pages\Page;
+use Filament\Pages\Dashboard;
+use App\Filament\Widgets\CatererDashboard\CatererStatOverview;
 
 class CatererDashboard extends Dashboard
 {
@@ -14,5 +15,12 @@ class CatererDashboard extends Dashboard
     public function isVerifiedCaterer(): bool
     {
         return auth()->user()->caterer->is_verified ?? false;
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            // CatererStatOverview::class,
+        ];
     }
 }
