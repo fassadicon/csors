@@ -61,8 +61,8 @@ class EditProfilePage extends Page implements HasForms
                     ->maxLength(255),
                 Forms\Components\TextInput::make('ext_name')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('password')
-                    ->maxLength(255)->password(),
+                // Forms\Components\TextInput::make('password')
+                //     ->maxLength(255)->password()->nullable(),
 
                 // Forms\Components\Toggle::make('is_verified')
                 //     ->label('Verified?')
