@@ -111,10 +111,10 @@ class CustomerResource extends Resource
                     ->visible(auth()->user()->hasRole('caterer')),
                 Tables\Actions\EditAction::make()
                     ->visible(auth()->user()->hasRole('superadmin')),
-                Tables\Actions\DeleteAction::make()
-                    ->visible(auth()->user()->hasRole('superadmin')),
-                Tables\Actions\RestoreAction::make()
-                    ->visible(auth()->user()->hasRole('superadmin')),
+                // Tables\Actions\DeleteAction::make()
+                //     ->visible(auth()->user()->hasRole('superadmin')),
+                // Tables\Actions\RestoreAction::make()
+                //     ->visible(auth()->user()->hasRole('superadmin')),
 
             ])
             ->bulkActions([

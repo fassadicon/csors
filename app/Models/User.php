@@ -5,10 +5,13 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Filament\Panel;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\CausesActivity;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -22,6 +25,7 @@ class User extends Authenticatable implements FilamentUser
     use HasFactory, Notifiable;
     use HasRoles, HasPanelShield;
     use SoftDeletes;
+    use LogsActivity, CausesActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -68,6 +72,15 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasAnyRole(['caterer', 'superadmin']);
     }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll() // Logging only the specified attributes - roles->*->name
+            ->useLogName('user') // Customizing the log name
+        ;
+    }
+
 
     public function caterer(): HasOne
     {

@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use \Znck\Eloquent\Traits\BelongsToThrough;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use \Znck\Eloquent\Traits\BelongsToThrough;
 
 class Package extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
     use BelongsToThrough;
 
     protected $fillable = [
@@ -26,6 +28,14 @@ class Package extends Model
             'price' => 'decimal:2',
             // 'images' => 'array',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->useLogName('package') // Customizing the log name
+        ;
     }
 
     public function events(): BelongsToMany

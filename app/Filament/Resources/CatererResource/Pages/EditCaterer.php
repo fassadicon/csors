@@ -20,6 +20,15 @@ class EditCaterer extends EditRecord
             Actions\DeleteAction::make(),
             Actions\ForceDeleteAction::make(),
             Actions\RestoreAction::make(),
+            Actions\Action::make('Notify to Reupload Requirements')
+                ->action(function (Model $record) {
+                    $recipient = User::find($record->user->id);
+
+                    $notification = 'Requirements do not pass the verification. Please reupload the correct and updated requirements. Contact the superadmin for more information';
+                    Notification::make()
+                        ->title($notification)
+                        ->sendToDatabase($recipient);
+                }),
         ];
     }
 

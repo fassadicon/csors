@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use Filament\Forms;
+use App\Models\User;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Support\Exceptions\Halt;
@@ -125,6 +126,12 @@ class EditCatererPage extends Page implements HasForms
             $data = $this->form->getState();
 
             auth()->user()->caterer->update($data);
+
+            $superAdmin = User::find(1);
+            $updateNotificationMessage = auth()->user()->caterer->name . ': Information updated. Please check in case of verification and/or security';
+            Notification::make()
+                ->title($updateNotificationMessage)
+                ->sendToDatabase($superAdmin);
         } catch (Halt $exception) {
             return;
         }

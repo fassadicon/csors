@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class FoodDetail extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
     use \Znck\Eloquent\Traits\BelongsToThrough;
 
     protected $fillable = [
@@ -22,6 +24,14 @@ class FoodDetail extends Model
     // protected $casts = [
     //     'images' => 'array',
     // ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->useLogName('food detail') // Customizing the log name
+        ;
+    }
 
     public function images(): MorphMany
     {

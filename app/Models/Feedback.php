@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Feedback extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
     protected $table = 'feedbacks';
     protected $fillable = [
         'caterer_id',
@@ -17,6 +19,14 @@ class Feedback extends Model
         'rating',
         'comment'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->useLogName('feedback') // Customizing the log name
+        ;
+    }
 
     public function users(): BelongsTo
     {

@@ -16,8 +16,10 @@
         "livewire/volt": "^1.0",
         "masmerise/livewire-toaster": "^2.3",
         "mohamedsabil83/filament-forms-tinyeditor": "^2.3",
+        "pxlrbt/filament-activity-log": "^1.1",
         "robsontenorio/mary": "^1.35",
         "saade/filament-fullcalendar": "^3.0",
+        "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-permission": "^6.9",
         "staudenmeir/belongs-to-through": "^2.16"
     },

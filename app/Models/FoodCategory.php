@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,13 +13,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FoodCategory extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'caterer_id',
         'name',
         'description'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->useLogName('food category') // Customizing the log name
+        ;
+    }
 
     public function foodDetails(): HasMany
     {
@@ -34,7 +44,7 @@ class FoodCategory extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
-  public function getFirstImagePath()
+    public function getFirstImagePath()
     {
         if ($this->images == null) {
             return false;

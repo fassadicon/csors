@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Utility extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'caterer_id',
@@ -24,6 +26,14 @@ class Utility extends Model
         return [
             'price' => 'decimal:2'
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->useLogName('utility') // Customizing the log name
+        ;
     }
 
     public function caterer(): BelongsTo
@@ -42,7 +52,7 @@ class Utility extends Model
     }
 
 
-  public function getFirstImagePath()
+    public function getFirstImagePath()
     {
         if ($this->images == null) {
             return false;

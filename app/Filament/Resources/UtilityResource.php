@@ -82,6 +82,10 @@ class UtilityResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('logs')
+                    ->url(fn($record) => UtilityResource::getUrl('logs', ['record' => $record]))
+                    ->icon('heroicon-m-list-bullet')
+                    ->color('gray'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -116,6 +120,7 @@ class UtilityResource extends Resource
             'create' => Pages\CreateUtility::route('/create'),
             'view' => Pages\ViewUtility::route('/{record}'),
             'edit' => Pages\EditUtility::route('/{record}/edit'),
+            'logs' => Pages\LogUtility::route('/{record}/logs'),
         ];
     }
 
