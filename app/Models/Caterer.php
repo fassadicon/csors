@@ -45,7 +45,7 @@ class Caterer extends Model
 
     public function orders(): HasMany
     {
-        return $this->hasMany(order::class);
+        return $this->hasMany(Order::class);
     }
 
     public function foodCategories(): HasMany
