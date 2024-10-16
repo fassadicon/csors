@@ -3,84 +3,40 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receipt</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        .receipt-box {
-            width: 100%;
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #000;
-        }
-
-        .header,
-        .payment-history {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .header-table,
-        .payment-history-table,
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .header-table td,
-        .items-table th,
-        .items-table td,
-        .payment-history-table th,
-        .payment-history-table td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .items-table th {
-            background-color: #f2f2f2;
-        }
-
-        .footer {
-            margin-top: 20px;
-            text-align: right;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-    </style>
 </head>
 
-<body>
-    <p>
-        @if ($paymentStatus == 'partial')
+<body style="font-family: Arial, sans-serif; margin: 20px;">
+
+    <div
+        style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid rgba(0, 0, 0, .5); border-radius: 10px;">
+        <img src="{{ asset('images/LOGO.jpg') }}" alt="" width="200" style="width: 100px; max-width: 100px;">
+
+        <p>
+            @if ($paymentStatus == 'partial')
             Downpayment paid successfully. Please settle the remaining balance before the event date.
-        @elseif($paymentStatus == 'paid')
+            @elseif($paymentStatus == 'paid')
             Order fully paid. Thank you!
-        @endif
-    </p>
+            @endif
+        </p>
 
-    <p>
-        For other concerns, please contact the caterer directly. Thank you!
-    </p>
+        <h3>
+            <strong>{{ $order->caterer->name }}</strong>
+        </h3>
+        <p>
+            For other concerns, please contact the caterer directly. Thank you!
+        </p>
 
-    <div class="receipt-box">
-        <table class="header-table">
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
             <tr>
-                <td>
+                <td style="border: 1px solid #000; padding: 8px;">
                     <strong>{{ $order->caterer->name }}</strong><br>
                     Test, Manila, Philippines<br>
                     {{ $order->caterer->phone_number }}<br>
                     {{ $order->caterer->email }}
                 </td>
-                <td class="text-right">
+                <td class="text-right" style="border: 1px solid #000; padding: 8px; text-align: right;">
                     <strong>Order #{{ $order->id }}</strong><br>
                     Order Status: {{ $order->order_status }}<br>
                     Payment Status: {{ $order->payment_status }}<br><br>
@@ -91,56 +47,69 @@
             </tr>
         </table>
 
-        <table class="items-table">
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
             <thead>
-                <th>Quantity</th>
-                <th>Name</th>
-                <th>Unit Price</th>
-                <th>Amount</th>
-                <th>Quantity</th>
-            </thead>
-            @foreach ($order->orderItems as $orderItem)
                 <tr>
-                    <td>{{ $orderItem->quantity }}</td>
-                    <td>
-                        {{ $orderItem->orderable_type == 'App\Models\Food'
-                            ? $orderItem->orderable->foodDetail->name . ' - ' . $orderItem->orderable->servingType->name
-                            : $orderItem->orderable->name }}
-                    </td>
-                    <td>{{ $orderItem->orderable->price }}</td>
-                    <td>{{ $orderItem->amount }}</td>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Quantity</th>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Name</th>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Unit Price</th>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Amount</th>
                 </tr>
-            @endforeach
+            </thead>
+            <tbody>
+                @foreach ($order->orderItems as $orderItem)
+                <tr>
+                    <td style="border: 1px solid #000; padding: 8px;">{{ $orderItem->quantity }}</td>
+                    <td style="border: 1px solid #000; padding: 8px;">
+                        {{ $orderItem->orderable_type == 'App\Models\Food' ? $orderItem->orderable->foodDetail->name . '
+                        - ' . $orderItem->orderable->servingType->name : $orderItem->orderable->name }}
+                    </td>
+                    <td style="border: 1px solid #000; padding: 8px;">{{ $orderItem->orderable->price }}</td>
+                    <td style="border: 1px solid #000; padding: 8px;">{{ $orderItem->amount }}</td>
+                </tr>
+                @endforeach
+            </tbody>
         </table>
 
-        <div class="footer">
-            {{-- Subtotal: 0<br>
-            Tax: 0<br> --}}
+        <div style="margin-top: 20px; text-align: right;">
+            Subtotal: 0<br>
+            Tax: 0<br>
             <strong>Total: {{ $order->total_amount }}</strong><br>
-            {{-- <small>Tax - 12%</small> --}}
+            <small>Tax - 12%</small>
         </div>
 
         <h3>Payment History</h3>
-        <table class="payment-history-table">
+        <table style="width: 100%; border-collapse: collapse;">
             <thead>
-                <th>Type</th>
-                <th>Method</th>
-                <th>Amount</th>
-                <th>Reference</th>
-                <th>Remarks</th>
-            </thead>
-            @foreach ($order->payments as $payment)
                 <tr>
-                    <td>{{ $payment->type }}</td>
-                    <td>{{ $payment->method }}</td>
-                    <td>{{ $payment->amount }}</td>
-                    <td>{{ $payment->reference_no }}</td>
-                    <td>{{ $payment->remarks }}</td>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Type</th>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Method</th>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Amount</th>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Reference</th>
+                    <th style="border: 1px solid #000; padding: 8px; background-color: #f2f2f2;">Remarks</th>
                 </tr>
-            @endforeach
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #000; padding: 8px;">test</td>
+                    <td style="border: 1px solid #000; padding: 8px;">test</td>
+                    <td style="border: 1px solid #000; padding: 8px;">test</td>
+                    <td style="border: 1px solid #000; padding: 8px;">test</td>
+                    <td style="border: 1px solid #000; padding: 8px;">test</td>
+                </tr>
+                @foreach ($order->payments as $payment)
+                <tr>
+                    <td style="border: 1px solid #000; padding: 8px;">{{ $payment->type }}</td>
+                    <td style="border: 1px solid #000; padding: 8px;">{{ $payment->method }}</td>
+                    <td style="border: 1px solid #000; padding: 8px;">{{ $payment->amount }}</td>
+                    <td style="border: 1px solid #000; padding: 8px;">{{ $payment->reference_no }}</td>
+                    <td style="border: 1px solid #000; padding: 8px;">{{ $payment->remarks }}</td>
+                </tr>
+                @endforeach
+            </tbody>
         </table>
 
-        <div class="footer">
+        <div style="margin-top: 20px; text-align: right;">
             <strong>Total: {{ $order->payments->sum('amount') }}</strong>
         </div>
     </div>

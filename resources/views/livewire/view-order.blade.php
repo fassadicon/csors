@@ -16,46 +16,51 @@
         </div>
     </div>
 
-    @foreach ($order->orderItems as $orderItem)
-        <div>
-            <x-mary-list-item :item="$orderItem"
-                no-separator
-                no-hover>
-                <x-slot:avatar>
-                    <x-mary-avatar :image="asset('images/placeholder.jpg')" />
-                </x-slot:avatar>
-                <x-slot:value>
-                    @if ($orderItem->orderable_type == 'App\Models\Food')
+    <div class="flex flex-row gap-x-4 justify-around">
+        <div class="w-[50%]">
+            @foreach ($order->orderItems as $orderItem)
+            <div>
+                <x-mary-list-item :item="$orderItem" no-separator no-hover>
+                    <x-slot:avatar>
+                        <x-mary-avatar :image="asset('images/placeholder.jpg')" />
+                    </x-slot:avatar>
+                    <x-slot:value>
+                        @if ($orderItem->orderable_type == 'App\Models\Food')
                         {{ $orderItem->orderable->foodDetail->name }} - {{ $orderItem->orderable->servingType->name }}
-                    @else
+                        @else
                         {{ $orderItem->orderable->name }}
-                    @endif
-                </x-slot:value>
-                <x-slot:sub-value>
-                    @if ($orderItem->orderable_type == 'App\Models\Food')
+                        @endif
+                    </x-slot:value>
+                    <x-slot:sub-value>
+                        @if ($orderItem->orderable_type == 'App\Models\Food')
                         Pax: {{ $orderItem->quantity }}
-                    @else
+                        @else
                         Package/Pieces/Pax: {{ $orderItem->quantity }}
-                    @endif
-                </x-slot:sub-value>
-                <x-slot:actions>
-                    PHP {{ number_format($orderItem->amount, 2) }}
-                </x-slot:actions>
-            </x-mary-list-item>
+                        @endif
+                    </x-slot:sub-value>
+                    <x-slot:actions>
+                        PHP {{ number_format($orderItem->amount, 2) }}
+                    </x-slot:actions>
+                </x-mary-list-item>
+            </div>
+            @endforeach
         </div>
-    @endforeach
+        @if ($payments)
+        <div class="flex flex-col p-4 shadow-md w-[50%]">
+            <x-mary-header title="Payments" class="!my-4 ">
+            </x-mary-header>
+            <x-mary-table :headers="$headers" :rows="$payments" striped show-empty-text class="border border-collapse" />
+        </div>
+        @endif
+    </div>
     {{-- <x-mary-header title="Total: {{ $totalAmount }}"
         class="!my-2"
         separator /> --}}
-    <div class="px-4">
-        @if ($payments)
-            <x-mary-header title="Payments"
-                class="!my-4 ">
-            </x-mary-header>
-            <x-mary-table :headers="$headers" :rows="$payments" striped show-empty-text class="border border-collapse" />
-        @endif
-        <div class="flex items-end justify-between">
-            <div>
+        <hr class="my-4 mx-4">
+    <div class="">
+        
+        <div class="flex w-full items-start justify-between p-4 gap-y-4">
+            <div class="space-y-4">
                 <x-mary-header title="Customer Information" class="!my-2" subtitle="Customer: {{ $order->user->name }}"
                     separator />
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
@@ -79,34 +84,30 @@
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     Date Ordered: {{ $order->created_at->format('M j, Y - g:ia') }}
                 </p>
+            </div>
+        
+            <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] ">
         
                 @if ($order->cancellationRequest)
                 <x-mary-header title="Cancellation Request" class="!my-2" separator />
-                <div class="space-y-2">
-                    <p>Status: {{ $cancellationRequestStatus }}</p>
-                    @if ($cancellationRequestStatus->value == 'approved' || $cancellationRequestStatus->value == 'declined')
-                    <p>Reason: {{ $cancellationRequestReason }}</p>
-                    @else
-                    <x-mary-textarea label="Reason for Cancellation" wire:model="cancellationRequestReason"
-                        placeholder="Notes for the Caterer" rows="4" inline />
+                    <div class="space-y-2">
+                        <p>Status: {{ $cancellationRequestStatus }}</p>
+                        @if ($cancellationRequestStatus->value == 'approved' || $cancellationRequestStatus->value == 'declined')
+                        <p>Reason: {{ $cancellationRequestReason }}</p>
+                        @else
+                        <x-mary-textarea label="Reason for Cancellation" wire:model="cancellationRequestReason"
+                            placeholder="Notes for the Caterer" rows="4" inline />
+                        @endif
+                        <x-mary-textarea label="Reason for Cancellation" wire:model="cancellationRequestResponse"
+                            placeholder="Awaiting Reply from the Caterer..." rows="4" inline readonly />
+                    </div>
+                    <hr class="my-4">
+                    @if ($cancellationRequestStatus->value == 'pending')
+                        <x-mary-button wire:click='updateCancellationRequest' label="Update Cancellation Request" class="btn-primary" spinner />
+                        <x-mary-button wire:click='removeCancellationRequest' label="Cancel Cancellation Request" class="btn-warning" spinner />
                     @endif
-                    <x-mary-textarea label="Reason for Cancellation" wire:model="cancellationRequestResponse"
-                        placeholder="Awaiting Reply from the Caterer..." rows="4" inline readonly />
-                </div>
-                <hr class="my-4">
-                @if ($cancellationRequestStatus->value == 'pending')
-                <x-mary-button wire:click='updateCancellationRequest' label="Update Cancellation Request" class="btn-primary"
-                    spinner />
-                <x-mary-button wire:click='removeCancellationRequest' label="Cancel Cancellation Request" class="btn-warning"
-                    spinner />
                 @endif
-        
-                @endif
-        
-            </div>
-        
-            <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] mt-4">
-        
+
                 @if ($canPay)
                 <div class="flex gap-x-2">
                     @if ($order->payment_status->value == 'pending')

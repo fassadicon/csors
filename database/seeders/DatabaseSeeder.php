@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             ServingTypeSeeder::class,
             FoodCategorySeeder::class,
             FoodDetailSeeder::class,
+            FeedbackSeeder::class,
 
             UtilitySeeder::class,
 
