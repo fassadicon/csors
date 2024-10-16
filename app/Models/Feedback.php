@@ -20,11 +20,11 @@ class Feedback extends Model
 
     public function users(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, foreignKey: 'user_id');
     }
 
     public function caterers(): BelongsTo
     {
-        return $this->belongsTo(Caterer::class);
+        return $this->belongsTo(Caterer::class, foreignKey: 'caterer_id');
     }
 }

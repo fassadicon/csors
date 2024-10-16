@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Feedback;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,11 @@ class FeedbackSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Feedback::create([
+            'caterer_id' => 1,
+            'user_id' => 4,
+            'rating' => 2,
+            'comment' => 'test feedback from seeder'
+        ]);
     }
 }
