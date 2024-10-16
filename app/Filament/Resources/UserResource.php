@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Spatie\Permission\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
@@ -65,13 +66,24 @@ class UserResource extends Resource
                     ->nullable()->disabled(),
                 Forms\Components\Toggle::make('is_verified')
                     ->visible(auth()->user()->hasRole('superadmin')),
-                Forms\Components\Select::make('roles')
+                // Forms\Components\Select::make('roles')
+                //     ->multiple()
+                //     ->relationship('roles', 'name')
+                //     // ->getOptionLabelFromRecordUsing(function ($record) {
+                //     //     return $record->name == 'guest' ? 'customer' : $record->name;
+                //     // })
+                //     ->preload()
+                //     ->required()->disabled(),
+                Forms\Components\CheckboxList::make('roles')
                     ->relationship('roles', 'name')
-                    ->getOptionLabelFromRecordUsing(function ($record) {
-                        return $record->name == 'guest' ? 'customer' : $record->name;
-                    })
-                    ->preload()
-                    ->required()->disabled()
+                    ->default([
+                        Role::where('name', 'customer')->pluck('id')->first()
+                    ])
+                    ->visibleOn(['edit', 'create'])
+                    ->required()
+                    // ->columnSpanFull()
+                    // ->columns(2)
+                    ->gridDirection('row')
             ]);
     }
 
@@ -83,9 +95,18 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->formatStateUsing(function ($state) {
+                        if ($state != 'guest') {
+                            return $state;
+                        }
+                    })
+                    ->listWithLineBreaks()
+                    ->bulleted()
+                    ->searchable(),
+                // Tables\Columns\TextColumn::make('email_verified_at')
+                //     ->dateTime()
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

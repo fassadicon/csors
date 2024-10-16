@@ -29,8 +29,12 @@ class FoodDetailResource extends Resource
                     ->relationship(
                         name: 'foodCategory',
                         titleAttribute: 'name',
-                        // modifyQueryUsing: fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id),
-                        modifyQueryUsing: fn(Builder $query) => $query->where('caterer_id', auth()->user()->caterer->id),
+                        modifyQueryUsing: function ($query) {
+                            return $query
+                                ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                    $query->where('caterer_id', auth()->user()->caterer->id);
+                                });
+                        }
                     )
                     ->required(),
                 Forms\Components\TextInput::make('name')

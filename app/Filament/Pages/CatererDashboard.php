@@ -14,6 +14,10 @@ class CatererDashboard extends Dashboard
 
     public function isVerifiedCaterer(): bool
     {
+        if (!auth()->user()->caterer) {
+            return true;
+        }
+
         return auth()->user()->caterer->is_verified ?? false;
     }
 

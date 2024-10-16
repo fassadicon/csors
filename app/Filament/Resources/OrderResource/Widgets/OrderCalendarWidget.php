@@ -40,7 +40,7 @@ class OrderCalendarWidget extends FullCalendarWidget
 
                 return EventData::make()
                     ->id($order->id)
-                    ->title($order->user->name)
+                    ->title('Order #' . $order->id)
                     ->start($order->start)
                     ->end($order->end)
                     ->backgroundColor($backgroundColor)
@@ -67,6 +67,10 @@ class OrderCalendarWidget extends FullCalendarWidget
 
     protected function headerActions(): array
     {
+        if (auth()->user()->hasRole('superadmin')) {
+            return [];
+        }
+
         return [
             Action::make('create')
                 ->url(OrderResource::getUrl('create'))

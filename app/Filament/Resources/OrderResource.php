@@ -65,6 +65,7 @@ class OrderResource extends Resource
                         titleAttribute: 'name',
                         modifyQueryUsing: fn(Builder $query) => $query->where('is_customer', 1)
                     )
+                    ->visibleOn('create')
                     ->required(),
                 Forms\Components\DateTimePicker::make('start')
                     ->date()

@@ -90,9 +90,9 @@ class CatererResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('is_verified')
                     ->badge()
-                    ->color(fn($record) => $record == '1' ? 'success' : 'danger')
+                    ->color(fn($record) => $record->is_verified == 1 ? 'success' : 'danger')
                     ->formatStateUsing(function ($record) {
-                        return $record == '1' ? 'Yes' : 'No';
+                        return $record->is_verified == 1 ? 'Yes' : 'No';
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('orders_count')

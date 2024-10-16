@@ -33,7 +33,9 @@ class CancellationRequestResource extends Resource
                         'id',
                         modifyQueryUsing: function ($query) {
                             return $query
-                                ->where('caterer_id', auth()->user()->caterer->id)
+                                ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                    $query->where('caterer_id', auth()->user()->caterer->id);
+                                })
                                 ->whereIn('order_status', [OrderStatus::Confirmed, OrderStatus::Pending]);
                         }
                     )

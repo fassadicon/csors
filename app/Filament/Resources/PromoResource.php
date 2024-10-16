@@ -32,12 +32,14 @@ class PromoResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('type')
+                    ->live()
                     ->options([
                         'percentage' => 'Percentage',
                         'fixed' => 'Fixed',
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('value')
+                    ->live()
                     ->prefix(function (Get $get) {
                         return $get('type') === 'percentage' ? '%' : '₱';
                     })

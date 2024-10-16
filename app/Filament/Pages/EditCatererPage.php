@@ -73,6 +73,10 @@ class EditCatererPage extends Page implements HasForms
                 ->uploadingMessage('Uploading images...')
                 ->nullable()
                 ->columnSpanFull(),
+            Forms\Components\Toggle::make('is_verified')
+                ->disabled()
+                ->label('Verified?')
+                ->required(),
 
         ])
             ->statePath('data')
