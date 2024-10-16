@@ -89,3 +89,8 @@ Route::get('payment-cancelled', [PaymentController::class, 'cancelled'])
     ->name('payment-cancelled');
 
 require __DIR__ . '/auth.php';
+
+
+Route::get('emailPreview', function () {
+    return view('mail.receipt-mail');
+});

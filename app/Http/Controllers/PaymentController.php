@@ -45,7 +45,8 @@ class PaymentController extends Controller
                     'remarks' => 'Downpayment',
                 ]);
 
-                Mail::to('sa.csors.offical@gmail.com')->send(new ReceiptMail(
+                // Mail::to('sa.csors.offical@gmail.com')->send(new ReceiptMail(
+                Mail::to('jjarts1028@gmail.com')->send(new ReceiptMail(
                     $order->id,
                     'partial'
                 ));
@@ -98,8 +99,8 @@ class PaymentController extends Controller
                     'reference_no' => $response->data->id,
                     'remarks' => 'Remaining Payment',
                 ]);
-
-                Mail::to('sa.csors.offical@gmail.com')->send(new ReceiptMail(
+                // sa . csors . offical
+                Mail::to('jjarts1028@gmail.com')->send(new ReceiptMail(
                     $order->id,
                     'paid'
                 ));
@@ -153,7 +154,7 @@ class PaymentController extends Controller
                     'remarks' => 'Full Payment',
                 ]);
 
-                Mail::to('sa.csors.offical@gmail.com')->send(new ReceiptMail(
+                Mail::to('jjarts1028@gmail.com')->send(new ReceiptMail(
                     $order->id,
                     'paid'
                 ));
