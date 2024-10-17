@@ -9,6 +9,7 @@ use Livewire\Attributes\On;
 use Masmerise\Toaster\Toaster;
 use App\Livewire\Actions\Logout;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class Navigation extends Component
@@ -18,8 +19,23 @@ class Navigation extends Component
     public $cartItemCount;
     public ?array $notifications = [];
 
+    public ?array $notifTest = [
+        [
+            'customer_name' => 'Sample',
+            'comment' => 'Testing notification',
+            'date_created' => 'Oct 17, 2024'
+        ],
+        [
+            'customer_name' => 'Roger',
+            'comment' => 'Testing notification 2',
+            'date_created' => 'Oct 18, 2024'
+        ]
+    ];
+
     public function mount(): void
     {
+        $this->getAdminInfo();
+
         if (auth()->user()) {
             $unformattedNotifications = auth()->user()->unreadNotifications;
             foreach ($unformattedNotifications as $notification) {
@@ -70,6 +86,17 @@ class Navigation extends Component
             return false;
         }
     }
+
+    // FIX LATER
+    public function getAdminInfo()
+    {
+        $admin = User::where('email', 'sa@csors.com')
+            ->select('phone_number', 'email')
+            ->first();
+
+        session(['adminInfo' => $admin]);
+    }
+
 
     public function render()
     {

@@ -8,4 +8,8 @@ $classes = ($active ?? false)
 
 <a {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
+    @if ($active === true)
+    {{-- highlight --}}
+        <div class="absolute w-[35px] h-[4px] mt-9 bg-white"></div>
+    @endif
 </a>

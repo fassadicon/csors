@@ -1,4 +1,12 @@
 <div class="p-4 shadow-md shadow-black/5 bg-jt-light">
+    <x-mary-header title="Phone number"
+        class="!my-2 !mb-4"
+        size='text-2xl'
+        subtitle="{{$caterer->phone_number}}" >
+    </x-mary-header>
+
+
+
     <x-mary-header title="Contact us"
         class="!my-2"
         size='text-xl'>

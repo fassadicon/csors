@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CustomerSignup;
 
 new #[Layout('layouts.guest')] class extends Component {
     public string $first_name = '';
@@ -22,6 +24,7 @@ new #[Layout('layouts.guest')] class extends Component {
     /**
      * Handle an incoming registration request.
      */
+    
     public function register(): void
     {
         $validated = $this->validate([
@@ -35,7 +38,9 @@ new #[Layout('layouts.guest')] class extends Component {
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-
+        // SEND MAIL
+        Mail::to($this->email)->send(new CustomerSignup($this->first_name, $this->email, $this->password));        
+        
         event(new Registered(($user = User::create($validated))));
 
         Auth::login($user);

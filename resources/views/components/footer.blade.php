@@ -5,12 +5,18 @@
             <x-application-logo class="block w-auto fill-current text-jt-white h-9 dark:text-gray-200" />
         </div>
         <div class="flex items-center">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum repellat quaerat voluptatibus
-                placeat
-                nam, commodi optio pariatur est quia magnam eum harum corrupti dicta, aliquam sequi voluptate quas.</p>
+            <p>
+                For additional information or inquiries or if you encounter any issues, please feel free to contact us.
+            </p>
         </div>
     </div>
-    <center>
+    <div class="flex items-center justify-center gap-x-4">
         <p>© CSORS 2024</p>
-    </center>
+        @if (session('adminInfo'))
+            <p> | </p>
+            <p>Phone: {{session('adminInfo')->phone_number}}</p>
+            <p> | </p>
+            <p>Email: {{session('adminInfo')->email}}</p>
+        @endif
+    </div>
 </div>

@@ -11,7 +11,7 @@
 
     <div
         style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid rgba(0, 0, 0, .5); border-radius: 10px;">
-        <img src="{{ asset('images/LOGO.jpg') }}" alt="" width="200" style="width: 100px; max-width: 100px;">
+        <img src="https://csors.online/images/LOGO.jpg" alt="" width="200" style="width: 100px; max-width: 100px;">
 
         <p>
             @if ($paymentStatus == 'partial')

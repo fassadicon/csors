@@ -28,7 +28,7 @@
                 @if ($caterer)
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
-                        <x-nav-dropdown>
+                        <x-nav-dropdown :active="request()->routeIs('about') || request()->routeIs('caterers') || request()->routeIs('contact')">
                             <x-slot name="trigger">
                                 <a href="{{ route('about', ['caterer' => $caterer]) }}">
                                     <p class="!text-white text-hover-def cursor-pointer">{{ $caterer->name }}</p>
@@ -56,10 +56,11 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)
-                        <x-nav-dropdown :active="request()->routeIs('events')">
+                        <x-nav-dropdown :active="request()->routeIs('events') || request()->routeIs('event') || request()->routeIs('package')">
                             <x-slot name="trigger">
                                 <a href="{{ route('events') }}"
                                     class="!text-white text-hover-def">Events</a>
+                                    
                             </x-slot>
                             <x-slot name="content">
 
@@ -76,17 +77,19 @@
                 @if ($caterer)
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('menu')"
-                            :active="request()->routeIs('menu')"
+                            :active="request()->routeIs('menu') || request()->routeIs('food')"
                             wire:navigate
                             class="!text-white text-hover-def">
                             {{ __('Menu') }}
+                            
                         </x-nav-link>
+                        
                     </div>
                 @endif
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)
-                        <x-nav-dropdown>
+                        <x-nav-dropdown :active="request()->routeIs('utilities') || request()->routeIs('utility')">
                             <x-slot name="trigger">
                                 <a href="{{ route('utilities') }}"
                                     class="!text-white text-hover-def">Utilities</a>
@@ -115,6 +118,33 @@
                                     class="absolute badge-primary -right-2 -top-2" />
                             </x-mary-button>
                         </a>
+                    </div>
+                    
+
+                @endif
+                @if (auth()->user())
+                    {{-- Notifications --}}
+                    <div x-data="{showNotif: false}" class="flex items-center space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
+                        <x-mary-button @click="showNotif = true" icon="o-bell" class="relative btn-circle">
+                            <x-mary-badge value="{{ count($notifTest) }}" class="absolute badge-primary -right-2 -top-2" />
+                        </x-mary-button>
+                        {{-- notif container --}}
+                        <template x-if="showNotif">
+                            <div class="fixed bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
+                                <div class="flex items-center justify-between">
+                                    <h4>Notifications</h4>
+                                    <x-mary-button @click="showNotif = false" icon="o-x-mark">
+                                    </x-mary-button>
+                                </div>
+                                <hr class="my-4">
+                                <div>
+                                    @foreach ($notifTest as $notif)
+                                    <x-notif-card customerName="{{$notif['customer_name']}}" message="{{$notif['comment']}}"
+                                        dateCreated="{{$notif['date_created']}}" />
+                                    @endforeach
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 @endif
                 @if (auth()->guest())
