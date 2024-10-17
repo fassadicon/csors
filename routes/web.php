@@ -1,10 +1,12 @@
 <?php
 
+use App\Mail\ForgotPassword;
 use App\Models\Order;
 use App\Enums\OrderStatus;
 use App\Models\FoodDetail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('test', function () {
     dd('BOOM!');
@@ -92,5 +94,7 @@ require __DIR__ . '/auth.php';
 
 
 Route::get('emailPreview', function () {
-    return view('mail.receipt-mail');
+    // return view('mail.forgot-pass');
+    // Mail::to('jjarts1028@gmail.com')
+    //     ->send(new ForgotPassword());
 });
