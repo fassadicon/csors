@@ -12,7 +12,9 @@
     </div>
     <div class="flex items-center justify-center gap-x-4">
         <p>© CSORS 2024</p>
-        <p>Phone: {{session('adminInfo')->phone_number}}</p>
-        <p>Email: {{session('adminInfo')->email}}</p>
+        @if (session('adminInfo'))
+            <p>Phone: {{session('adminInfo')->phone_number}}</p>
+            <p>Email: {{session('adminInfo')->email}}</p>
+        @endif
     </div>
 </div>

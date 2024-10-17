@@ -19,6 +19,18 @@ class Navigation extends Component
     public $cartItemCount;
     public ?array $notifications = [];
 
+    public ?array $notifTest = [
+        [
+            'customer_name' => 'Sample',
+            'comment' => 'Testing notification',
+            'date_created' => 'Oct 17, 2024'
+        ],
+        [
+            'customer_name' => 'Roger',
+            'comment' => 'Testing notification 2',
+            'date_created' => 'Oct 18, 2024'
+        ]
+    ];
 
     public function mount(): void
     {
