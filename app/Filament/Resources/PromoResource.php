@@ -98,6 +98,10 @@ class PromoResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('logs')
+                    ->url(fn($record) => PromoResource::getUrl('logs', ['record' => $record]))
+                    ->icon('heroicon-m-list-bullet')
+                    ->color('gray'),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
             ])
@@ -131,6 +135,7 @@ class PromoResource extends Resource
             'create' => Pages\CreatePromo::route('/create'),
             'view' => Pages\ViewPromo::route('/{record}'),
             'edit' => Pages\EditPromo::route('/{record}/edit'),
+            'logs' => Pages\LogPromo::route('/{record}/logs')
         ];
     }
 

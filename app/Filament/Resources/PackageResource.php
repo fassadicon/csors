@@ -97,6 +97,10 @@ class PackageResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('logs')
+                    ->url(fn($record) => PackageResource::getUrl('logs', ['record' => $record]))
+                    ->icon('heroicon-m-list-bullet')
+                    ->color('gray'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -130,6 +134,7 @@ class PackageResource extends Resource
             'create' => Pages\CreatePackage::route('/create'),
             'view' => Pages\ViewPackage::route('/{record}'),
             'edit' => Pages\EditPackage::route('/{record}/edit'),
+            'logs' => Pages\LogPackage::route('/{record}/logs')
         ];
     }
 

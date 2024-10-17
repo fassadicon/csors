@@ -93,6 +93,10 @@ class CancellationRequestResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('logs')
+                    ->url(fn($record) => CancellationRequestResource::getUrl('logs', ['record' => $record]))
+                    ->icon('heroicon-m-list-bullet')
+                    ->color('gray'),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
             ])
@@ -120,6 +124,7 @@ class CancellationRequestResource extends Resource
             'create' => Pages\CreateCancellationRequest::route('/create'),
             'view' => Pages\ViewCancellationRequest::route('/{record}'),
             'edit' => Pages\EditCancellationRequest::route('/{record}/edit'),
+            'logs' => Pages\LogCancellationRequest::route('/{record}/logs')
         ];
     }
 
