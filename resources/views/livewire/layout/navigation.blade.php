@@ -28,7 +28,7 @@
                 @if ($caterer)
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
-                        <x-nav-dropdown>
+                        <x-nav-dropdown :active="request()->routeIs('about') || request()->routeIs('caterers') || request()->routeIs('contact')">
                             <x-slot name="trigger">
                                 <a href="{{ route('about', ['caterer' => $caterer]) }}">
                                     <p class="!text-white text-hover-def cursor-pointer">{{ $caterer->name }}</p>
@@ -56,10 +56,11 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)
-                        <x-nav-dropdown :active="request()->routeIs('events')">
+                        <x-nav-dropdown :active="request()->routeIs('events') || request()->routeIs('event') || request()->routeIs('package')">
                             <x-slot name="trigger">
                                 <a href="{{ route('events') }}"
                                     class="!text-white text-hover-def">Events</a>
+                                    
                             </x-slot>
                             <x-slot name="content">
 
@@ -76,17 +77,19 @@
                 @if ($caterer)
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('menu')"
-                            :active="request()->routeIs('menu')"
+                            :active="request()->routeIs('menu') || request()->routeIs('food')"
                             wire:navigate
                             class="!text-white text-hover-def">
                             {{ __('Menu') }}
+                            
                         </x-nav-link>
+                        
                     </div>
                 @endif
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex {{ $navClasses }}">
                     @if ($caterer)
-                        <x-nav-dropdown>
+                        <x-nav-dropdown :active="request()->routeIs('utilities') || request()->routeIs('utility')">
                             <x-slot name="trigger">
                                 <a href="{{ route('utilities') }}"
                                     class="!text-white text-hover-def">Utilities</a>
