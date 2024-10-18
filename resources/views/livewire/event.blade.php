@@ -22,7 +22,7 @@
 
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($event->packages as $package)
-            <x-mary-card title="{!! $package->name !!}">
+            <x-mary-card title="{!! $package->name !!}" class="card-medium">
                 {{ \Illuminate\Support\Str::limit($package->description, 50) }}
                 <x-slot:figure>
                     <img src="{{ asset('images/placeholder.jpg') }}" class="card-img" />

@@ -18,6 +18,20 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        .card-small {
+            max-height: !300px;
+            height: 300px;
+        }
+
+        .card-medium {
+            max-height: !400px;
+            height: !400px;
+        }
+
+    </style>
+
 </head>
 
 <body class="font-sans antialiased">
