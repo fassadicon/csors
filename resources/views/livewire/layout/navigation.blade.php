@@ -130,7 +130,7 @@
                         </x-mary-button>
                         {{-- notif container --}}
                         <template x-if="showNotif">
-                            <div class="fixed bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
+                            <div style="top: 70px;" class="fixed bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
                                 <div class="flex items-center justify-between">
                                     <h4>Notifications</h4>
                                     <x-mary-button @click="showNotif = false" icon="o-x-mark">
