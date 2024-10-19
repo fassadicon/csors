@@ -94,8 +94,7 @@ require __DIR__ . '/auth.php';
 
 
 Route::get('emailPreview', function () {
-    $order = Order::findOrFail(7);
-    return view('filament.order.receipt', ['order' => $order]);
+    // return view('mail.forgot-pass');
     // Mail::to('jjarts1028@gmail.com')
     //     ->send(new ForgotPassword());
 });

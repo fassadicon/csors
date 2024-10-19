@@ -89,6 +89,10 @@ class FoodDetailResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('logs')
+                    ->url(fn($record) => FoodDetailResource::getUrl('logs', ['record' => $record]))
+                    ->icon('heroicon-m-list-bullet')
+                    ->color('gray'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -123,6 +127,7 @@ class FoodDetailResource extends Resource
             'create' => Pages\CreateFoodDetail::route('/create'),
             'view' => Pages\ViewFoodDetail::route('/{record}'),
             'edit' => Pages\EditFoodDetail::route('/{record}/edit'),
+            'logs' => Pages\LogFoodDetail::route('/{record}/logs')
         ];
     }
 

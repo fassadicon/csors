@@ -77,6 +77,11 @@ class ServingTypeResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('logs')
+                    ->url(fn($record) => ServingTypeResource::getUrl('logs', ['record' => $record]))
+                    ->icon('heroicon-m-list-bullet')
+                    ->color('gray'),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -110,6 +115,7 @@ class ServingTypeResource extends Resource
             'create' => Pages\CreateServingType::route('/create'),
             'view' => Pages\ViewServingType::route('/{record}'),
             'edit' => Pages\EditServingType::route('/{record}/edit'),
+            'logs' => Pages\LogServingType::route('/{record}/logs')
         ];
     }
 

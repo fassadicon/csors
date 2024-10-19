@@ -122,6 +122,10 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('logs')
+                    ->url(fn($record) => UserResource::getUrl('logs', ['record' => $record]))
+                    ->icon('heroicon-m-list-bullet')
+                    ->color('gray'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -145,6 +149,7 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+            'logs' => Pages\LogUser::route('/{record}/logs')
         ];
     }
 

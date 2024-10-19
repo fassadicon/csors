@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages\Auth;
 
-use App\Mail\CustomerSignup;
 use App\Models\Caterer;
 use Filament\Forms;
 use Filament\Pages\Auth\Register;
@@ -33,7 +32,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 
 class CatererRegister extends Register
@@ -133,16 +131,7 @@ class CatererRegister extends Register
 
             $data = $this->form->getState();
 
-            // Capture the plain text password before hashing
-            $plainPassword = $data['password'];
-
-            // Send email with the plain text password
-            Mail::to($data['email'])->send(new CustomerSignup($data['first_name'] . ", " . $data['last_name'], $data['email'], $plainPassword));
-
             $this->callHook('afterValidate');
-
-            // Hash the password for saving in the database
-            $data['password'] = Hash::make($plainPassword);
 
             $data = $this->mutateFormDataBeforeRegister($data);
 
@@ -177,8 +166,6 @@ class CatererRegister extends Register
 
         return app(RegistrationResponse::class);
     }
-
-
 
     protected function mutateFormDataBeforeRegister(array $data): array
     {
