@@ -1,4 +1,9 @@
-<div class="p-4 rounded-md bg-jt-white">
+@php
+    use Illuminate\Support\Str;
+@endphp
+<div 
+    x-data="{showPopup: false}"
+    class="p-4 rounded-md bg-jt-white">
     <div class="flex justify-between px-4">
         <x-mary-header title="Order Information"
             {{-- subtitle="# {{ $order->id }} - PHP {{ $order->total_amount }}" --}}
@@ -16,7 +21,7 @@
         </div>
     </div>
 
-    <div class="flex flex-row gap-x-4 justify-around">
+    <div class="flex flex-row justify-around gap-x-4">
         <div class="w-[50%]">
             @foreach ($order->orderItems as $orderItem)
             <div>
@@ -56,10 +61,10 @@
     {{-- <x-mary-header title="Total: {{ $totalAmount }}"
         class="!my-2"
         separator /> --}}
-        <hr class="my-4 mx-4">
+        <hr class="mx-4 my-4">
     <div class="">
         
-        <div class="flex w-full items-start justify-between p-4 gap-y-4">
+        <div class="flex items-start justify-between w-full p-4 gap-y-4">
             <div class="space-y-4">
                 <x-mary-header title="Customer Information" class="!my-2" subtitle="Customer: {{ $order->user->name }}"
                     separator />
@@ -129,12 +134,35 @@
                 </x-danger-button>
                 @endif
                 @endunless
+                {{-- TEMPORARY  --}}
+                @if ($canPay)
+                    <x-primary-button class="w-full btn-primary !bg-blue-500  flex !justify-center" @click='showPopup=true'>
+                        ALTERNATIVE PAYMENT (GCASH)
+                    </x-primary-button>
+                @endif
                 <a href="{{ route('order-history') }}">
                     <x-mary-button label="Back to Order History" class="w-full py-2 btn-outline" />
                 </a>
             </div>
         </div>
     </div>
+
+    <template x-if="showPopup">
+        <div class="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-screen bg-black/50">
+            <div class="flex flex-col justify-center items-center w-[300px] p-4 h-[450px] bg-white rounded-xl">
+                {{-- @dd($order->user && Str::contains($order->user->name, 'Omsim', true)) --}}
+                @if ($order->user && $order->caterer->name === "Pauline Event and Catering Services")
+                    <img src="{{ asset('images/gcash/pauline.png') }}" alt="Pauline GCash QR" class="w-[250px] h-[350px] object-cover object-center">
+                @elseif ($order->user && Str::contains($order->caterer->name, 'Sherton', true))
+                    <img src="{{ asset('images/gcash/shertons.png') }}" alt="Shorton's QR" class="w-[250px] h-[350px] object-cover object-center">
+                @else
+                    <p class="mx-4 text-center">No alternative payment options have been set up yet.</p>
+                @endif
+
+                <button @click="showPopup=false" class="w-full p-4 mt-2 text-white bg-slate-900">CLOSE</button>
+            </div>
+        </div>
+    </template>
 
 
 </div>
