@@ -412,6 +412,27 @@ class OrderResource extends Resource
             ->actions([
 
                 ActionGroup::make([
+
+
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+
+                    // VIEW RECEITPT 
+                    Action::make('orderItems')->label('View Receipt')
+                        ->modalHeading('Receipt Details')
+                        ->modalContent(function ($record) {
+                            // Fetch only the order items related to this specific order
+                            $items = $record->orderItems; // Assuming $record is an instance of your order model
+                            $payments = $record->payments; // Assuming $record is an instance of your order model
+                            // Return the view with the order items
+                            return view('filament.order.receipt', [
+                                'order' => $items,
+                                'payments' => $payments
+                            ]);
+                        })->modalSubmitAction(false)->modalCancelActionLabel('Close'),
+
                     Action::make('user_id')->label('Report Customer')
                         ->form([
                             Select::make('comment') // Ensure this is the correct key for the selected reason
@@ -440,11 +461,6 @@ class OrderResource extends Resource
                                 ->where('reported_user', $record->user_id)
                                 ->exists();
                         }),
-
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\RestoreAction::make(),
                 ]),
             ])
             ->bulkActions([
