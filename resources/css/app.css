@@ -46,6 +46,14 @@
         @apply hover:!scale-105 duration-100 ease-in-out !max-h-[250px]
     }
 
+    .card-sm {
+        @apply !max-h-[300px] !min-h-[300px]
+    }
+
+    .card-md {
+        @apply !max-h-[350px] !min-h-[350px]
+    }
+
     .remove-card-animation {
         @apply hover:!scale-100
     }

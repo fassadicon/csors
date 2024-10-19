@@ -9,9 +9,10 @@
         @foreach ($events as $event)
             <a href="{{ route('event', ['event' => $event]) }}">
                 <x-mary-card title="{{ $event->name }}"
-                    class=" !pb-0 !flex !flex-col !justify-center !items-center">
+                    class=" !pb-0 !flex !flex-col !justify-center !items-center card-md">
                     <x-slot:figure>
-                        <img src="{{ asset('images/placeholder.jpg') }}" />
+                        {{-- <img src="{{ asset('images/placeholder.jpg') }}" /> --}}
+                        <img src="{{ $event->getFirstImagePath() ? asset('storage/' . $event->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                     </x-slot:figure>
                 </x-mary-card>
             </a>

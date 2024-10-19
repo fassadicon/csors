@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col mt-8 gap-y-4">
+            <div class="flex flex-col mt-4 gap-y-4">
                 <x-mary-button type="submit"
                     label="Add to Order"
                     class="w-full btn-primary" />

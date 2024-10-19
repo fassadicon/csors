@@ -21,7 +21,7 @@
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 @foreach ($foodDetails as $foodDetail)
                     <x-mary-card title="{{ $foodDetail->name }}"
-                        class="!pb-0 flex justify-center items-center">
+                        class="!pb-0 flex justify-center items-center card-sm">
                         <x-slot:figure>
                             <img
                                 src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
