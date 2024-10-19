@@ -86,7 +86,7 @@
         </x-mary-header>
         <hr class="my-4">
         @if (count($cart) > 0)
-            @unless ($totalAmount <= 2000)
+            @unless ($totalAmount <= 0)
                 <x-mary-button type="submit"
                     label="Proceed to Checkout"
                     class="my-4 btn-primary md:w-[40%]"

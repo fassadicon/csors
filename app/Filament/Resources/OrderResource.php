@@ -26,7 +26,6 @@ use Filament\Tables\Actions\ActionGroup;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Models\ReportedUser;
 use App\Models\User;
-use Filament\Actions\ViewAction;
 use Filament\Notifications;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Button;
@@ -413,41 +412,10 @@ class OrderResource extends Resource
             ->actions([
 
                 ActionGroup::make([
-
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\RestoreAction::make(),
-
-                    Action::make('orderItems')->label('View Receipt')
-                        ->modalHeading('Receipt Details')
-                        ->modalContent(function ($record) {
-                            // Fetch only the order items related to this specific order
-                            $items = $record->orderItems; // Assuming $record is an instance of your order model
-                            $payments = $record->payments; // Assuming $record is an instance of your order model
-
-                            // Return the view with the order items
-                            return view('filament.order.receipt', [
-                                'order' => $items,
-                                'payments' => $payments
-                            ]);
-                        })->modalSubmitAction(false)->modalCancelActionLabel('Close'),
-
-
-
-                    // ->visible(function ($record) {
-                    //     // Check if the user has already reported this customer
-                    //     return !ReportedUser::where('user_id', auth()->user()->id)
-                    //     ->where('reported_user', $record->user_id)
-                    //     ->exists();
-                    // }),
-
-
-                    // REPORT CUSTOMER 
                     Action::make('user_id')->label('Report Customer')
                         ->form([
                             Select::make('comment') // Ensure this is the correct key for the selected reason
-                                ->label('Reason')->hintIcon('heroicon-o-no-symbol')
+                                ->label('Reason')
                                 ->options(self::$reportReasons)
                                 ->required(),
                         ])
@@ -473,6 +441,10 @@ class OrderResource extends Resource
                                 ->exists();
                         }),
 
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
                 ]),
             ])
             ->bulkActions([
