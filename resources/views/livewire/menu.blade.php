@@ -20,21 +20,22 @@
             <h2 class="mb-4 text-xl">Food Items</h2>
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 @foreach ($foodDetails as $foodDetail)
-                    <x-mary-card title="{{ $foodDetail->name }}"
-                        class="!pb-0 flex justify-center items-center card-sm">
-                        <x-slot:figure>
-                            <img
-                                src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
-                        </x-slot:figure>
-                        <x-slot:actions>
-                            <div
-                                class="flex items-center justify-center px-16 mb-4 cursor-pointer btn-primary btn-circle hover:!bg-jt-primary-dark">
-                                <a href="{{ route('food', ['foodDetail' => $foodDetail]) }}">
-                                    VIEW
-                                </a>
-                            </div>
-                        </x-slot:actions>
-                    </x-mary-card>
+                    @if (count($foodDetail->servingTypes) > 0)
+                        <x-mary-card title="{{ $foodDetail->name }}" class="!pb-0 flex justify-center items-center card-sm">
+                            <x-slot:figure>
+                                <img
+                                    src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                            </x-slot:figure>
+                            <x-slot:actions>
+                                <div
+                                    class="flex items-center justify-center px-16 mb-4 cursor-pointer btn-primary btn-circle hover:!bg-jt-primary-dark">
+                                    <a href="{{ route('food', ['foodDetail' => $foodDetail]) }}">
+                                        VIEW
+                                    </a>
+                                </div>
+                            </x-slot:actions>
+                        </x-mary-card>
+                    @endif
                 @endforeach
             </div>
         </div>

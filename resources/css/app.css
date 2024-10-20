@@ -60,7 +60,7 @@
 
 
     .card-img {
-        @apply !max-h-[200px] object-cover
+        @apply !max-h-[200px] object-cover !min-h-[200px]
     }
 
 
