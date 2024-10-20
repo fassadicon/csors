@@ -5,7 +5,7 @@
             without-arrows />
     @endif
 
-    <x-mary-header title="{{ $caterer->name }}"
+    <x-mary-header title="{!! $caterer->name !!}"
         subtitle="By {{ $caterer->user->full_name }}"
         class="!my-4 mt-8">
         @if ($caterer->id != session()->get('caterer'))
