@@ -20,6 +20,18 @@ class ServingTypesRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\Select::make('caterer_id')
+                    ->default(function () {
+                        if (auth()->user()->hasRole('caterer')) {
+                            return auth()->user()->caterer->id;
+                        }
+                        return null;
+                    })
+                    ->hidden(function () {
+                        if (auth()->user()->hasRole('caterer')) {
+                            return true;
+                        }
+                        return false;
+                    })
                     ->relationship('caterer', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
@@ -61,7 +73,16 @@ class ServingTypesRelationManager extends RelationManager
                 Tables\Filters\TrashedFilter::make()
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->mutateFormDataUsing(
+                        function (array $data): array {
+                            if (auth()->user()->hasRole('caterer')) {
+                                $data['caterer_id'] = auth()->user()->caterer->id;
+                            }
+
+                            return $data;
+                        }
+                    ),
                 Tables\Actions\AttachAction::make()
                     ->recordSelectOptionsQuery(
                         fn(Builder $query) => $query->whereBelongsTo(auth()->user()->caterer)
