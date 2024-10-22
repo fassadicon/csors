@@ -40,8 +40,10 @@
             <x-mary-card title="{{ $event->name }}"
                 class="card !pb-0  !flex !flex-col !justify-center !items-center">
                 <x-slot:figure>
-                    <img
-                        src="{{ $event->getFirstImagePath() ? asset('storage/' . $event->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    <a href="{{ route('event', ['event'=>$event]) }}">
+                        <img
+                            src="{{ $event->getFirstImagePath() ? asset('storage/' . $event->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    </a>
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
@@ -61,8 +63,10 @@
             <x-mary-card title="{!! $package->name !!}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
                 <x-slot:figure>
-                    <img
-                        src="{{ $package->getFirstImagePath() ? asset('storage/' . $package->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    <a href="{{ route('package', ['package'=>$package->name]) }}">
+                        <img
+                            src="{{ $package->getFirstImagePath() ? asset('storage/' . $package->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    </a>
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
@@ -103,8 +107,10 @@
             <x-mary-card title="{{ $foodDetail->name }}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
                 <x-slot:figure>
-                    <img
-                        src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    <a href="{{ route('food', ['foodDetail'=>$foodDetail]) }}">
+                        <img
+                            src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    </a>
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
@@ -145,8 +151,10 @@
             <x-mary-card title="{{ $utility->name }}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
                 <x-slot:figure>
-                    <img
-                        src="{{ $utility->getFirstImagePath() ? asset('storage/' . $utility->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    <a href="{{ route('utility', ['utility'=>$utility]) }}">
+                        <img
+                            src="{{ $utility->getFirstImagePath() ? asset('storage/' . $utility->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    </a>
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
