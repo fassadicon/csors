@@ -105,6 +105,12 @@ class Navigation extends Component
         session(['adminInfo' => $admin]);
     }
 
+    public function changeCaterer() {
+        session()->forget('cart');
+        session()->forget('caterer');
+
+        return redirect()->route('caterers');
+    }
 
     public function render()
     {
