@@ -48,7 +48,7 @@
         @endif
 
         <!-- Page Content -->
-        <main class="min-h-screen pt-24 mx-auto max-w-7xl sm:px-2">
+        <main class="p-4 md:p-0 min-h-screen !pt-24 mx-auto max-w-7xl sm:px-2">
             {{ $slot }}
         </main>
 

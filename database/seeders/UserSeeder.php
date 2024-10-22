@@ -25,6 +25,7 @@ class UserSeeder extends Seeder
             'phone_number' => '09063406603',
             'email' => 'sa@csors.com',
             'is_customer' => 0,
+            'is_verified' => 1,
             'password' => bcrypt('qwe'),
         ]);
         Artisan::call('shield:super-admin --user=1');
@@ -38,6 +39,7 @@ class UserSeeder extends Seeder
             'phone_number' => '09063406601',
             'email' => 'caterer_1@csors.com',
             'is_customer' => 0,
+            'is_verified' => 1,
             'password' => bcrypt('qwe'),
         ]);
         $test_1_caterer->assignRole('caterer');
@@ -49,6 +51,7 @@ class UserSeeder extends Seeder
             'phone_number' => '090634066',
             'email' => 'caterer_2@csors.com',
             'is_customer' => 0,
+            'is_verified' => 1,
             'password' => bcrypt('qwe'),
         ]);
         $test_2_caterer->assignRole('caterer');
@@ -62,6 +65,7 @@ class UserSeeder extends Seeder
             'phone_number' => '09063406602',
             'email' => 'customer_1@csors.com',
             'is_customer' => 1,
+            'is_verified' => 1,
             'password' => bcrypt('qwe'),
         ]);
         $test_1_customer->assignRole('customer');
@@ -74,6 +78,7 @@ class UserSeeder extends Seeder
             'phone_number' => '09063406606',
             'email' => 'customer_2@csors.com',
             'is_customer' => 1,
+            'is_verified' => 1,
             'password' => bcrypt('qwe'),
         ]);
         $test_2_customer->assignRole('customer');

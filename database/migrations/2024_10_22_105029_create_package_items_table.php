@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('foods', function (Blueprint $table) {
+        Schema::create('package_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('food_detail_id')->constrained();
-            $table->foreignId('serving_type_id')->constrained();
-            $table->decimal('price', 10, 2);
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('package_id')->nullable();
+            $table->morphs('packageable');
             $table->timestamps();
-            // $table->softDeletes();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('food');
+        Schema::dropIfExists('package_items');
     }
 };

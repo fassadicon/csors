@@ -4,7 +4,7 @@
 <div 
     x-data="{showPopup: false}"
     class="p-4 rounded-md bg-jt-white">
-    <div class="flex justify-between px-4">
+    <div class="flex flex-col md:flex-row justify-between px-4">
         <x-mary-header title="Order Information"
             {{-- subtitle="# {{ $order->id }} - PHP {{ $order->total_amount }}" --}}
             class="!my-4 ">
@@ -20,9 +20,9 @@
             <h3>#{{ $order->id }} - Total Php {{ number_format($order->total_amount, 2) }}</h3>
         </div>
     </div>
-
-    <div class="flex flex-row justify-around gap-x-4">
-        <div class="w-[50%]">
+    <hr class="block my-4 md:my-0 md:hidden">
+    <div class="flex flex-col gap-y-4 md:gap-y-0 md:flex-row justify-around gap-x-4">
+        <div class="w-[100%] md:w-[50%]">
             @foreach ($order->orderItems as $orderItem)
             <div>
                 <x-mary-list-item :item="$orderItem" no-separator no-hover>
@@ -51,7 +51,7 @@
             @endforeach
         </div>
         @if ($payments)
-        <div class="flex flex-col p-4 shadow-md w-[50%]">
+        <div class="flex flex-col p-4 shadow-md w-[100%] md:w-[50%]">
             <x-mary-header title="Payments" class="!my-4 ">
             </x-mary-header>
             <x-mary-table :headers="$headers" :rows="$payments" striped show-empty-text class="border border-collapse" />
@@ -63,8 +63,7 @@
         separator /> --}}
         <hr class="mx-4 my-4">
     <div class="">
-        
-        <div class="flex items-start justify-between w-full p-4 gap-y-4">
+        <div class="flex flex-col md:flex-row items-start justify-between w-full p-4 gap-y-4">
             <div class="space-y-4">
                 <x-mary-header title="Customer Information" class="!my-2" subtitle="Customer: {{ $order->user->name }}"
                     separator />
@@ -90,7 +89,7 @@
                     Date Ordered: {{ $order->created_at->format('M j, Y - g:ia') }}
                 </p>
             </div>
-        
+            <hr class="block my-4 md:my-0 md:hidden"    >
             <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] ">
         
                 @if ($order->cancellationRequest)

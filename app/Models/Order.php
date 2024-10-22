@@ -23,6 +23,7 @@ class Order extends Model
         'recipient',
         'promo_id',
         'deducted_amount',
+        'delivery_amount',
         'recipient',
         'location',
         'remarks',

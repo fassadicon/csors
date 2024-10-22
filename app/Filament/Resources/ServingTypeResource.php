@@ -31,9 +31,10 @@ class ServingTypeResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
-                TinyEditor::make('description')
+                    ->maxLength(255)
                     ->columnSpanFull(),
+                // TinyEditor::make('description')
+                //     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
                     ->directory('caterers/images/serving-types')
                     ->image()

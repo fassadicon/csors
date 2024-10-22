@@ -20,7 +20,7 @@
                 <x-slot:figure>
                     {{-- Change this later to get image --}}
                     @if ($caterer->logo_path)
-                        <img src="{{ asset('storage/'.$caterer->logo_path) }}" class="card-img" />                        
+                        <img src="{{ asset('storage/'.$caterer->logo_path) }}" class="card-img" />
                     @else
                         <img src="{{ asset('images/placeholder.jpg') }}" class="card-img" />
                     @endif

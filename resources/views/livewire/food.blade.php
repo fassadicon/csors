@@ -19,14 +19,14 @@
         </x-mary-header>
 
         <div class="mt-4">
-            {!! $foodDetail->description !!}
-        </div>
-
-        <div class="mt-4">
             <x-mary-table :headers="$headers"
                 :rows="$foodDetail->servingTypes"
                 striped
                 class="border border-collapse" />
+        </div>
+
+        <div class="mt-4">
+            {!! $food->description !!}
         </div>
 
         <form wire:submit="addToCart">

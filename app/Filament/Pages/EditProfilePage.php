@@ -64,14 +64,14 @@ class EditProfilePage extends Page implements HasForms
                 // Forms\Components\TextInput::make('password')
                 //     ->maxLength(255)->password()->nullable(),
 
-                // Forms\Components\Toggle::make('is_verified')
-                //     ->label('Verified?')
-                //     ->disabled(),
-                // Forms\Components\FileUpload::make('verification_image_path')
-                //     ->label('Valid ID')
-                //     ->directory('users/' . auth()->id() . '/verification')
-                //     ->nullable()
-                //     ->columnSpan(3),
+                Forms\Components\Toggle::make('is_verified')
+                    ->label('Verified?')
+                    ->disabled(),
+                Forms\Components\FileUpload::make('verification_image_path')
+                    ->label('Valid ID')
+                    ->directory('users/' . auth()->id() . '/verification')
+                    ->nullable()
+                    ->columnSpan(3),
             ])
             ->statePath('data')
             ->model(auth()->user());
