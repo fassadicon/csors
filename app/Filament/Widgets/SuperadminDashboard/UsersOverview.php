@@ -19,16 +19,16 @@ class UsersOverview extends BaseWidget
         return [
             Stat::make('Caterers', $caterersCount)
                 ->color('success')
-                ->descriptionIcon('heroicon-m-arrow-trending-up'),
+                ->icon('heroicon-o-building-storefront'),
             Stat::make('Customers', $customersCount)
                 ->color('success')
-                ->descriptionIcon('heroicon-m-arrow-trending-up'),
+                ->icon('heroicon-o-users'),
             Stat::make('Unverified Users', $notVerifiedUsersCount)
-                ->color('success')
-                ->descriptionIcon('heroicon-m-arrow-trending-up'),
+                ->color('danger')
+                ->icon('heroicon-o-x-circle'),
             Stat::make('All Users', $usersCount)
-                ->color('success')
-                ->descriptionIcon('heroicon-m-arrow-trending-up'),
+                ->color('info')
+                ->icon('heroicon-o-users')
         ];
     }
 }
