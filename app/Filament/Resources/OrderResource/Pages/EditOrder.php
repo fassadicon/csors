@@ -26,6 +26,12 @@ class EditOrder extends EditRecord
 
     protected function afterSave()
     {
+        if (auth()->user()->hasRole('caterer')) {
+            Mail::to(auth()->user()->caterer->email)->send(new OrderUpdateMail(
+                $this->record->id,
+            ));
+        }
+
         Mail::to('sa.csors.offical@gmail.com')->send(new OrderUpdateMail(
             $this->record->id,
         ));
