@@ -55,6 +55,11 @@ class Package extends Model
         return $this->morphMany(OrderItem::class, 'orderable');
     }
 
+    public function packageItems(): HasMany
+    {
+        return $this->hasMany(PackageItem::class);
+    }
+
     public function caterer(): \Znck\Eloquent\Relations\BelongsToThrough
     {
         return $this->belongsToThrough(Caterer::class, Event::class);

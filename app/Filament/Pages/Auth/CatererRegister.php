@@ -77,10 +77,10 @@ class CatererRegister extends Register
                                 ->required()
                                 ->nullable(255),
                         ]),
-                    Wizard\Step::make('Caterer')
+                    Wizard\Step::make('Catering Service')
                         ->schema([
                             Forms\Components\TextInput::make('caterer.name')
-                                ->label('Caterer Name')
+                                ->label('Catering Service Name')
                                 ->unique(
                                     table: Caterer::class,
                                     column: 'name'
@@ -88,7 +88,7 @@ class CatererRegister extends Register
                                 ->required()
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('caterer.email')
-                                ->label('Caterer Email')
+                                ->label('Catering Service Email')
                                 ->unique(
                                     table: Caterer::class,
                                     column: 'email'
@@ -97,7 +97,7 @@ class CatererRegister extends Register
                                 ->required()
                                 ->maxLength(255),
                             Forms\Components\TextInput::make('caterer.phone_number')
-                                ->label('Caterer Phone Number')
+                                ->label('Caterer Service Phone Number')
                                 ->tel()
                                 ->nullable()
                                 ->unique(

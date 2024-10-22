@@ -40,26 +40,26 @@ class EventSeeder extends Seeder
         // Caterer 2
         Event::create([
             'caterer_id' => 2,
-            'name' => 'Wedding',
-            'description' => 'A wedding is a ceremony where two people are united in marriage. Wedding traditions and customs vary greatly'
+            'name' => 'Christening',
+            'description' => 'test'
         ]);
 
         Event::create([
             'caterer_id' => 2,
-            'name' => 'Birthday',
-            'description' => 'A birthday is the anniversary of the birth of a person, or figuratively of an institution.'
+            'name' => 'Debut',
+            'description' => 'test'
         ]);
 
         Event::create([
             'caterer_id' => 2,
-            'name' => 'Seminar',
-            'description' => 'A seminar is a form of academic instruction, either at an academic institution or offered by a commercial or professional organization.'
+            'name' => 'Gatherings',
+            'description' => 'test'
         ]);
 
         Event::create([
             'caterer_id' => 2,
             'name' => 'Party',
-            'description' => 'A seminar is a form of academic instruction, either at an academic institution or offered by a commercial or professional organization.'
+            'description' => 'test'
         ]);
     }
 }

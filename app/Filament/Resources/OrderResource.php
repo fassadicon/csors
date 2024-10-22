@@ -168,7 +168,21 @@ class OrderResource extends Resource
                     ->default(0)
                     ->prefix('- ₱')
                     ->numeric()
-                    ->hidden(fn($get) => $get('promo_id') === null),
+                    ->hidden(fn($get) => $get('promo_id') == null || $get('promo_id') == ''),
+                // Forms\Components\TextInput::make('delivery_amount')
+                //     ->label('Delivery Fee')
+                //     ->disabled(function ($get) {
+                //         return $get('order_status') == 'confirmed' || $get('order_status') == 'completed' || $get('order_status') == 'to_review' || $get('order_status') == 'cancelled';
+                //     })
+                //     ->default(0)
+                //     ->prefix('₱')
+                //     ->required()
+                //     ->numeric()
+                //     ->live(debounce: 500)
+                //     ->afterStateUpdated(function ($state, $get, $set) {
+                //         $set('deducted_amount', static::getDeductedAmount($get('promo_id'), static::getTotalAmount($get('orderItems'))));
+                //         $set('total_amount', static::getTotalAmount($get('orderItems')) - $get('deducted_amount'));
+                //     }),
                 Forms\Components\TextInput::make('total_amount')
                     ->readOnly()
                     ->default(0)
@@ -285,6 +299,9 @@ class OrderResource extends Resource
         foreach ($orderItems as $orderItem) {
             $totalAmount += $orderItem['amount'];
         }
+
+        // Add code to subtract delivery fee (if any) to total amount
+
         return $totalAmount;
     }
 
@@ -419,7 +436,7 @@ class OrderResource extends Resource
                     Tables\Actions\DeleteAction::make(),
                     Tables\Actions\RestoreAction::make(),
 
-                    // VIEW RECEITPT 
+                    // VIEW RECEITPT
                     Action::make('orderItems')->label('View Receipt')
                         ->modalHeading('Receipt Details')
                         ->modalContent(function ($record) {

@@ -51,6 +51,10 @@ class Utility extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
+    public function packageItems(): MorphMany
+    {
+        return $this->morphMany(PackageItem::class, 'packageable');
+    }
 
     public function getFirstImagePath()
     {

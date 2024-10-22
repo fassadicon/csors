@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PackageResource\Pages;
-use App\Filament\Resources\PackageResource\RelationManagers;
-use App\Models\Package;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Food;
 use Filament\Tables;
+use App\Models\Package;
+use App\Models\Utility;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\MorphToSelect;
+use App\Filament\Resources\PackageResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PackageResource\RelationManagers;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class PackageResource extends Resource
@@ -43,9 +46,67 @@ class PackageResource extends Resource
                     ->preload()
                     ->required()
                     ->columnSpanFull(),
-                TinyEditor::make('description')
-                    ->nullable()
-                    ->columnSpanFull(),
+                Forms\Components\TextArea::make('description')
+                    ->columnSpanFull()
+                    ->nullable(),
+                Forms\Components\Section::make([
+                    Forms\Components\Repeater::make('packageItems')
+                        ->label('Package List')
+                        ->relationship()
+                        ->schema([
+                            Forms\Components\MorphToSelect::make('packageable')
+                                ->label('Package Item')
+                                ->preload()
+                                ->searchable()
+                                ->types([
+                                    MorphToSelect\Type::make(Utility::class)
+                                        ->getOptionLabelFromRecordUsing(fn(Utility $record): string => "$record->name - (₱$record->price/[pc/set])"),
+                                    MorphToSelect\Type::make(Food::class)
+                                        ->getOptionLabelFromRecordUsing(fn(Food $record): string =>
+                                        $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"),
+                                ])
+                                // ->afterStateUpdated(function ($state, $get, $set) {
+                                //     $set('amount', static::getAmount($state['orderable_type'], $state['orderable_id'], $get('quantity')));
+
+                                //     $totalAmount = static::getTotalAmount($get('../'));
+                                //     $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
+                                //     $set('../../deducted_amount', $deductedAmount);
+                                //     $set('../../total_amount', $totalAmount - $deductedAmount);
+                                // })
+                                ->live(debounce: 500)
+                                ->required()
+                                ->columnSpanFull(),
+                            // Forms\Components\TextInput::make('quantity')
+                            //     ->minValue(1)
+                            //     ->live(debounce: 500)
+                            //     ->default(25)
+                            //     ->integer()
+                            //     ->required()
+                            //     ->afterStateUpdated(function ($state, $get, $set) {
+                            //         $set('amount', static::getAmount($get('orderable_type'), $get('orderable_id'), $state));
+
+                            //         $totalAmount = static::getTotalAmount($get('../'));
+                            //         $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
+                            //         $set('../../deducted_amount', $deductedAmount);
+                            //         $set('../../total_amount', $totalAmount - $deductedAmount);
+                            //     })
+                            //     ->columnSpan(2),
+                            // Forms\Components\TextInput::make('amount')
+                            //     ->prefix('₱')
+                            //     ->live()
+                            //     ->readOnly()
+                            //     ->required()
+                            //     ->columnSpan(4),
+                        ])
+                        // ->afterStateUpdated(function ($get, $set) {
+                        //     $totalAmount = static::getTotalAmount($get('orderItems'));
+                        //     $deductedAmount = static::getDeductedAmount($get('promo_id'), $totalAmount);
+                        //     $set('deducted_amount', $deductedAmount);
+                        //     $set('total_amount', $totalAmount - $deductedAmount);
+                        // })
+                        ->reorderable()
+                        ->columns(12)
+                ]),
                 Forms\Components\FileUpload::make('images')
                     ->directory('caterers/images/packages')
                     ->image()
@@ -72,6 +133,21 @@ class PackageResource extends Resource
                     ->label('Events')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('packageItems')
+                    ->size(Tables\Columns\TextColumn\TextColumnSize::ExtraSmall)
+                    ->listWithLineBreaks()
+                    ->bulleted()
+                    ->limitList(2)
+                    ->expandableLimitedList()
+                    ->formatStateUsing(function ($state) {
+                        $packageable_type = get_class($state->packageable);
+                        if ($packageable_type === 'App\Models\Food') {
+                            return $state->packageable->foodDetail->name . ' - ' . $state->packageable->servingType->name;
+                        }
+
+                        return $state->packageable->name;
+                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
                     ->toggleable(isToggledHiddenByDefault: true),

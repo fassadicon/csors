@@ -19,8 +19,8 @@ class FoodDetailSeeder extends Seeder
             'description' => 'Soy sauce, vinegar, and garlic',
         ]);
         $buffaloWings->servingTypes()->attach([
-            1 => ['price' => 100],
-            2 => ['price' => 150],
+            1 => ['price' => 100, 'description' => 'Buffet Unli Wings'],
+            2 => ['price' => 150, 'description' => '2pcs Wings'],
         ]);
 
         $chickenCurry = FoodDetail::create([
@@ -29,8 +29,8 @@ class FoodDetailSeeder extends Seeder
             'description' => 'Curry Sauce with Chicken',
         ]);
         $chickenCurry->servingTypes()->attach([
-            3 => ['price' => 200],
-            4 => ['price' => 350],
+            3 => ['price' => 200, 'description' => '1 Serving of Chicken Curry'],
+            4 => ['price' => 350, 'description' => 'test'],
         ]);
 
         $porkAdobo = FoodDetail::create([
@@ -39,8 +39,8 @@ class FoodDetailSeeder extends Seeder
             'description' => 'Soy sauce, vinegar, and garlic pork',
         ]);
         $porkAdobo->servingTypes()->attach([
-            1 => ['price' => 400],
-            5 => ['price' => 150],
+            1 => ['price' => 400, 'description' => 'test1'],
+            5 => ['price' => 150, 'description' => 'test2'],
         ]);
 
         $steak = FoodDetail::create([
@@ -49,11 +49,11 @@ class FoodDetailSeeder extends Seeder
             'description' => 'Salt Bae Inspired Steak',
         ]);
         $steak->servingTypes()->attach([
-            6 => ['price' => 650],
-            7 => ['price' => 750],
-            8 => ['price' => 850],
-            9 => ['price' => 950],
-            10 => ['price' => 1150],
+            6 => ['price' => 650, 'description' => 'test1'],
+            7 => ['price' => 750, 'description' => 'test2'],
+            8 => ['price' => 850, 'description' => 'test3'],
+            9 => ['price' => 950, 'description' => 'test4'],
+            10 => ['price' => 1150, 'description' => 'test5'],
         ]);
     }
 }

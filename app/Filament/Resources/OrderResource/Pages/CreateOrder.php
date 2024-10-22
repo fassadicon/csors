@@ -25,6 +25,13 @@ class CreateOrder extends CreateRecord
 
     protected function afterCreate()
     {
+        if (auth()->user()->hasRole('caterer')) {
+            $data['caterer_id'] = auth()->user()->caterer->id;
+            Mail::to(auth()->user()->caterer->email)->send(new OrderUpdateMail(
+                $this->record->id,
+            ));
+        }
+
         Mail::to('sa.csors.offical@gmail.com')->send(new OrderUpdateMail(
             $this->record->id,
         ));
