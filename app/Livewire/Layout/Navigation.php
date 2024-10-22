@@ -17,7 +17,7 @@ class Navigation extends Component
     public $caterer;
 
     public $cartItemCount;
-    public ?array $notifications = [];
+    public $notifications = [];
 
     public ?array $notifTest = [
         [
@@ -34,6 +34,14 @@ class Navigation extends Component
 
     public function mount(): void
     {
+        // $this->notifications = auth()->user()->notifications;
+
+        // if ($this->notifications) {
+        //     foreach ($this->notifications as $notification) {
+        //         dump($notification->data['title']);
+        //     }
+        // }
+
         $this->getAdminInfo();
 
         if (auth()->user()) {
