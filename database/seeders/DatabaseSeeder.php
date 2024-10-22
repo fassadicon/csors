@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             CatererSeeder::class,
 
             EventSeeder::class,
-            PackageSeeder::class,
+            // PackageSeeder::class,
 
             ServingTypeSeeder::class,
             FoodCategorySeeder::class,
@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
 
             CancellationRequestSeeder::class,
 
-            // FeedbackSeeder::class,
+            FeedbackSeeder::class,
         ]);
     }
 }

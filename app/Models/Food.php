@@ -41,4 +41,9 @@ class Food extends Pivot
     {
         return $this->morphMany(OrderItem::class, 'orderable');
     }
+
+    public function packageItems(): MorphMany
+    {
+        return $this->morphMany(PackageItem::class, 'packageable');
+    }
 }
