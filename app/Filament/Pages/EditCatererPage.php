@@ -65,10 +65,17 @@ class EditCatererPage extends Page implements HasForms
                 ->image()
                 ->nullable()
                 ->image(),
+            Forms\Components\FileUpload::make('qr_path')
+                ->directory('caterers/' . auth()->user()->caterer->id . '/images/qr')
+                ->label('QR Payment')
+                ->image()
+                ->nullable()
+                ->image(),
             Forms\Components\FileUpload::make('requirements_path')
                 ->label('Business Requirements (.zip)')
                 ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
                 ->label('Business Requirements (.zip)')
+                ->columnSpanFull()
                 ->nullable(),
             Forms\Components\FileUpload::make('images')
                 ->directory('caterers/' . $this->data['id'] . '/images/profile')

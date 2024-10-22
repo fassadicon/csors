@@ -20,21 +20,20 @@ class DatabaseSeeder extends Seeder
 
             CatererSeeder::class,
 
-            EventSeeder::class,
-            // PackageSeeder::class,
-
             ServingTypeSeeder::class,
             FoodCategorySeeder::class,
             FoodDetailSeeder::class,
-            FeedbackSeeder::class,
 
             UtilitySeeder::class,
+
+            EventSeeder::class,
+            PackageSeeder::class,
 
             PromoSeeder::class,
 
             OrderSeeder::class,
 
-            CancellationRequestSeeder::class,
+            // CancellationRequestSeeder::class,
 
             FeedbackSeeder::class,
         ]);

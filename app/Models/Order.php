@@ -32,6 +32,7 @@ class Order extends Model
         'total_amount',
         'payment_status',
         'order_status',
+        'decline_reason',
     ];
 
     protected function casts(): array

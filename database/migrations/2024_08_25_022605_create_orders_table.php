@@ -32,10 +32,12 @@ return new class extends Migration
                 'pending',
                 'confirmed',
                 'to_review',
+                'declined',
                 'completed',
                 'cancelled'
             ])
                 ->default('pending');
+            $table->text('decline_reason')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();

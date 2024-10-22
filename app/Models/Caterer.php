@@ -23,6 +23,7 @@ class Caterer extends Model
         'name',
         'about',
         'logo_path',
+        'qr_path',
         'requirements_path',
         'is_verified',
     ];

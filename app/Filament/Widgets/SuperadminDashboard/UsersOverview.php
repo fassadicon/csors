@@ -4,11 +4,14 @@ namespace App\Filament\Widgets\SuperadminDashboard;
 
 use App\Models\User;
 use App\Models\Caterer;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 class UsersOverview extends BaseWidget
 {
+    use HasWidgetShield;
+
     protected function getStats(): array
     {
         $caterersCount = Caterer::count();

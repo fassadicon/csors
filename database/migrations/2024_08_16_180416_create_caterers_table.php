@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone_number')->nullable();
             $table->text('about')->nullable();
             $table->text('logo_path')->nullable();
+            $table->text('qr_path')->nullable();
             $table->text('requirements_path')->nullable();
             $table->unsignedTinyInteger('is_verified')->default(0);
             $table->timestamps();

@@ -30,31 +30,78 @@ class UserSeeder extends Seeder
         ]);
         Artisan::call('shield:super-admin --user=1');
 
-        // Create Caterers
-        $test_1_caterer = User::create([
-            'last_name' => 'Bitong',
-            'first_name' => 'Gary',
-            'middle_name' => 'Dela Cruz',
-            'ext_name' => 'Jr',
-            'phone_number' => '09063406601',
-            'email' => 'caterer_1@csors.com',
-            'is_customer' => 0,
-            'is_verified' => 1,
-            'password' => bcrypt('qwe'),
-        ]);
-        $test_1_caterer->assignRole('caterer');
-        $test_2_caterer = User::create([
+        $csors_caterer1 = User::create([
             'last_name' => 'Talla',
             'first_name' => 'Jay Ray',
-            'middle_name' => 'Santos',
-            'ext_name' => 'III',
-            'phone_number' => '090634066',
-            'email' => 'caterer_2@csors.com',
+            'middle_name' => '',
+            'ext_name' => '',
+            'phone_number' => '09291076882',
+            'email' => 'caterer@csors.com',
             'is_customer' => 0,
-            'is_verified' => 1,
             'password' => bcrypt('qwe'),
         ]);
-        $test_2_caterer->assignRole('caterer');
+        $csors_caterer1->assignRole('caterer');
+
+        // Create Caterers
+        $csors_caterer1 = User::create([
+            'last_name' => 'De Leon',
+            'first_name' => 'Roberto',
+            'middle_name' => '',
+            'ext_name' => '',
+            'phone_number' => '09291076887',
+            'email' => 'roberto@gmail.com',
+            'is_customer' => 0,
+            'password' => bcrypt('Pauline'),
+        ]);
+        $csors_caterer1->assignRole('caterer');
+
+        $csors_caterer2 = User::create([
+            'last_name' => 'Dizon',
+            'first_name' => 'Star',
+            'middle_name' => '',
+            'ext_name' => '',
+            'phone_number' => '09501392989',
+            'email' => 'stardizon@gmail.com',
+            'is_customer' => 0,
+            'password' => bcrypt('Shertons'),
+        ]);
+        $csors_caterer2->assignRole('caterer');
+
+        $csors_caterer3 = User::create([
+            'last_name' => 'Ceniza',
+            'first_name' => 'Rica',
+            'middle_name' => '',
+            'ext_name' => '',
+            'phone_number' => '09124358761',
+            'email' => 'ricaceniza@gmail.com',
+            'is_customer' => 0,
+            'password' => bcrypt('InatoResto'),
+        ]);
+        $csors_caterer3->assignRole('caterer');
+
+        $csors_caterer4 = User::create([
+            'last_name' => 'Quismundo',
+            'first_name' => 'Mary Faye',
+            'middle_name' => '',
+            'ext_name' => '',
+            'phone_number' => '09507892431',
+            'email' => 'maryfaye@gmail.com',
+            'is_customer' => 0,
+            'password' => bcrypt('ArmyK'),
+        ]);
+        $csors_caterer4->assignRole('caterer');
+
+        $csors_caterer5 = User::create([
+            'last_name' => 'Ambrocio',
+            'first_name' => 'Eron ',
+            'middle_name' => '',
+            'ext_name' => '',
+            'phone_number' => '09345216181',
+            'email' => 'eron@gmail.com',
+            'is_customer' => 0,
+            'password' => bcrypt('Jaycris'),
+        ]);
+        $csors_caterer5->assignRole('caterer');
 
         // Create Customers
         $test_1_customer = User::create([

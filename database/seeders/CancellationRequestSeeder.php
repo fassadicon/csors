@@ -49,7 +49,7 @@ class CancellationRequestSeeder extends Seeder
 
         foreach ($caterers as $caterer) {
             // FOODS and UTILITIES
-            $users = User::whereIn('id', [4, 5])->get();
+            $users = User::whereIn('id', [7, 8])->get();
 
             foreach ($users as $user) {
 
