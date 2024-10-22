@@ -37,7 +37,7 @@
                             <x-slot name="content">
                                 {{-- <x-dropdown-link
                                     href="{{ route('about', ['caterer' => $caterer]) }}">About</x-dropdown-link> --}}
-                                <x-dropdown-link href="{{ route('caterers') }}">Change Caterer</x-dropdown-link>
+                                <x-dropdown-link wire:click='changeCaterer'>Change Caterer</x-dropdown-link>
                                 <x-dropdown-link href="{{ route('contact') }}">Contact</x-dropdown-link>
                             </x-slot>
                         </x-nav-dropdown>
@@ -60,7 +60,7 @@
                             <x-slot name="trigger">
                                 <a href="{{ route('events') }}"
                                     class="!text-white text-hover-def">Events</a>
-                                    
+
                             </x-slot>
                             <x-slot name="content">
 
@@ -81,9 +81,9 @@
                             wire:navigate
                             class="!text-white text-hover-def">
                             {{ __('Menu') }}
-                            
+
                         </x-nav-link>
-                        
+
                     </div>
                 @endif
 
@@ -119,7 +119,7 @@
                             </x-mary-button>
                         </a>
                     </div>
-                    
+
 
                 @endif
                 @if (auth()->user())

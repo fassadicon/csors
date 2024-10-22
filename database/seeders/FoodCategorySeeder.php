@@ -30,5 +30,25 @@ class FoodCategorySeeder extends Seeder
             'name' => 'Beef',
             'description' => 'Salt Bae',
         ]);
+        FoodCategory::create([
+            'caterer_id' => 3,
+            'name' => 'Vegetables',
+            'description' => 'healthy living',
+        ]);
+        FoodCategory::create([
+            'caterer_id' => 4,
+            'name' => 'Pasta',
+            'description' => 'bon appetite',
+        ]);
+        FoodCategory::create([
+            'caterer_id' => 5,
+            'name' => 'Liquors',
+            'description' => 'tipsy party',
+        ]);
+        FoodCategory::create([
+            'caterer_id' => 6,
+            'name' => 'Pastries',
+            'description' => 'baked fresh',
+        ]);
     }
 }

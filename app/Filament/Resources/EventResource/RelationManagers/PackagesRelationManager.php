@@ -26,8 +26,9 @@ class PackagesRelationManager extends RelationManager
                     ->required()
                     ->numeric()
                     ->prefix('₱'),
-                TinyEditor::make('description')
-                    ->columnSpanFull(),
+                Forms\Components\TextArea::make('description')
+                    ->columnSpanFull()
+                    ->nullable(),
                 Forms\Components\FileUpload::make('image_path')
                     ->label('Image')
                     ->image()

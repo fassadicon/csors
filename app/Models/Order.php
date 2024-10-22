@@ -23,6 +23,7 @@ class Order extends Model
         'recipient',
         'promo_id',
         'deducted_amount',
+        'delivery_amount',
         'recipient',
         'location',
         'remarks',
@@ -31,6 +32,7 @@ class Order extends Model
         'total_amount',
         'payment_status',
         'order_status',
+        'decline_reason',
     ];
 
     protected function casts(): array

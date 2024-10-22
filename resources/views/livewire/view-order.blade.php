@@ -1,10 +1,10 @@
 @php
     use Illuminate\Support\Str;
 @endphp
-<div 
+<div
     x-data="{showPopup: false}"
     class="p-4 rounded-md bg-jt-white">
-    <div class="flex justify-between px-4">
+    <div class="flex flex-col md:flex-row justify-between px-4">
         <x-mary-header title="Order Information"
             {{-- subtitle="# {{ $order->id }} - PHP {{ $order->total_amount }}" --}}
             class="!my-4 ">
@@ -20,9 +20,9 @@
             <h3>#{{ $order->id }} - Total Php {{ number_format($order->total_amount, 2) }}</h3>
         </div>
     </div>
-
-    <div class="flex flex-row justify-around gap-x-4">
-        <div class="w-[50%]">
+    <hr class="block my-4 md:my-0 md:hidden">
+    <div class="flex flex-col gap-y-4 md:gap-y-0 md:flex-row justify-around gap-x-4">
+        <div class="w-[100%] md:w-[50%]">
             @foreach ($order->orderItems as $orderItem)
             <div>
                 <x-mary-list-item :item="$orderItem" no-separator no-hover>
@@ -51,7 +51,7 @@
             @endforeach
         </div>
         @if ($payments)
-        <div class="flex flex-col p-4 shadow-md w-[50%]">
+        <div class="flex flex-col p-4 shadow-md w-[100%] md:w-[50%]">
             <x-mary-header title="Payments" class="!my-4 ">
             </x-mary-header>
             <x-mary-table :headers="$headers" :rows="$payments" striped show-empty-text class="border border-collapse" />
@@ -63,13 +63,12 @@
         separator /> --}}
         <hr class="mx-4 my-4">
     <div class="">
-        
-        <div class="flex items-start justify-between w-full p-4 gap-y-4">
+        <div class="flex flex-col md:flex-row items-start justify-between w-full p-4 gap-y-4">
             <div class="space-y-4">
                 <x-mary-header title="Customer Information" class="!my-2" subtitle="Customer: {{ $order->user->name }}"
                     separator />
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
-        
+
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     Caterer: {{ $order->caterer->name }}
                 </p>
@@ -90,9 +89,9 @@
                     Date Ordered: {{ $order->created_at->format('M j, Y - g:ia') }}
                 </p>
             </div>
-        
+            <hr class="block my-4 md:my-0 md:hidden"    >
             <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] ">
-        
+
                 @if ($order->cancellationRequest)
                 <x-mary-header title="Cancellation Request" class="!my-2" separator />
                     <div class="space-y-2">
@@ -117,7 +116,7 @@
                 <div class="flex gap-x-2">
                     @if ($order->payment_status->value == 'pending')
                     <x-primary-button class="w-full bg-jt-primary-dark flex !justify-center !text-center"
-                        wire:click='payPartial'>{{ __('Pay Partial') }}</x-primary-button>
+                        wire:click='payPartial'>{{ __('Pay Partial - ') . $order->caterer->downpayment . '%' }}</x-primary-button>
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payFull'>{{ __('Pay Full') }}
                     </x-primary-button>
                     @elseif ($order->payment_status->value == 'partial')
@@ -126,7 +125,7 @@
                     @endif
                 </div>
                 @endif
-        
+
                 {{-- CANCEL --}}
                 @unless ($order->cancellationRequest)
                 @if ($canRequestCancellation)

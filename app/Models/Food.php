@@ -9,14 +9,15 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Food extends Pivot
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $table = 'foods';
 
     protected $fillable = [
         'serving_type_id',
         'food_detail_id',
-        'price'
+        'price',
+        'description'
     ];
 
     protected function casts(): array
@@ -39,5 +40,10 @@ class Food extends Pivot
     public function orderItems(): MorphMany
     {
         return $this->morphMany(OrderItem::class, 'orderable');
+    }
+
+    public function packageItems(): MorphMany
+    {
+        return $this->morphMany(PackageItem::class, 'packageable');
     }
 }

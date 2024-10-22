@@ -17,11 +17,13 @@ class Caterer extends Model
 
     protected $fillable = [
         'user_id',
+        'downpayment',
         'email',
         'phone_number',
         'name',
         'about',
         'logo_path',
+        'qr_path',
         'requirements_path',
         'is_verified',
     ];

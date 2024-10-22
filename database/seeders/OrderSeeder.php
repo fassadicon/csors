@@ -49,12 +49,12 @@ class OrderSeeder extends Seeder
 
         foreach ($caterers as $caterer) {
             // FOODS and UTILITIES
-            $users = User::whereIn('id', [4, 5])->get();
+            $users = User::where('is_customer', 1)->get();
 
             foreach ($users as $user) {
 
                 foreach ($this->cases as $case) {
-                    for ($i = 0; $i < 2; $i++) {
+                    for ($i = 0; $i < 1; $i++) {
 
                         $orderedFoods = Food::whereHas('servingType', function ($query) use ($caterer) {
                             $query->where('caterer_id', $caterer->id);
@@ -113,7 +113,7 @@ class OrderSeeder extends Seeder
                             Payment::create([
                                 'order_id' => $order->id,
                                 'type' => 'cash',
-                                'amount' => $case['payment_status'] == 'partial' ? $totalAmount * 0.7 : $totalAmount,
+                                'amount' => $case['payment_status'] == 'partial' ? $totalAmount * ($caterer->downpayment/100) : $totalAmount,
                             ]);
                         }
 
