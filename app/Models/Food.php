@@ -16,7 +16,8 @@ class Food extends Pivot
     protected $fillable = [
         'serving_type_id',
         'food_detail_id',
-        'price'
+        'price',
+        'description'
     ];
 
     protected function casts(): array

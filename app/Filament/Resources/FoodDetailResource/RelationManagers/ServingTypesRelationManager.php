@@ -94,6 +94,8 @@ class ServingTypesRelationManager extends RelationManager
                         Forms\Components\TextInput::make('price')
                             ->numeric()
                             ->prefix('₱'),
+                        Forms\Components\TextArea::make('description')
+                            ->nullable(),
                     ]),
             ])
             ->actions([
