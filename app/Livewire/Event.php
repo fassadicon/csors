@@ -12,6 +12,7 @@ class Event extends Component
     public function mount()
     {
         $this->event->load(['packages', 'images']);
+        // dd($this->event->packages);
     }
 
     public function render()

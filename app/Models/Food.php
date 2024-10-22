@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Food extends Pivot
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $table = 'foods';
 

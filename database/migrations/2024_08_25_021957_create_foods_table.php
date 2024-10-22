@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('serving_type_id')->constrained();
             $table->decimal('price', 10, 2);
             $table->timestamps();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 
