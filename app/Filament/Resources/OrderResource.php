@@ -193,6 +193,7 @@ class OrderResource extends Resource
                 Forms\Components\Select::make('order_status')
                     ->default(OrderStatus::Pending)
                     ->options(OrderStatus::class)
+                    ->visibleOn('edit')
                     ->disableOptionWhen(function (string $value, Model $record) {
                         if ($record->order_status === OrderStatus::Completed) {
                             return in_array($value, ['pending', 'confirmed', 'cancelled']);
@@ -263,7 +264,8 @@ class OrderResource extends Resource
                     //     fn(Action $action) => $action->requiresConfirmation(),
                     // )
                     ->columns(6)
-            ]),
+            ])
+                ->visibleOn('edit'),
             Forms\Components\Section::make([
                 Forms\Components\Group::make()
                     ->label('Cancellation Request')
@@ -282,8 +284,8 @@ class OrderResource extends Resource
                     ])
                     ->columns(3),
             ])
-                ->visible(fn($record) => $record->cancellationRequest !== null)
-            // ->visibleOn('edit')
+                ->visibleOn('edit')
+            // ->visible(fn($record) => $record->cancellationRequest !== null)
         ];
     }
 

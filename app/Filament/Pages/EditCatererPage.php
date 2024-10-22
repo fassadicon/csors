@@ -52,6 +52,13 @@ class EditCatererPage extends Page implements HasForms
                 ->maxLength(255),
             TinyEditor::make('about')
                 ->columnSpanFull(),
+            Forms\Components\TextInput::make('downpayment')
+                ->label('Downpayment (Default is 25%)')
+                ->prefix('%')
+                ->numeric()
+                ->minValue(1)
+                ->maxValue(99)
+                ->nullable(),
             Forms\Components\FileUpload::make('logo_path')
                 ->directory('caterers/' . auth()->user()->caterer->id . '/images/logo')
                 ->label('Logo')
@@ -59,7 +66,6 @@ class EditCatererPage extends Page implements HasForms
                 ->nullable()
                 ->image(),
             Forms\Components\FileUpload::make('requirements_path')
-                ->columnSpan(2)
                 ->label('Business Requirements (.zip)')
                 ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
                 ->label('Business Requirements (.zip)')

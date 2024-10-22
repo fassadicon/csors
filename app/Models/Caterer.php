@@ -17,6 +17,7 @@ class Caterer extends Model
 
     protected $fillable = [
         'user_id',
+        'downpayment',
         'email',
         'phone_number',
         'name',

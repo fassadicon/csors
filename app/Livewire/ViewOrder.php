@@ -113,7 +113,8 @@ class ViewOrder extends Component
 
     public function payPartial()
     {
-        $downPayment = $this->order->total_amount * 0.7;
+        $downPayment = $this->order->total_amount * ($this->order->caterer->downpayment/100);
+
         $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($downPayment, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route("partial-payment-existing-success");
@@ -164,7 +165,7 @@ class ViewOrder extends Component
 
     public function payRemaining()
     {
-        $remainingPayment = $this->order->total_amount * 0.3;
+        $remainingPayment = $this->order->total_amount * (100 - $this->order->caterer->downpayment);
         $remainingPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($remainingPayment, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route('remaining-payment-success');

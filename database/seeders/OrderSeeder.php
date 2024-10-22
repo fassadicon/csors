@@ -113,7 +113,7 @@ class OrderSeeder extends Seeder
                             Payment::create([
                                 'order_id' => $order->id,
                                 'type' => 'cash',
-                                'amount' => $case['payment_status'] == 'partial' ? $totalAmount * 0.7 : $totalAmount,
+                                'amount' => $case['payment_status'] == 'partial' ? $totalAmount * ($caterer->downpayment/100) : $totalAmount,
                             ]);
                         }
 

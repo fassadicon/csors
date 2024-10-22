@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('caterers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->integer('downpayment')->default(25);
             $table->string('name')->unique();
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();

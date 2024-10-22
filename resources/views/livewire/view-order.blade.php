@@ -1,7 +1,7 @@
 @php
     use Illuminate\Support\Str;
 @endphp
-<div 
+<div
     x-data="{showPopup: false}"
     class="p-4 rounded-md bg-jt-white">
     <div class="flex flex-col md:flex-row justify-between px-4">
@@ -68,7 +68,7 @@
                 <x-mary-header title="Customer Information" class="!my-2" subtitle="Customer: {{ $order->user->name }}"
                     separator />
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
-        
+
                 <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
                     Caterer: {{ $order->caterer->name }}
                 </p>
@@ -91,7 +91,7 @@
             </div>
             <hr class="block my-4 md:my-0 md:hidden"    >
             <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] ">
-        
+
                 @if ($order->cancellationRequest)
                 <x-mary-header title="Cancellation Request" class="!my-2" separator />
                     <div class="space-y-2">
@@ -116,7 +116,7 @@
                 <div class="flex gap-x-2">
                     @if ($order->payment_status->value == 'pending')
                     <x-primary-button class="w-full bg-jt-primary-dark flex !justify-center !text-center"
-                        wire:click='payPartial'>{{ __('Pay Partial') }}</x-primary-button>
+                        wire:click='payPartial'>{{ __('Pay Partial - ') . $order->caterer->downpayment . '%' }}</x-primary-button>
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payFull'>{{ __('Pay Full') }}
                     </x-primary-button>
                     @elseif ($order->payment_status->value == 'partial')
@@ -125,7 +125,7 @@
                     @endif
                 </div>
                 @endif
-        
+
                 {{-- CANCEL --}}
                 @unless ($order->cancellationRequest)
                 @if ($canRequestCancellation)
