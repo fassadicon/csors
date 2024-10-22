@@ -10,6 +10,9 @@
         class="!my-4 mt-8">
         @if ($caterer->id != session()->get('caterer'))
             <x-slot:actions>
+                <x-mary-button label="Browse more Caterers"
+                    class="ml-4 duration-200 ease-in-out btn-gray hover:!bg-jt-primary hover:!text-white"
+                    wire:click="browseCaterers" />
                 <x-mary-button label="Select Caterer"
                     class="ml-4 duration-200 ease-in-out btn-lite hover:!bg-jt-primary hover:!text-white"
                     wire:click="select" />
