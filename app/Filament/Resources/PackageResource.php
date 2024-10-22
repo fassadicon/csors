@@ -43,9 +43,9 @@ class PackageResource extends Resource
                     ->preload()
                     ->required()
                     ->columnSpanFull(),
-                TinyEditor::make('description')
-                    ->nullable()
-                    ->columnSpanFull(),
+                Forms\Components\TextArea::make('description')
+                    ->columnSpanFull()
+                    ->nullable(),
                 Forms\Components\FileUpload::make('images')
                     ->directory('caterers/images/packages')
                     ->image()
