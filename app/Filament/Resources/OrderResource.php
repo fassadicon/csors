@@ -193,23 +193,40 @@ class OrderResource extends Resource
                 Forms\Components\Select::make('order_status')
                     ->default(OrderStatus::Pending)
                     ->options(OrderStatus::class)
+                    ->live()
                     ->visibleOn('edit')
                     ->disableOptionWhen(function (string $value, Model $record) {
                         if ($record->order_status === OrderStatus::Completed) {
-                            return in_array($value, ['pending', 'confirmed', 'cancelled']);
+                            return in_array($value, ['pending', 'confirmed', 'cancelled', 'declined', 'to_review']);
                         }
 
                         if ($record->order_status === OrderStatus::Confirmed) {
-                            return in_array($value, ['pending']);
+                            return in_array($value, ['pending', 'to_review', 'declined']);
                         }
 
                         if ($record->order_status === OrderStatus::Cancelled) {
-                            return in_array($value, ['pending', 'confirmed', 'completed']);
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'to_review', 'declined']);
+                        }
+
+                        if ($record->order_status === OrderStatus::Pending) {
+                            return in_array($value, ['completed', 'cancelled', 'to_review']);
+                        }
+
+                        if ($record->order_status === OrderStatus::Declined) {
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled', 'to_review']);
+                        }
+
+                        if ($record->order_status === OrderStatus::To_Review) {
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled', 'to_review', 'declined']);
                         }
 
                         return false;
                     })
                     ->required(),
+                Forms\Components\TextArea::make('decline_reason')
+                    ->live()
+                    ->visible(fn(Get $get) => $get('order_status') == 'declined')
+                    ->nullable()
             ])
                 ->columns(2),
             Forms\Components\Section::make([
@@ -219,7 +236,6 @@ class OrderResource extends Resource
                     ->live()
                     ->required()
                     ->disableOptionWhen(function (string $value, Model $record) {
-
                         // If the current status is 'paid', disable all other options
                         if ($record->payment_status === PaymentStatus::Paid) {
                             return $value !== 'paid';
@@ -284,7 +300,8 @@ class OrderResource extends Resource
                     ])
                     ->columns(3),
             ])
-                ->visibleOn('edit')
+                ->visible(fn(Model $record, $livewire) => $record->cancellationRequest && $livewire instanceof \Filament\Resources\Pages\EditRecord)
+            // ->visibleOn('edit')
             // ->visible(fn($record) => $record->cancellationRequest !== null)
         ];
     }
