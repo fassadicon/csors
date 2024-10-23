@@ -6,7 +6,7 @@
         <a href="{{ route('about', ['caterer' => $caterer]) }}">
             <x-mary-card title="{!! $caterer->name !!}" class="flex items-center justify-center">
                 <div class="flex gap-x-2">
-                    {{ \Illuminate\Support\Str::limit($caterer->about, 50) }}
+                    {!! \Illuminate\Support\Str::limit($caterer->about, 50) !!}
                     <x-mary-badge value="+99" class="text-white badge-success" />
                 </div>
                 {{-- <x-mary-rating class="!my-4 badge-warning"/> --}}

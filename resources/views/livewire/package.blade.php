@@ -27,10 +27,32 @@
             <div class="px-2 py-1 text-white badge-success w-fit rounded-xl ">
                 {{ 'PHP ' . $package->price }}
             </div>
-            <hr class="my-2">
+            <hr class="mx-4 my-4">
             <div>
                 {!! $package->description !!}
             </div>
+
+            <hr class="mx-4 my-4">
+            @if ($package->packageItems)
+            <h4>This package includes:</h4>
+            <div class="grid grid-cols-3 p-4 shadow-md gap-y-4">
+                @foreach ($package->packageItems as $item)
+                @php
+                    $model = $item->packageable; // Access the polymorphic relation
+                @endphp
+                @if ($model instanceof \App\Models\Food)
+                    <div class="flex flex-row items-center gap-x-4">
+                        @if ($model->foodDetail->getFirstImagePath() !== null)
+                            <img src="{{asset('storage/'.$model->foodDetail->getFirstImagePath())}}" alt="Food Image" class="mini-card">
+                        @else
+                            <img src="https://placehold.co/50" alt="Food Image" class="mini-card">
+                        @endif
+                        <p>{{ $model->foodDetail->name }}</p>
+                    </div>
+                @endif
+                @endforeach
+            </div>
+            @endif
         </div>
 
         <!-- Second Column: Remaining Content -->

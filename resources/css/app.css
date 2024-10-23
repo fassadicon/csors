@@ -63,6 +63,10 @@
         @apply !max-h-[200px] object-cover !min-h-[200px]
     }
 
+    .mini-card {
+        @apply !max-h-[50px] object-cover !min-h-[50px] max-w-[50px] min-w-[50px]
+    }
+
 
     /* TEXT HOVERED  */
     .text-hover-def {
