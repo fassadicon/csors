@@ -80,15 +80,13 @@
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($foodDetails as $foodDetail)
-        <x-mary-card title="{{ $foodDetail->name }}"
-            class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
-            <x-slot:figure>
-                <a href="{{ route('food', ['foodDetail'=>$foodDetail]) }}">
+            <x-mary-card title="{{ $foodDetail->name }}"
+                class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
+                <x-slot:figure>
                     <img
                         src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
-                </a>
-            </x-slot:figure>
-        </x-mary-card>
+                </x-slot:figure>
+            </x-mary-card>
         @endforeach
     </div>
 
@@ -114,15 +112,13 @@
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($utilities as $utility)
-        <x-mary-card title="{{ $utility->name }}"
-            class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
-            <x-slot:figure>
-                <a href="{{ route('utility', ['utility'=>$utility]) }}">
+            <x-mary-card title="{{ $utility->name }}"
+                class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
+                <x-slot:figure>
                     <img
                         src="{{ $utility->getFirstImagePath() ? asset('storage/' . $utility->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
-                </a>
-            </x-slot:figure>
-        </x-mary-card>
+                </x-slot:figure>
+            </x-mary-card>
         @endforeach
     </div>
 

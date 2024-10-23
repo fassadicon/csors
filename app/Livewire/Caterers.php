@@ -13,11 +13,12 @@ class Caterers extends Component
 
     public function mount()
     {
-        $this->caterers = Caterer::where('is_verified', 1)
-        ->whereHas('user', function ($query) {
-            $query->where('is_verified', 1);
-        })
-        ->get();
+        $this->caterers = Caterer::with('user')
+            ->where('is_verified', 1)
+            // ->whereHas('user', function ($query) {
+            //     $query->where('is_verified', 1);
+            // })
+            ->get();
         foreach ($this->caterers as $caterer) {
             $this->ratings[$caterer->id] = $this->getRating($caterer);
         }

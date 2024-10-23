@@ -4,7 +4,7 @@
 <div
     x-data="{showPopup: false}"
     class="p-4 rounded-md bg-jt-white">
-    <div class="flex flex-col md:flex-row justify-between px-4">
+    <div class="flex flex-col justify-between px-4 md:flex-row">
         <x-mary-header title="Order Information"
             {{-- subtitle="# {{ $order->id }} - PHP {{ $order->total_amount }}" --}}
             class="!my-4 ">
@@ -21,7 +21,7 @@
         </div>
     </div>
     <hr class="block my-4 md:my-0 md:hidden">
-    <div class="flex flex-col gap-y-4 md:gap-y-0 md:flex-row justify-around gap-x-4">
+    <div class="flex flex-col justify-around gap-y-4 md:gap-y-0 md:flex-row gap-x-4">
         <div class="w-[100%] md:w-[50%]">
             @foreach ($order->orderItems as $orderItem)
             <div>
@@ -63,7 +63,7 @@
         separator /> --}}
         <hr class="mx-4 my-4">
     <div class="">
-        <div class="flex flex-col md:flex-row items-start justify-between w-full p-4 gap-y-4">
+        <div class="flex flex-col items-start justify-between w-full p-4 md:flex-row gap-y-4">
             <div class="space-y-4">
                 <x-mary-header title="Customer Information" class="!my-2" subtitle="Customer: {{ $order->user->name }}"
                     separator />
@@ -150,10 +150,8 @@
         <div class="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-screen bg-black/50">
             <div class="flex flex-col justify-center items-center w-[300px] p-4 h-[450px] bg-white rounded-xl">
                 {{-- @dd($order->user && Str::contains($order->user->name, 'Omsim', true)) --}}
-                @if ($order->user && $order->caterer->name === "Pauline Event and Catering Services")
-                    <img src="{{ asset('images/gcash/pauline.png') }}" alt="Pauline GCash QR" class="w-[250px] h-[350px] object-cover object-center">
-                @elseif ($order->user && Str::contains($order->caterer->name, 'Sherton', true))
-                    <img src="{{ asset('images/gcash/shertons.png') }}" alt="Shorton's QR" class="w-[250px] h-[350px] object-cover object-center">
+                @if ($order->caterer->qr_path)
+                    <img src="{{ asset('storage/'.$order->caterer->qr_path) }}" alt="Pauline GCash QR" class="w-[250px] h-[350px] object-cover object-center">
                 @else
                     <p class="mx-4 text-center">No alternative payment options have been set up yet.</p>
                 @endif
