@@ -17,7 +17,7 @@
             without-arrows />
     @endif
 
-    <div class="grid grid-cols-2 gap-4 p-4 bg-jt-light">
+    <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 bg-jt-light">
         <!-- First Column: Carousel -->
         <div>
             <x-mary-header title="{!! $package->name !!}"
@@ -35,7 +35,7 @@
             <hr class="mx-4 my-4">
             @if ($package->packageItems)
             <h4>This package includes:</h4>
-            <div class="grid grid-cols-3 p-4 shadow-md gap-y-4">
+            <div class="grid grid-cols-2 p-4 shadow-md md:grid-cols-3 gap-y-4">
                 @foreach ($package->packageItems as $item)
                 @php
                     $model = $item->packageable; // Access the polymorphic relation

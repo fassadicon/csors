@@ -106,7 +106,45 @@
                 </div>
 
             </div>
-
+            @if (auth()->user())
+            {{-- Notifications --}}
+                <div class="flex items-center justify-end w-full">
+                    <div x-data="{showNotif: false, notifCount:false}"
+                            class="flex items-center space-x-8 md:-mr-14 sm:-my-px sm:ms-10 sm:flex shrink-0">
+                            <x-mary-button wire:click='readAllNotif' @click="showNotif = true, notifCount = true" icon="o-bell"
+                                class="relative btn-circle">
+                                <template x-if="!notifCount">
+                                    <x-mary-badge value="{{ $notifCount }}" class="absolute badge-primary -right-2 -top-2" />
+                                </template>
+                                <template x-if="notifCount">
+                                    <x-mary-badge value="0" class="absolute badge-primary -right-2 -top-2" />
+                                </template>
+                            </x-mary-button>
+                            {{-- notif container --}}
+                            <template x-if="showNotif">
+                                <div style="top: 70px;"
+                                    class="fixed max-h-[500px] overflow-y-auto bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
+                                    <div class="flex items-center justify-between">
+                                        <h4>Notifications</h4>
+                                        <x-mary-button @click="showNotif = false" icon="o-x-mark">
+                                        </x-mary-button>
+                                    </div>
+                                    <hr class="my-4">
+                                    <div>
+                                        @foreach ($notifications as $notif)
+                                        <x-notif-card customerName="{{ $notif['customer_name'] ?? 'System' }}"
+                                            :read="$notif->read_at ? true : false"
+                                            message="{{ $notif['data']['title'] ?? 'No message available' }}"
+                                            dateCreated="{{ \Carbon\Carbon::parse($notif['created_at'])->diffForHumans() }}" />
+                                        @endforeach
+                                        @if (count($notifications) <= 0) <p>You have 0 notifications yet...</p>
+                                            @endif
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                </div>
+            @endif
             <!-- Settings Dropdown -->
             <div class="hidden space-x-2 sm:flex sm:items-center sm:ms-6">
                 @if ($caterer)
@@ -119,43 +157,8 @@
                             </x-mary-button>
                         </a>
                     </div>
-
-
                 @endif
-                @if (auth()->user())
-                    {{-- Notifications --}}
-                    <div x-data="{showNotif: false, notifCount:false}" class="flex items-center space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
-                        <x-mary-button wire:click='readAllNotif' @click="showNotif = true, notifCount = true" icon="o-bell" class="relative btn-circle">
-                            <template x-if="!notifCount">
-                                <x-mary-badge value="{{ $notifCount }}" class="absolute badge-primary -right-2 -top-2" />
-                            </template>
-                            <template x-if="notifCount">
-                                <x-mary-badge value="0" class="absolute badge-primary -right-2 -top-2" />
-                            </template>
-                        </x-mary-button>
-                        {{-- notif container --}}
-                        <template x-if="showNotif">
-                            <div style="top: 70px;" class="fixed max-h-[500px] overflow-y-auto bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
-                                <div class="flex items-center justify-between">
-                                    <h4>Notifications</h4>
-                                    <x-mary-button @click="showNotif = false" icon="o-x-mark">
-                                    </x-mary-button>
-                                </div>
-                                <hr class="my-4">
-                                <div>
-                                    @foreach ($notifications as $notif)
-                                        <x-notif-card customerName="{{ $notif['customer_name'] ?? 'System' }}" :read="$notif->read_at ? true : false"
-                                            message="{{ $notif['data']['title'] ?? 'No message available' }}"
-                                            dateCreated="{{ \Carbon\Carbon::parse($notif['created_at'])->diffForHumans() }}" />
-                                    @endforeach
-                                    @if (count($notifications) <= 0)
-                                        <p>You have 0 notifications yet...</p>
-                                    @endif
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                @endif
+                
                 @if (auth()->guest())
                     <a href="{{ route('login') }}"
                         class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md dark:text-gray-400 dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none">

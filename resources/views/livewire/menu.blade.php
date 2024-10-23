@@ -1,7 +1,7 @@
 <div>
-    <div class="flex min-h-screen gap-x-4">
+    <div class="flex flex-col min-h-screen md:flex-row gap-x-4">
         <!-- First column: 20% width -->
-        <div class="w-1/6 px-4 py-2 bg-jt-white">
+        <div class="w-full px-4 py-2 mb-4 md:mb-0 md:w-1/6 bg-jt-white">
             <h2 class="text-2xl">Categories</h2>
             <hr class="my-2">
             <div class="mt-4 space-y-2">

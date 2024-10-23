@@ -36,10 +36,12 @@ class Navigation extends Component
 
     public function mount(): void
     {
-        $this->notifications = auth()->user()->notifications;
-        $this->notifCount = $this->notifications->filter(function ($notifs) {
-            return is_null($notifs->read_at);
-        })->count();
+        if (auth()->user()) {
+            $this->notifications = auth()->user()->notifications;
+            $this->notifCount = $this->notifications->filter(function ($notifs) {
+                return is_null($notifs->read_at);
+            })->count();
+        }
         // if ($this->notifications) {
         //     foreach ($this->notifications as $notification) {
         //         dump($notification->data['title']);
