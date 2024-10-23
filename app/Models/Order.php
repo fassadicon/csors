@@ -30,6 +30,7 @@ class Order extends Model
         'start',
         'end',
         'total_amount',
+        'final_amount',
         'payment_status',
         'order_status',
         'decline_reason',

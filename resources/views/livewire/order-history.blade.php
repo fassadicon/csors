@@ -18,8 +18,8 @@
         {{-- @row-click="alert($event.detail.name)"  --}}
         {{-- :link="route('users.show', ['username' => ['username'], 'id' => ['id']])" --}}
         {{-- :cell-decoration="$cell_decoration" --}}>
-        @scope('cell_total_amount', $order)
-            {{ '₱ ' . $order->total_amount }}
+        @scope('cell_final_amount', $order)
+            {{ '₱ ' . $order->final_amount }}
         @endscope
         @scope('cell_payment_status', $order)
             <x-mary-badge :value="$order->payment_status->getLabel()"

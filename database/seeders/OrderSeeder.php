@@ -96,6 +96,8 @@ class OrderSeeder extends Seeder
 
                         $totalAmount = $foodsTotalAmount + $utilitiesTotalAmount;
 
+                        $deliveryAmount = rand(0, 1) === 1 ? 0 : rand(500, 1000);
+
                         $order = Order::create([
                             'user_id' => $user->id,
                             'recipient' => $user->full_name,
@@ -103,6 +105,8 @@ class OrderSeeder extends Seeder
                             'start' => $start,
                             'end' => $end,
                             'total_amount' => $totalAmount,
+                            'delivery_amount' => $deliveryAmount,
+                            'final_amount' => $totalAmount + $deliveryAmount,
                             'location' => 'test',
                             'payment_status' => $case['payment_status'],
                             'order_status' => $case['order_status'],

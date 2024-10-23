@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('total_amount', 8, 2);
             $table->decimal('deducted_amount', 8, 2)->nullable();
             $table->decimal('delivery_amount', 8, 2)->nullable();
+            $table->decimal('final_amount', 8, 2);
             $table->enum('payment_status', [
                 'pending',
                 'partial',
