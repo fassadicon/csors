@@ -277,7 +277,7 @@ class OrderResource extends Resource
                             ->options(CancellationRequestStatus::class)
                             ->required(),
                         Forms\Components\Textarea::make('reason')
-                            ->readOnlyOn('edit')
+                            // ->readOnlyOn('edit')
                             ->required(),
                         Forms\Components\Textarea::make('response')
                             ->nullable(),

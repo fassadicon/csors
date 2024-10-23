@@ -8,7 +8,7 @@
         </div>
         <p class="text-xs text-gray-500">
             {{-- date time here --}}
-            2 min ago
+            {{$dateCreated}}
         </p>
     </div>
     <p class="mt-1 text-sm">

@@ -124,13 +124,18 @@
                 @endif
                 @if (auth()->user())
                     {{-- Notifications --}}
-                    <div x-data="{showNotif: false}" class="flex items-center space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
-                        <x-mary-button @click="showNotif = true" icon="o-bell" class="relative btn-circle">
-                            <x-mary-badge value="{{ count($notifTest) }}" class="absolute badge-primary -right-2 -top-2" />
+                    <div x-data="{showNotif: false, notifCount:false}" class="flex items-center space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
+                        <x-mary-button wire:click='readAllNotif' @click="showNotif = true, notifCount = true" icon="o-bell" class="relative btn-circle">
+                            <template x-if="!notifCount">
+                                <x-mary-badge value="{{ $notifCount }}" class="absolute badge-primary -right-2 -top-2" />
+                            </template>
+                            <template x-if="notifCount">
+                                <x-mary-badge value="0" class="absolute badge-primary -right-2 -top-2" />
+                            </template>
                         </x-mary-button>
                         {{-- notif container --}}
                         <template x-if="showNotif">
-                            <div style="top: 70px;" class="fixed bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
+                            <div style="top: 70px;" class="fixed max-h-[500px] overflow-y-auto bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
                                 <div class="flex items-center justify-between">
                                     <h4>Notifications</h4>
                                     <x-mary-button @click="showNotif = false" icon="o-x-mark">
@@ -138,10 +143,14 @@
                                 </div>
                                 <hr class="my-4">
                                 <div>
-                                    @foreach ($notifTest as $notif)
-                                    <x-notif-card customerName="{{$notif['customer_name']}}" message="{{$notif['comment']}}"
-                                        dateCreated="{{$notif['date_created']}}" />
+                                    @foreach ($notifications as $notif)
+                                        <x-notif-card customerName="{{ $notif['customer_name'] ?? 'System' }}"
+                                            message="{{ $notif['data']['title'] ?? 'No message available' }}"
+                                            dateCreated="{{ \Carbon\Carbon::parse($notif['created_at'])->diffForHumans() }}" />
                                     @endforeach
+                                    @if (count($notifications) <= 0)
+                                        <p>You have 0 notifications yet...</p>
+                                    @endif
                                 </div>
                             </div>
                         </template>
