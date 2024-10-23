@@ -144,7 +144,7 @@
                                 <hr class="my-4">
                                 <div>
                                     @foreach ($notifications as $notif)
-                                        <x-notif-card customerName="{{ $notif['customer_name'] ?? 'System' }}"
+                                        <x-notif-card customerName="{{ $notif['customer_name'] ?? 'System' }}" :read="$notif->read_at ? true : false"
                                             message="{{ $notif['data']['title'] ?? 'No message available' }}"
                                             dateCreated="{{ \Carbon\Carbon::parse($notif['created_at'])->diffForHumans() }}" />
                                     @endforeach
