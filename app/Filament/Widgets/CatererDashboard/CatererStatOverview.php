@@ -33,9 +33,17 @@ class CatererStatOverview extends BaseWidget
             $query->where('caterer_id', $caterer_id);
         })->whereIn('order_status', ['completed', 'to_review'])->count();
 
+        $forReviewOrdersCount = Order::when($caterer_id, function ($query) use ($caterer_id) {
+            $query->where('caterer_id', $caterer_id);
+        })->whereIn('order_status', ['to_review'])->count();
+
         $cancelledOrdersCount = Order::when($caterer_id, function ($query) use ($caterer_id) {
             $query->where('caterer_id', $caterer_id);
         })->where('order_status', 'cancelled')->count();
+
+        $declinedOrdersCount = Order::when($caterer_id, function ($query) use ($caterer_id) {
+            $query->where('caterer_id', $caterer_id);
+        })->where('order_status', 'declined')->count();
 
         // Create stats with icons and right-aligned values
         return [
@@ -54,7 +62,17 @@ class CatererStatOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->icon('heroicon-o-check-circle') // Icon for Completed Reservations
                 ->extraAttributes(['class' => 'text-right hover:bg-gray-100 transition duration-150']),
+            Stat::make('Awaiting Reviews', $forReviewOrdersCount)
+                ->color('success')
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->icon('heroicon-o-check-circle') // Icon for Completed Reservations
+                ->extraAttributes(['class' => 'text-right hover:bg-gray-100 transition duration-150']),
             Stat::make('Cancelled Reservations', $cancelledOrdersCount)
+                ->color('success')
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->icon('heroicon-o-x-circle') // Icon for Cancelled Reservations
+                ->extraAttributes(['class' => 'text-right hover:bg-gray-100 transition duration-150']),
+            Stat::make('Declined Reservations', $declinedOrdersCount)
                 ->color('success')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->icon('heroicon-o-x-circle') // Icon for Cancelled Reservations
