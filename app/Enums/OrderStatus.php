@@ -34,9 +34,9 @@ enum OrderStatus: string implements HasLabel, HasColor
     public function getMaryColor(): string | array | null
     {
         return match ($this) {
-            self::Pending => 'warning',
-            self::Confirmed => 'outline !border-[1px] !border-black/25',
-            self::Completed => 'success',
+            self::Pending => 'warning !bg-orange-500 ',
+            self::Confirmed => 'success !bg-green-500 text-white',
+            self::Completed => 'success !bg-blue-500 text-white',
             self::Cancelled => 'error bg-red-500 text-white',
             self::Declined => 'error bg-red-500 text-white',
             self::To_Review => 'outline',

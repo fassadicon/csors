@@ -68,6 +68,15 @@
     }
 
 
+    .jt-badge-success {
+        @apply !bg-yellow-500 !border-transparent
+    }
+
+
+    .table-zebra tr {
+        @apply hover:!bg-jt-primary/25 duration-100 ease-in-out
+    }
+
     /* TEXT HOVERED  */
     .text-hover-def {
         @apply text-jt-light hover:text-jt-white duration-200 ease-out
