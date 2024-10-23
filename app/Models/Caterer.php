@@ -104,4 +104,9 @@ class Caterer extends Model
     {
         return $this->hasMany(Feedback::class);
     }
+
+    public function feedbacksThrough(): HasManyThrough
+    {
+        return $this->hasManyThrough(Feedback::class, Order::class, 'caterer_id', 'order_id', 'id', 'id');
+    }
 }
