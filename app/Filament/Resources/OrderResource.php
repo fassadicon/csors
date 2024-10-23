@@ -440,6 +440,7 @@ class OrderResource extends Resource
 
                     // VIEW RECEITPT
                     Action::make('orderItems')->label('View Receipt')
+                        ->icon('heroicon-m-receipt-percent')
                         ->modalHeading('Receipt Details')
                         ->modalContent(function ($record) {
                             // Fetch only the order items related to this specific order
@@ -453,6 +454,7 @@ class OrderResource extends Resource
                         })->modalSubmitAction(false)->modalCancelActionLabel('Close'),
 
                     Action::make('user_id')->label('Report Customer')
+                        ->icon('heroicon-m-flag')
                         ->form([
                             Select::make('comment') // Ensure this is the correct key for the selected reason
                                 ->label('Reason')
