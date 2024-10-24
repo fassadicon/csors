@@ -81,6 +81,11 @@ class Order extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function feedback(): HasOne
+    {
+        return $this->hasOne(Feedback::class, foreignKey: 'order_id');
+    }
+
     public function cancellationRequest(): HasOne
     {
         return $this->hasOne(CancellationRequest::class);

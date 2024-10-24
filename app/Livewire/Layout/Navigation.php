@@ -93,7 +93,10 @@ class Navigation extends Component
 
     public function checkToReview()
     {
-        $order = Auth::user()->orders()->where('order_status', OrderStatus::To_Review)->get()->first();
+        $order = Auth::user()->orders()->where('order_status', OrderStatus::Completed)
+            ->doesntHave('feedback')
+            ->get()->first();
+        // dd($order);
         if ($order) {
             return $order;
         } else {

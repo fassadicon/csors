@@ -27,8 +27,9 @@ class Caterers extends Component
     public function getRating(Caterer $caterer)
     {
         // Get all
-        $rates = Feedback::where('caterer_id', $caterer->id)->pluck('rating');
-
+        // $rates = Feedback::where('caterer_id', $caterer->id)->pluck('rating');
+        $rates = $caterer->feedbacksThrough->pluck('rating');
+        // dd($rates->pluck('rating'));
         // Check if there are any feedback ratings
         if ($rates->isNotEmpty()) {
             // total rating

@@ -77,14 +77,23 @@
                         class="mt-2" />
                 </div>
             </div>
-            <div class="flex flex-col mt-8 gap-y-4">
-                <x-mary-button type="submit"
-                    label="Add to Order"
-                    class="w-full btn-primary" />
-                <a href="{{ route('menu') }}">
-                    <x-mary-button label="Back to Menu"
-                        class="w-full btn-outline" />
-                </a>
+            <div x-data="{showPopup:{{session('caterer') ? 'false' : 'true'}}}"
+                class="flex flex-col mt-8 gap-y-4">
+                <template x-if="showPopup">
+                    <x-popup.select-caterer />
+                </template>
+                @if (session('caterer'))
+                    <x-mary-button type="submit" label="Add to Order" class="w-full btn-primary" />
+                    <a href="{{ route('menu') }}">
+                        <x-mary-button label="Back to Menu" class="w-full mt-4 btn-outline" />
+                    </a>
+                @else
+                    <x-mary-button @click="showPopup=true" type="button" label="Add to Order" class="w-full mb-2 btn-primary" />
+                    <a href="{{ route('caterers') }}">
+                        <x-mary-button label="Select Caterer" class="w-full btn-outline" />
+                    </a>
+                @endif
+                
             </div>
             <div wire:loading.flex>
                 Calculating...
