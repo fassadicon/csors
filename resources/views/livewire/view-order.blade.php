@@ -2,13 +2,24 @@
 use Illuminate\Support\Str;
 @endphp
 <div x-data="{ showPopup: false }" class="p-4 rounded-md bg-jt-white">
+
+    @if ($order->order_status->value == 'declined')
+        <div class="w-[90%] md:w-[70%] mx-auto pt-5 pb-2 -mt-10 text-white bg-red-700 h-fit">
+            <center>
+                <h3>Order Declined</h3>
+                {{-- <p>reason</p>
+                <hr class="mx-4 my-2">
+                <p>{{$order->decline_reason}}</p> --}}
+            </center>
+        </div>
+    @endif
     <div class="flex flex-col justify-between px-4 md:flex-row">
         <x-mary-header title="Order #{{ $order->id }}" {{--
             subtitle="# {{ $order->id }} - PHP {{ $order->total_amount }}" --}} class="!my-4 ">
         </x-mary-header>
 
         <div class="flex flex-col justify-end mt-4 gap-y-4">
-            <div class="flex flex-row justify-end gap-x-2">
+            <div class="flex-row flex-wrap justify-end md:flex gap-x-2">
                 <x-mary-badge value="Payment: {{ $order->payment_status->getLabel() }}"
                     class="badge-{{ $order->payment_status->getMaryColor() }}" />
                 <x-mary-badge value="Order: {{ $order->order_status->getLabel() }}"
@@ -88,7 +99,16 @@ use Illuminate\Support\Str;
             <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] ">
                 <p>Subtotal: Php {{ number_format($order->total_amount + $order->deducted_amount, 2) }}</p>
                 @if ($order->promo)
-                <p>Less: {{ $promo->name }} Php {{ number_format($order->deducted_amount, 2) }}</p>
+                    <div class="flex gap-x-2 w-fit">
+                        <p>Promo:</p>
+                        <div class="flex items-center mx-auto rounded-full w-max bg-jt-primary">
+                            <span
+                                class="flex items-center justify-center px-2 text-base font-semibold text-gray-900 bg-yellow-300 rounded-full">{{ $order->promo->name }}</span>
+                            <p class="mx-4 text-white uppercase">Php {{ number_format($order->deducted_amount, 2) }}</p>
+                        </div>
+                        
+                        {{-- <div>Php {{ number_format($order->deducted_amount, 2) }}</div> --}}
+                    </div>
                 @endif
                 <p>Delivery Fee: Php {{ number_format($order->delivery_amount, 2) }}</p>
                 <h4>Total Amount: Php {{ number_format($order->final_amount, 2) }}</h4>

@@ -98,7 +98,8 @@ class Order extends Component
             'remarks' => $this->remarks,
             'start' => $this->startDateTime,
             'end' => $this->endDateTime,
-            'total_amount' => $this->totalAmount
+            'total_amount' => $this->totalAmount,
+            'final_amount' => $this->totalAmount
         ]);
 
         foreach ($orderItems as $orderItem) {
