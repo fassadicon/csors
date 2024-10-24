@@ -6,8 +6,10 @@ use Filament\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\CatererResource;
+use App\Mail\NotifyUser;
 use App\Models\User;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Mail;
 
 class EditCaterer extends EditRecord
 {
@@ -23,8 +25,11 @@ class EditCaterer extends EditRecord
             Actions\Action::make('Notify to Reupload Requirements')
                 ->action(function (Model $record) {
                     $recipient = User::find($record->user->id);
-
+                    // $user = User::find($recipient);
                     $notification = 'Requirements do not pass the verification. Please reupload the correct and updated requirements. Contact the superadmin for more information';
+                    // dd($recipient->caterer->email);
+                    // send email 
+                    Mail::to($recipient->caterer->email)->send(new NotifyUser('Reupload Requirements', 'We need you to reupload the requirements.', $notification));
                     Notification::make()
                         ->title($notification)
                         ->sendToDatabase($recipient);

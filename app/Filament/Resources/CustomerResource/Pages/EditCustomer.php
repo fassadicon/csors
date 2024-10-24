@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\CustomerResource\Pages;
 
+use App\Mail\NotifyUser;
 use App\Models\User;
 use Filament\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\CustomerResource;
+use Illuminate\Support\Facades\Mail;
 
 class EditCustomer extends EditRecord
 {
@@ -25,6 +27,8 @@ class EditCustomer extends EditRecord
                     $recipient = User::find($record->id);
 
                     $notification = 'Requirements do not pass the verification. Please reupload the correct and updated requirements. Contact the superadmin for more information';
+
+                    Mail::to($recipient->email)->send(new NotifyUser('Reupload Requirements - (Customer)', 'We need you to reupload the requirements.', $notification));
                     Notification::make()
                         ->title($notification)
                         ->sendToDatabase($recipient);
