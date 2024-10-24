@@ -112,6 +112,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
+                                $set('../../final_amount', $totalAmount);
                             })
                             ->live(debounce: 500)
                             ->required()
@@ -129,6 +130,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
+                                $set('../../final_amount', $totalAmount);
                             })
                             ->columnSpan(2),
                         Forms\Components\TextInput::make('amount')
@@ -143,6 +145,7 @@ class OrderResource extends Resource
                         $deductedAmount = static::getDeductedAmount($get('promo_id'), $totalAmount);
                         $set('deducted_amount', $deductedAmount);
                         $set('total_amount', $totalAmount - $deductedAmount);
+                        $set('final_amount', $totalAmount);
                     })
                     ->reorderable()
                     ->columns(12)
@@ -161,6 +164,7 @@ class OrderResource extends Resource
                     ->afterStateUpdated(function ($state, $get, $set) {
                         $set('deducted_amount', static::getDeductedAmount($state, static::getTotalAmount($get('orderItems'))));
                         $set('total_amount', static::getTotalAmount($get('orderItems')) - $get('deducted_amount'));
+                        $set('final_amount', $get('total_amount'));
                     }),
                 Forms\Components\TextInput::make('deducted_amount')
                     ->live(debounce: 500)
@@ -169,20 +173,19 @@ class OrderResource extends Resource
                     ->prefix('- ₱')
                     ->numeric()
                     ->hidden(fn($get) => $get('promo_id') == null || $get('promo_id') == ''),
-                // Forms\Components\TextInput::make('delivery_amount')
-                //     ->label('Delivery Fee')
-                //     ->disabled(function ($get) {
-                //         return $get('order_status') == 'confirmed' || $get('order_status') == 'completed' || $get('order_status') == 'to_review' || $get('order_status') == 'cancelled';
-                //     })
-                //     ->default(0)
-                //     ->prefix('₱')
-                //     ->required()
-                //     ->numeric()
-                //     ->live(debounce: 500)
-                //     ->afterStateUpdated(function ($state, $get, $set) {
-                //         $set('deducted_amount', static::getDeductedAmount($get('promo_id'), static::getTotalAmount($get('orderItems'))));
-                //         $set('total_amount', static::getTotalAmount($get('orderItems')) - $get('deducted_amount'));
-                //     }),
+                Forms\Components\TextInput::make('delivery_amount')
+                    ->label('Delivery Fee')
+                    ->readOnly(function ($get) {
+                        return in_array($get('order_status'), ['pending', 'completed', 'declined', 'cancelled']);
+                    })
+                    ->default(0.00)
+                    ->prefix('₱')
+                    ->required()
+                    ->numeric()
+                    ->live(debounce: 500)
+                    ->afterStateUpdated(function ($state, $get, $set) {
+                        $set('final_amount', floatval($get('total_amount') + $state));
+                    }),
                 Forms\Components\TextInput::make('total_amount')
                     ->readOnly()
                     ->default(0)
@@ -190,6 +193,12 @@ class OrderResource extends Resource
                     ->required()
                     ->numeric()
                     ->live(debounce: 500),
+                Forms\Components\TextInput::make('final_amount')
+                    ->live(debounce: 500)
+                    ->numeric()
+                    ->prefix('₱')
+                    ->readOnly()
+                    ->required(),
                 Forms\Components\Select::make('order_status')
                     ->default(OrderStatus::Pending)
                     ->options(OrderStatus::class)
@@ -221,6 +230,12 @@ class OrderResource extends Resource
                         }
 
                         return false;
+                    })
+                    ->afterStateUpdated(function($state, $get, $set) {
+                        if ($state == 'pending') {
+                            $set('delivery_amount', 0.00);
+                        }
+                        $set('final_amount', floatval($get('total_amount') + $get('delivery_amount')));
                     })
                     ->required(),
                 Forms\Components\TextArea::make('decline_reason')
