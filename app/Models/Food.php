@@ -29,12 +29,12 @@ class Food extends Pivot
 
     public function foodDetail(): BelongsTo
     {
-        return $this->belongsTo(FoodDetail::class);
+        return $this->belongsTo(FoodDetail::class)->withTrashed();
     }
 
     public function servingType(): BelongsTo
     {
-        return $this->belongsTo(ServingType::class);
+        return $this->belongsTo(ServingType::class)->withTrashed();
     }
 
     public function orderItems(): MorphMany

@@ -29,6 +29,6 @@ class PackageItem extends Model
 
     public function packageable(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 }

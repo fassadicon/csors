@@ -51,7 +51,8 @@ class ViewOrder extends Component
 
     public function mount(Order $order)
     {
-        $this->order = $order->load('caterer', 'orderItems', 'cancellationRequest');
+        $this->order = $order->load('caterer', 'orderItems',  'cancellationRequest');
+
         if ($this->order->cancellationRequest) {
             $this->cancellationRequestReason = $this->order->cancellationRequest->reason;
             $this->cancellationRequestResponse = $this->order->cancellationRequest->response;

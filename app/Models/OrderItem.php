@@ -38,6 +38,6 @@ class OrderItem extends Model
 
     public function orderable(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 }
