@@ -1,5 +1,10 @@
 <div class="grid grid-cols-2 p-4 gap-x-4">
     <div class="p-4 rounded-sm bg-jt-white">
+        @if (session('error'))
+            <div class="p-2 text-white bg-red-500">
+                <p>{{session('error')}}</p>
+            </div>
+        @endif
         <x-mary-header title="Total: Php {{ $totalAmount }}"
             class="!my-2"
             separator />
