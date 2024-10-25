@@ -8,6 +8,7 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Support\Exceptions\Halt;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Support\Enums\FontWeight;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -29,10 +30,10 @@ class EditCatererPage extends Page implements HasForms
 
     public function mount(): void
     {
-        $data = auth()->user()->caterer->attributesToArray();
-        $data['images'] = auth()->user()->caterer->images()->pluck('path')->toArray();
+        $this->data = auth()->user()->caterer->attributesToArray();
+        $this->data['images'] = auth()->user()->caterer->images()->pluck('path')->toArray();
         $this->form->fill(
-            $data
+            $this->data
         );
     }
 
@@ -51,20 +52,33 @@ class EditCatererPage extends Page implements HasForms
                 ->maxLength(255),
             TinyEditor::make('about')
                 ->columnSpanFull(),
+            Forms\Components\TextInput::make('downpayment')
+                ->label('Downpayment (Default is 25%)')
+                ->prefix('%')
+                ->numeric()
+                ->minValue(1)
+                ->maxValue(99)
+                ->nullable(),
             Forms\Components\FileUpload::make('logo_path')
                 ->directory('caterers/' . auth()->user()->caterer->id . '/images/logo')
                 ->label('Logo')
                 ->image()
                 ->nullable()
                 ->image(),
+            Forms\Components\FileUpload::make('qr_path')
+                ->directory('caterers/' . auth()->user()->caterer->id . '/images/qr')
+                ->label('QR Payment')
+                ->image()
+                ->nullable()
+                ->image(),
             Forms\Components\FileUpload::make('requirements_path')
-                ->columnSpan(2)
                 ->label('Business Requirements (.zip)')
                 ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
                 ->label('Business Requirements (.zip)')
+                ->columnSpanFull()
                 ->nullable(),
             Forms\Components\FileUpload::make('images')
-                ->directory('caterers/' . auth()->user()->caterer->id . '/images/profile')
+                ->directory('caterers/' . $this->data['id'] . '/images/profile')
                 ->image()
                 ->multiple()
                 ->reorderable()
@@ -76,6 +90,7 @@ class EditCatererPage extends Page implements HasForms
                 ->columnSpanFull(),
             Forms\Components\Toggle::make('is_verified')
                 ->disabled()
+                // ->weight(FontWeight::Bold)
                 ->label('Verified?')
                 ->required(),
 
@@ -99,6 +114,12 @@ class EditCatererPage extends Page implements HasForms
         $record = $this->record;
         $images = $data['images'];
         $this->handleImages($record, $images);
+    }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['images'] = $this->record->images()->pluck('path')->toArray();
+        return $data;
     }
 
     protected function handleImages(Model $record, array $images): void
@@ -126,6 +147,10 @@ class EditCatererPage extends Page implements HasForms
             $data = $this->form->getState();
 
             auth()->user()->caterer->update($data);
+
+            $record = auth()->user()->caterer;
+            $images = $data['images'];
+            $this->handleImages($record, $images);
 
             $superAdmin = User::find(1);
             $updateNotificationMessage = auth()->user()->caterer->name . ': Information updated. Please check in case of verification and/or security';

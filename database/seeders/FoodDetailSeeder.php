@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Caterer;
 use App\Models\FoodDetail;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class FoodDetailSeeder extends Seeder
 {
@@ -13,47 +14,22 @@ class FoodDetailSeeder extends Seeder
      */
     public function run(): void
     {
-        $buffaloWings = FoodDetail::create([
-            'food_category_id' => 1,
-            'name' => 'Buffalo Wings',
-            'description' => 'Soy sauce, vinegar, and garlic',
-        ]);
-        $buffaloWings->servingTypes()->attach([
-            1 => ['price' => 100],
-            2 => ['price' => 150],
-        ]);
-
-        $chickenCurry = FoodDetail::create([
-            'food_category_id' => 1,
-            'name' => 'Chicken Curry',
-            'description' => 'Curry Sauce with Chicken',
-        ]);
-        $chickenCurry->servingTypes()->attach([
-            3 => ['price' => 200],
-            4 => ['price' => 350],
-        ]);
-
-        $porkAdobo = FoodDetail::create([
-            'food_category_id' => 2,
-            'name' => 'Pork Adobo',
-            'description' => 'Soy sauce, vinegar, and garlic pork',
-        ]);
-        $porkAdobo->servingTypes()->attach([
-            1 => ['price' => 400],
-            5 => ['price' => 150],
-        ]);
-
-        $steak = FoodDetail::create([
-            'food_category_id' => 3,
-            'name' => 'Beef Steak',
-            'description' => 'Salt Bae Inspired Steak',
-        ]);
-        $steak->servingTypes()->attach([
-            6 => ['price' => 650],
-            7 => ['price' => 750],
-            8 => ['price' => 850],
-            9 => ['price' => 950],
-            10 => ['price' => 1150],
-        ]);
+        $caterers = Caterer::all();
+        foreach ($caterers as $caterer) {
+            foreach ($caterer->foodCategories as $foodCategory) {
+                $foodDetail = FoodDetail::create([
+                    'food_category_id' => $foodCategory->id,
+                    'name' => 'Test - ' . $foodCategory->name,
+                    'description' => 'Test',
+                ]);
+                foreach ($caterer->servingTypes as $servingType) {
+                    $randPrice = rand(100, 1000);
+                    $foodDetail->servingTypes()->attach($servingType->id, [
+                        'price' => $randPrice,
+                        'description' => 'Test',
+                    ]);
+                }
+            }
+        }
     }
 }

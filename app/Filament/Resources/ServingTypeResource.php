@@ -73,7 +73,11 @@ class ServingTypeResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\TrashedFilter::make()
+                    ->label('Status')
+                    ->placeholder('Active Only')
+                    ->trueLabel('All')
+                    ->falseLabel('Inactive Only')
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -82,12 +86,23 @@ class ServingTypeResource extends Resource
                     ->url(fn($record) => ServingTypeResource::getUrl('logs', ['record' => $record]))
                     ->icon('heroicon-m-list-bullet')
                     ->color('gray'),
-
+                Tables\Actions\DeleteAction::make()
+                    ->label('Set Inactive')
+                    ->icon('heroicon-m-bookmark-slash')
+                    ->modalIcon('heroicon-m-bookmark-slash')
+                    ->modalHeading('Set Inactive')
+                    ->successNotificationTitle('Serving type has been set Inactive.'),
+                Tables\Actions\RestoreAction::make()
+                    ->label('Set Active')
+                    ->icon('heroicon-m-bookmark')
+                    ->modalIcon('heroicon-m-bookmark')
+                    ->modalHeading('Set Active')
+                    ->successNotificationTitle('Serving type has been set Active.'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    // Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])

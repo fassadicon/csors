@@ -29,8 +29,7 @@ class FeedbackPopup extends Component
 
         // save feedback
         Feedback::create([
-            'user_id' => $this->order->user_id,
-            'caterer_id' => $this->order->caterer_id,
+            'order_id' => $this->order->id,
             'rating' => $this->rate,
             'comment' => $this->comment
         ]);

@@ -32,8 +32,8 @@ class FoodCategoryResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                TinyEditor::make('description')
-                    ->columnSpanFull(),
+                Forms\Components\TextArea::make('description')
+                    ->nullable(),
                 Forms\Components\FileUpload::make('images')
                     ->directory('caterers/images/food-categories')
                     ->image()

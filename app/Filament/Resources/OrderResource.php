@@ -112,6 +112,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
+                                $set('../../final_amount', $totalAmount);
                             })
                             ->live(debounce: 500)
                             ->required()
@@ -129,6 +130,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
+                                $set('../../final_amount', $totalAmount);
                             })
                             ->columnSpan(2),
                         Forms\Components\TextInput::make('amount')
@@ -143,6 +145,7 @@ class OrderResource extends Resource
                         $deductedAmount = static::getDeductedAmount($get('promo_id'), $totalAmount);
                         $set('deducted_amount', $deductedAmount);
                         $set('total_amount', $totalAmount - $deductedAmount);
+                        $set('final_amount', $totalAmount);
                     })
                     ->reorderable()
                     ->columns(12)
@@ -161,6 +164,7 @@ class OrderResource extends Resource
                     ->afterStateUpdated(function ($state, $get, $set) {
                         $set('deducted_amount', static::getDeductedAmount($state, static::getTotalAmount($get('orderItems'))));
                         $set('total_amount', static::getTotalAmount($get('orderItems')) - $get('deducted_amount'));
+                        $set('final_amount', $get('total_amount'));
                     }),
                 Forms\Components\TextInput::make('deducted_amount')
                     ->live(debounce: 500)
@@ -168,7 +172,20 @@ class OrderResource extends Resource
                     ->default(0)
                     ->prefix('- ₱')
                     ->numeric()
-                    ->hidden(fn($get) => $get('promo_id') === null),
+                    ->hidden(fn($get) => $get('promo_id') == null || $get('promo_id') == ''),
+                Forms\Components\TextInput::make('delivery_amount')
+                    ->label('Delivery Fee')
+                    ->readOnly(function ($get) {
+                        return in_array($get('order_status'), ['pending', 'completed', 'declined', 'cancelled']);
+                    })
+                    ->default(0.00)
+                    ->prefix('₱')
+                    ->required()
+                    ->numeric()
+                    ->live(debounce: 500)
+                    ->afterStateUpdated(function ($state, $get, $set) {
+                        $set('final_amount', floatval($get('total_amount') + $state));
+                    }),
                 Forms\Components\TextInput::make('total_amount')
                     ->readOnly()
                     ->default(0)
@@ -176,25 +193,55 @@ class OrderResource extends Resource
                     ->required()
                     ->numeric()
                     ->live(debounce: 500),
+                Forms\Components\TextInput::make('final_amount')
+                    ->live(debounce: 500)
+                    ->numeric()
+                    ->prefix('₱')
+                    ->readOnly()
+                    ->required(),
                 Forms\Components\Select::make('order_status')
                     ->default(OrderStatus::Pending)
                     ->options(OrderStatus::class)
+                    ->live()
+                    ->visibleOn('edit')
                     ->disableOptionWhen(function (string $value, Model $record) {
                         if ($record->order_status === OrderStatus::Completed) {
-                            return in_array($value, ['pending', 'confirmed', 'cancelled']);
+                            return in_array($value, ['pending', 'confirmed', 'cancelled', 'declined', 'to_review']);
                         }
 
                         if ($record->order_status === OrderStatus::Confirmed) {
-                            return in_array($value, ['pending']);
+                            return in_array($value, ['pending', 'to_review', 'declined']);
                         }
 
                         if ($record->order_status === OrderStatus::Cancelled) {
-                            return in_array($value, ['pending', 'confirmed', 'completed']);
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'to_review', 'declined']);
+                        }
+
+                        if ($record->order_status === OrderStatus::Pending) {
+                            return in_array($value, ['completed', 'cancelled', 'to_review']);
+                        }
+
+                        if ($record->order_status === OrderStatus::Declined) {
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled', 'to_review']);
+                        }
+
+                        if ($record->order_status === OrderStatus::To_Review) {
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled', 'to_review', 'declined']);
                         }
 
                         return false;
                     })
+                    ->afterStateUpdated(function($state, $get, $set) {
+                        if ($state == 'pending') {
+                            $set('delivery_amount', 0.00);
+                        }
+                        $set('final_amount', floatval($get('total_amount') + $get('delivery_amount')));
+                    })
                     ->required(),
+                Forms\Components\TextArea::make('decline_reason')
+                    ->live()
+                    ->visible(fn(Get $get) => $get('order_status') == 'declined')
+                    ->nullable()
             ])
                 ->columns(2),
             Forms\Components\Section::make([
@@ -204,7 +251,6 @@ class OrderResource extends Resource
                     ->live()
                     ->required()
                     ->disableOptionWhen(function (string $value, Model $record) {
-
                         // If the current status is 'paid', disable all other options
                         if ($record->payment_status === PaymentStatus::Paid) {
                             return $value !== 'paid';
@@ -249,7 +295,8 @@ class OrderResource extends Resource
                     //     fn(Action $action) => $action->requiresConfirmation(),
                     // )
                     ->columns(6)
-            ]),
+            ])
+                ->visibleOn('edit'),
             Forms\Components\Section::make([
                 Forms\Components\Group::make()
                     ->label('Cancellation Request')
@@ -261,15 +308,16 @@ class OrderResource extends Resource
                             ->options(CancellationRequestStatus::class)
                             ->required(),
                         Forms\Components\Textarea::make('reason')
-                            ->readOnlyOn('edit')
+                            // ->readOnlyOn('edit')
                             ->required(),
                         Forms\Components\Textarea::make('response')
                             ->nullable(),
                     ])
                     ->columns(3),
             ])
-                ->visible(fn($record) => $record->cancellationRequest !== null)
+                ->visible(fn(Model $record, $livewire) => $record->cancellationRequest && $livewire instanceof \Filament\Resources\Pages\EditRecord)
             // ->visibleOn('edit')
+            // ->visible(fn($record) => $record->cancellationRequest !== null)
         ];
     }
 
@@ -285,6 +333,9 @@ class OrderResource extends Resource
         foreach ($orderItems as $orderItem) {
             $totalAmount += $orderItem['amount'];
         }
+
+        // Add code to subtract delivery fee (if any) to total amount
+
         return $totalAmount;
     }
 
@@ -419,8 +470,9 @@ class OrderResource extends Resource
                     Tables\Actions\DeleteAction::make(),
                     Tables\Actions\RestoreAction::make(),
 
-                    // VIEW RECEITPT 
+                    // VIEW RECEITPT
                     Action::make('orderItems')->label('View Receipt')
+                        ->icon('heroicon-m-receipt-percent')
                         ->modalHeading('Receipt Details')
                         ->modalContent(function ($record) {
                             // Fetch only the order items related to this specific order
@@ -434,6 +486,7 @@ class OrderResource extends Resource
                         })->modalSubmitAction(false)->modalCancelActionLabel('Close'),
 
                     Action::make('user_id')->label('Report Customer')
+                        ->icon('heroicon-m-flag')
                         ->form([
                             Select::make('comment') // Ensure this is the correct key for the selected reason
                                 ->label('Reason')

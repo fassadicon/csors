@@ -53,10 +53,18 @@ class CatererResource extends Resource
                     ->image()
                     ->nullable()
                     ->visibleOn('edit')->disabled(),
+                Forms\Components\FileUpload::make('qr_path')
+                    ->directory(fn($record) => 'caterers/' . $record->id . '/images/qr')
+                    ->label('QR Payment')
+                    ->image()
+                    ->nullable()
+                    ->image()
+                    ->visibleOn('edit')->disabled(),
                 Forms\Components\FileUpload::make('requirements_path')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/requirements')
                     ->label('Business Requirements (.zip)')
-                    ->nullable()->disabled(),
+                    ->nullable()->disabled()
+                    ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/images/profile')
                     ->image()

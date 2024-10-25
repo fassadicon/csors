@@ -63,6 +63,19 @@
         @apply !max-h-[200px] object-cover !min-h-[200px]
     }
 
+    .mini-card {
+        @apply !max-h-[50px] object-cover !min-h-[50px] max-w-[50px] min-w-[50px]
+    }
+
+
+    .jt-badge-success {
+        @apply !bg-yellow-500 !border-transparent
+    }
+
+
+    .table-zebra tr {
+        @apply hover:!bg-jt-primary/25 duration-100 ease-in-out
+    }
 
     /* TEXT HOVERED  */
     .text-hover-def {

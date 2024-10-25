@@ -54,8 +54,10 @@ class ServingTypesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('price')
                     ->money('php'),
-                Tables\Columns\TextColumn::make('description')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('pivot.description')
+                    ->label('Description'),
+
+                // ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -71,6 +73,10 @@ class ServingTypesRelationManager extends RelationManager
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make()
+                    ->label('Status')
+                    ->placeholder('Active Only')
+                    ->trueLabel('All')
+                    ->falseLabel('Inactive Only')
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
@@ -94,22 +100,24 @@ class ServingTypesRelationManager extends RelationManager
                         Forms\Components\TextInput::make('price')
                             ->numeric()
                             ->prefix('₱'),
+                        Forms\Components\TextArea::make('description')
+                            ->nullable(),
                     ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DetachAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                // Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\ForceDeleteAction::make(),
+                // Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DetachBulkAction::make(),
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\ForceDeleteBulkAction::make(),
+                    // Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
             ->modifyQueryUsing(fn(Builder $query) => $query->withoutGlobalScopes([

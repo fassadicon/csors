@@ -39,7 +39,7 @@ class FeedbackResource extends Resource
             ->columns([
                 TextColumn::make('caterers.name')->label('Customer Name')
                     ->visible(auth()->user()->hasRole('superadmin')),
-                TextColumn::make('users.name')->label('Customer Name'),
+                TextColumn::make('order.user.name')->label('Customer Name'),
                 TextColumn::make('rating')->label(
                     'Rate ⭐'
                 ),

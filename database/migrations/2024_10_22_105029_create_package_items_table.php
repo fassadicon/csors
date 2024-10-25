@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedbacks', function (Blueprint $table) {
+        Schema::create('package_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained();
-            // $table->foreignId('user_id')->constrained();
-            $table->integer('rating')->constrained();
-            $table->text('comment')->constrained();
+            $table->unsignedBigInteger('package_id')->nullable();
+            $table->morphs('packageable');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('package_items');
     }
 };

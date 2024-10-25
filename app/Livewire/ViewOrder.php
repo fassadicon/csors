@@ -51,7 +51,8 @@ class ViewOrder extends Component
 
     public function mount(Order $order)
     {
-        $this->order = $order->load('caterer', 'orderItems', 'cancellationRequest');
+        $this->order = $order->load('caterer', 'orderItems',  'cancellationRequest');
+
         if ($this->order->cancellationRequest) {
             $this->cancellationRequestReason = $this->order->cancellationRequest->reason;
             $this->cancellationRequestResponse = $this->order->cancellationRequest->response;
@@ -113,7 +114,8 @@ class ViewOrder extends Component
 
     public function payPartial()
     {
-        $downPayment = $this->order->total_amount * 0.7;
+        $downPayment = $this->order->final_amount * ($this->order->caterer->downpayment / 100);
+
         $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($downPayment, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route("partial-payment-existing-success");
@@ -140,7 +142,7 @@ class ViewOrder extends Component
 
     public function payFull()
     {
-        $fullPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->order->total_amount, 2)))));
+        $fullPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->order->final_amount, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route("full-payment-existing-success");
         $this->data['data']['attributes']['line_items'][0]['amount'] = $fullPayment;
@@ -164,7 +166,7 @@ class ViewOrder extends Component
 
     public function payRemaining()
     {
-        $remainingPayment = $this->order->total_amount * 0.3;
+        $remainingPayment = $this->order->final_amount * ((100 - $this->order->caterer->downpayment) / 100);
         $remainingPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($remainingPayment, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route('remaining-payment-success');

@@ -40,7 +40,7 @@ class PaymentController extends Controller
                     'order_id' => $order->id,
                     'type' => 'online',
                     'method' => $response->data->attributes->payment_method_used,
-                    'amount' => $order->total_amount * 0.7,
+                    'amount' => $order->final_amount * ($order->caterer->downpayment / 100),
                     'reference_no' => $response->data->id,
                     'remarks' => 'Downpayment',
                 ]);
@@ -94,7 +94,7 @@ class PaymentController extends Controller
                     'order_id' => $order->id,
                     'type' => 'online',
                     'method' => $response->data->attributes->payment_method_used,
-                    'amount' => $order->total_amount * 0.7,
+                    'amount' => $order->final_amount * ((100 - $order->caterer->downpayment) / 100),
                     'reference_no' => $response->data->id,
                     'remarks' => 'Remaining Payment',
                 ]);
@@ -148,7 +148,7 @@ class PaymentController extends Controller
                     'order_id' => $order->id,
                     'type' => 'online',
                     'method' => $response->data->attributes->payment_method_used,
-                    'amount' => $order->total_amount * 0.7,
+                    'amount' => $order->final_amount,
                     'reference_no' => $response->data->id,
                     'remarks' => 'Full Payment',
                 ]);

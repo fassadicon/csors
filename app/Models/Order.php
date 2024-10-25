@@ -23,14 +23,17 @@ class Order extends Model
         'recipient',
         'promo_id',
         'deducted_amount',
+        'delivery_amount',
         'recipient',
         'location',
         'remarks',
         'start',
         'end',
         'total_amount',
+        'final_amount',
         'payment_status',
         'order_status',
+        'decline_reason',
     ];
 
     protected function casts(): array
@@ -70,12 +73,17 @@ class Order extends Model
 
     public function orderItems(): HasMany
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(OrderItem::class)->withTrashed();
     }
 
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function feedback(): HasOne
+    {
+        return $this->hasOne(Feedback::class, foreignKey: 'order_id');
     }
 
     public function cancellationRequest(): HasOne
