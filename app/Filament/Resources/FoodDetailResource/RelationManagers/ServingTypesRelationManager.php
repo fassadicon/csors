@@ -55,9 +55,9 @@ class ServingTypesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('price')
                     ->money('php'),
                 Tables\Columns\TextColumn::make('pivot.description')
-                ->label('Description'),
+                    ->label('Description'),
 
-                    // ->toggleable(isToggledHiddenByDefault: true),
+                // ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -72,7 +72,11 @@ class ServingTypesRelationManager extends RelationManager
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                // Tables\Filters\TrashedFilter::make()
+                Tables\Filters\TrashedFilter::make()
+                    ->label('Status')
+                    ->placeholder('Active Only')
+                    ->trueLabel('All')
+                    ->falseLabel('Inactive Only')
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
