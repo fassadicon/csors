@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('food_detail_id')->constrained();
             $table->foreignId('serving_type_id')->constrained();
             $table->decimal('price', 10, 2);
+            $table->text('description')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 

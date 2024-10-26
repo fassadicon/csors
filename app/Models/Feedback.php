@@ -14,8 +14,7 @@ class Feedback extends Model
     use SoftDeletes, LogsActivity;
     protected $table = 'feedbacks';
     protected $fillable = [
-        'caterer_id',
-        'user_id',
+        'order_id',
         'rating',
         'comment'
     ];
@@ -36,5 +35,10 @@ class Feedback extends Model
     public function caterers(): BelongsTo
     {
         return $this->belongsTo(Caterer::class, foreignKey: 'caterer_id');
+    }
+
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 }

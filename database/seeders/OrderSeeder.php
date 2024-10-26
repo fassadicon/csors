@@ -49,12 +49,12 @@ class OrderSeeder extends Seeder
 
         foreach ($caterers as $caterer) {
             // FOODS and UTILITIES
-            $users = User::whereIn('id', [4, 5])->get();
+            $users = User::where('is_customer', 1)->get();
 
             foreach ($users as $user) {
 
                 foreach ($this->cases as $case) {
-                    for ($i = 0; $i < 2; $i++) {
+                    for ($i = 0; $i < 1; $i++) {
 
                         $orderedFoods = Food::whereHas('servingType', function ($query) use ($caterer) {
                             $query->where('caterer_id', $caterer->id);
@@ -96,6 +96,8 @@ class OrderSeeder extends Seeder
 
                         $totalAmount = $foodsTotalAmount + $utilitiesTotalAmount;
 
+                        $deliveryAmount = rand(0, 1) === 1 ? 0 : rand(500, 1000);
+
                         $order = Order::create([
                             'user_id' => $user->id,
                             'recipient' => $user->full_name,
@@ -103,6 +105,8 @@ class OrderSeeder extends Seeder
                             'start' => $start,
                             'end' => $end,
                             'total_amount' => $totalAmount,
+                            'delivery_amount' => $deliveryAmount,
+                            'final_amount' => $totalAmount + $deliveryAmount,
                             'location' => 'test',
                             'payment_status' => $case['payment_status'],
                             'order_status' => $case['order_status'],
@@ -113,7 +117,7 @@ class OrderSeeder extends Seeder
                             Payment::create([
                                 'order_id' => $order->id,
                                 'type' => 'cash',
-                                'amount' => $case['payment_status'] == 'partial' ? $totalAmount * 0.7 : $totalAmount,
+                                'amount' => $case['payment_status'] == 'partial' ? $totalAmount * ($caterer->downpayment/100) : $totalAmount,
                             ]);
                         }
 

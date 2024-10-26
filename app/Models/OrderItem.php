@@ -16,6 +16,7 @@ class OrderItem extends Model
     protected $fillable = [
         'orderable_type',
         'orderable_id',
+        'order_id',
         'quantity',
         'amount'
     ];
@@ -37,6 +38,6 @@ class OrderItem extends Model
 
     public function orderable(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 }

@@ -10,7 +10,7 @@
         </h1>
     @endif
 
-    <x-filament-widgets::widgets :columns="$this->getColumns()"
+    <x-filament-widgets::widgets :columns="3" 
         :data="[
             ...property_exists($this, 'filters') ? ['filters' => $this->filters] : [],
             ...$this->getWidgetData(),

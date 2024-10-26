@@ -17,11 +17,13 @@ class Caterer extends Model
 
     protected $fillable = [
         'user_id',
+        'downpayment',
         'email',
         'phone_number',
         'name',
         'about',
         'logo_path',
+        'qr_path',
         'requirements_path',
         'is_verified',
     ];
@@ -101,5 +103,10 @@ class Caterer extends Model
     public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    public function feedbacksThrough(): HasManyThrough
+    {
+        return $this->hasManyThrough(Feedback::class, Order::class, 'caterer_id', 'order_id', 'id', 'id');
     }
 }

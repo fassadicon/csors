@@ -11,15 +11,15 @@
 
     <x-mary-table :headers="$headers"
         :rows="$orders"
-        striped
+        striped hover
         class="!gap-y-4"
         {{-- show-empty-text --}}
         {{-- empty-text="No orders found" --}}
         {{-- @row-click="alert($event.detail.name)"  --}}
         {{-- :link="route('users.show', ['username' => ['username'], 'id' => ['id']])" --}}
         {{-- :cell-decoration="$cell_decoration" --}}>
-        @scope('cell_total_amount', $order)
-            {{ '₱ ' . $order->total_amount }}
+        @scope('cell_final_amount', $order)
+            {{ '₱ ' . $order->final_amount }}
         @endscope
         @scope('cell_payment_status', $order)
             <x-mary-badge :value="$order->payment_status->getLabel()"
@@ -30,12 +30,18 @@
             <x-mary-badge :value="$order->order_status->getLabel()"
                 class="badge-{{ $order->order_status->getMaryColor() }}" />
         @endscope
-        @scope('cell_start', $order)
-            {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
+        @scope('cell_duration', $order)
+            {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') .' - '. \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
         @endscope
-        @scope('cell_end', $order)
-            {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
+        
+        {{-- DECLINE REASON  --}}
+        @scope('cell_final_amount', $order)
+            {{ $order->decline_reason ? $order->decline_reason : ' - - - '  }}
         @endscope
+        
+        {{-- @scope('cell_end', $order)
+            {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
+        @endscope --}}
         @scope('cell_created_at', $order)
             {{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y g:i A') }}
         @endscope

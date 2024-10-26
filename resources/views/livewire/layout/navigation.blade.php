@@ -37,7 +37,7 @@
                             <x-slot name="content">
                                 {{-- <x-dropdown-link
                                     href="{{ route('about', ['caterer' => $caterer]) }}">About</x-dropdown-link> --}}
-                                <x-dropdown-link href="{{ route('caterers') }}">Change Caterer</x-dropdown-link>
+                                <x-dropdown-link wire:click='changeCaterer'>Change Caterer</x-dropdown-link>
                                 <x-dropdown-link href="{{ route('contact') }}">Contact</x-dropdown-link>
                             </x-slot>
                         </x-nav-dropdown>
@@ -60,7 +60,7 @@
                             <x-slot name="trigger">
                                 <a href="{{ route('events') }}"
                                     class="!text-white text-hover-def">Events</a>
-                                    
+
                             </x-slot>
                             <x-slot name="content">
 
@@ -81,9 +81,9 @@
                             wire:navigate
                             class="!text-white text-hover-def">
                             {{ __('Menu') }}
-                            
+
                         </x-nav-link>
-                        
+
                     </div>
                 @endif
 
@@ -106,11 +106,49 @@
                 </div>
 
             </div>
-
+            @if (auth()->user())
+            {{-- Notifications --}}
+            <div class="flex items-center justify-end w-full sm:hidden md:hidden">
+                <div x-data="{showNotif: false, notifCount:false}"
+                    class="flex items-center space-x-8 md:-mr-14 sm:-my-px sm:ms-10 sm:flex shrink-0">
+                    <x-mary-button wire:click='readAllNotif' @click="showNotif = true, notifCount = true" icon="o-bell"
+                        class="relative btn-circle">
+                        <template x-if="!notifCount">
+                            <x-mary-badge value="{{ $notifCount }}" class="absolute badge-primary -right-2 -top-2" />
+                        </template>
+                        <template x-if="notifCount">
+                            <x-mary-badge value="0" class="absolute badge-primary -right-2 -top-2" />
+                        </template>
+                    </x-mary-button>
+                    {{-- notif container --}}
+                    <template x-if="showNotif">
+                        <div style="top: 70px;"
+                            class="fixed max-h-[500px] overflow-y-auto bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
+                            <div class="flex items-center justify-between">
+                                <h4>Notifications</h4>
+                                <x-mary-button @click="showNotif = false" icon="o-x-mark">
+                                </x-mary-button>
+                            </div>
+                            <hr class="my-4">
+                            <div>
+                                @foreach ($notifications as $notif)
+                                <x-notif-card customerName="{{ $notif['customer_name'] ?? 'System' }}"
+                                    :read="$notif->read_at ? true : false"
+                                    message="{{ $notif['data']['title'] ?? 'No message available' }}"
+                                    dateCreated="{{ \Carbon\Carbon::parse($notif['created_at'])->diffForHumans() }}" />
+                                @endforeach
+                                @if (count($notifications) <= 0) <p>You have 0 notifications yet...</p>
+                                    @endif
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            @endif
             <!-- Settings Dropdown -->
             <div class="hidden space-x-2 sm:flex sm:items-center sm:ms-6">
                 @if ($caterer)
-                    <div class="flex items-center space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
+                    <div class="flex items-center -mr-10 space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
                         <a href="{{ route('cart') }}">
                             <x-mary-button icon="o-shopping-cart"
                                 class="relative btn-circle">
@@ -119,18 +157,25 @@
                             </x-mary-button>
                         </a>
                     </div>
-                    
-
                 @endif
                 @if (auth()->user())
-                    {{-- Notifications --}}
-                    <div x-data="{showNotif: false}" class="flex items-center space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
-                        <x-mary-button @click="showNotif = true" icon="o-bell" class="relative btn-circle">
-                            <x-mary-badge value="{{ count($notifTest) }}" class="absolute badge-primary -right-2 -top-2" />
+                {{-- Notifications --}}
+                <div class="w-fit">
+                    <div x-data="{showNotif: false, notifCount:false}"
+                        class="flex items-end sm:-my-px sm:ms-10 sm:flex shrink-0">
+                        <x-mary-button wire:click='readAllNotif' @click="showNotif = true, notifCount = true" icon="o-bell"
+                            class="relative btn-circle">
+                            <template x-if="!notifCount">
+                                <x-mary-badge value="{{ $notifCount }}" class="absolute badge-primary -right-2 -top-2" />
+                            </template>
+                            <template x-if="notifCount">
+                                <x-mary-badge value="0" class="absolute badge-primary -right-2 -top-2" />
+                            </template>
                         </x-mary-button>
                         {{-- notif container --}}
                         <template x-if="showNotif">
-                            <div style="top: 70px;" class="fixed bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
+                            <div style="top: 70px;"
+                                class="fixed max-h-[500px] overflow-y-auto bg-jt-white top-[70px] w-[350px] right-5 min-w-32 p-4 shadow-xl">
                                 <div class="flex items-center justify-between">
                                     <h4>Notifications</h4>
                                     <x-mary-button @click="showNotif = false" icon="o-x-mark">
@@ -138,14 +183,19 @@
                                 </div>
                                 <hr class="my-4">
                                 <div>
-                                    @foreach ($notifTest as $notif)
-                                    <x-notif-card customerName="{{$notif['customer_name']}}" message="{{$notif['comment']}}"
-                                        dateCreated="{{$notif['date_created']}}" />
+                                    @foreach ($notifications as $notif)
+                                    <x-notif-card customerName="{{ $notif['customer_name'] ?? 'System' }}"
+                                        :read="$notif->read_at ? true : false"
+                                        message="{{ $notif['data']['title'] ?? 'No message available' }}"
+                                        dateCreated="{{ \Carbon\Carbon::parse($notif['created_at'])->diffForHumans() }}" />
                                     @endforeach
+                                    @if (count($notifications) <= 0) <p>You have 0 notifications yet...</p>
+                                        @endif
                                 </div>
                             </div>
                         </template>
                     </div>
+                </div>
                 @endif
                 @if (auth()->guest())
                     <a href="{{ route('login') }}"

@@ -10,15 +10,17 @@ use Masmerise\Toaster\Toaster;
 use App\Livewire\Actions\Logout;
 use App\Models\Order;
 use App\Models\User;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
+use function Symfony\Component\Clock\now;
 
 class Navigation extends Component
 {
     public $caterer;
 
     public $cartItemCount;
-    public ?array $notifications = [];
-
+    public $notifications = [];
+    public int $notifCount = 0;
     public ?array $notifTest = [
         [
             'customer_name' => 'Sample',
@@ -29,20 +31,32 @@ class Navigation extends Component
             'customer_name' => 'Roger',
             'comment' => 'Testing notification 2',
             'date_created' => 'Oct 18, 2024'
-        ]
+        ],
     ];
 
     public function mount(): void
     {
+        if (auth()->user()) {
+            $this->notifications = auth()->user()->notifications;
+            $this->notifCount = $this->notifications->filter(function ($notifs) {
+                return is_null($notifs->read_at);
+            })->count();
+        }
+        // if ($this->notifications) {
+        //     foreach ($this->notifications as $notification) {
+        //         dump($notification->data['title']);
+        //     }
+        // }
+
         $this->getAdminInfo();
 
-        if (auth()->user()) {
-            $unformattedNotifications = auth()->user()->unreadNotifications;
-            foreach ($unformattedNotifications as $notification) {
-                $notificationTitle = $notification->data['title'];
-                array_push($this->notifications, $notificationTitle);
-            }
-        }
+        // if (auth()->user()) {
+        //     $unformattedNotifications = auth()->user()->unreadNotifications;
+        //     foreach ($unformattedNotifications as $notification) {
+        //         $notificationTitle = $notification->data['title'];
+        //         array_push($this->notifications, $notificationTitle);
+        //     }
+        // }
 
         $this->caterer = false;
         if (session()->has('caterer') != null) {
@@ -79,12 +93,25 @@ class Navigation extends Component
 
     public function checkToReview()
     {
-        $order = Auth::user()->orders()->where('order_status', OrderStatus::To_Review)->get()->first();
+        $order = Auth::user()->orders()->where('order_status', OrderStatus::Completed)
+            ->doesntHave('feedback')
+            ->get()->first();
+        // dd($order);
         if ($order) {
             return $order;
         } else {
             return false;
         }
+    }
+
+    public function readAllNotif()
+    {
+        $user = auth()->user();
+
+        // Loop through each notification and mark it as read
+        $user->notifications()->update([
+            'read_at' => now(), // Laravel's helper for the current timestamp
+        ]);
     }
 
     // FIX LATER
@@ -97,6 +124,13 @@ class Navigation extends Component
         session(['adminInfo' => $admin]);
     }
 
+    public function changeCaterer()
+    {
+        session()->forget('cart');
+        session()->forget('caterer');
+
+        return redirect()->route('caterers');
+    }
 
     public function render()
     {

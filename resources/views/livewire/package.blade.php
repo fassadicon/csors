@@ -17,7 +17,7 @@
             without-arrows />
     @endif
 
-    <div class="grid grid-cols-2 gap-4 p-4 bg-jt-light">
+    <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 bg-jt-light">
         <!-- First Column: Carousel -->
         <div>
             <x-mary-header title="{!! $package->name !!}"
@@ -27,10 +27,32 @@
             <div class="px-2 py-1 text-white badge-success w-fit rounded-xl ">
                 {{ 'PHP ' . $package->price }}
             </div>
-            <hr class="my-2">
+            <hr class="mx-4 my-4">
             <div>
                 {!! $package->description !!}
             </div>
+
+            <hr class="mx-4 my-4">
+            @if ($package->packageItems)
+            <h4>This package includes:</h4>
+            <div class="grid grid-cols-2 p-4 shadow-md md:grid-cols-3 gap-y-4">
+                @foreach ($package->packageItems as $item)
+                @php
+                    $model = $item->packageable; // Access the polymorphic relation
+                @endphp
+                @if ($model instanceof \App\Models\Food)
+                    <div class="flex flex-row items-center gap-x-4">
+                        @if ($model->foodDetail->getFirstImagePath() !== null)
+                            <img src="{{asset('storage/'.$model->foodDetail->getFirstImagePath())}}" alt="Food Image" class="mini-card">
+                        @else
+                            <img src="https://placehold.co/50" alt="Food Image" class="mini-card">
+                        @endif
+                        <p>{{ $model->foodDetail->name }}</p>
+                    </div>
+                @endif
+                @endforeach
+            </div>
+            @endif
         </div>
 
         <!-- Second Column: Remaining Content -->
@@ -69,14 +91,23 @@
                             class="mt-2" />
                     </div>
                 </div>
-                <div class="flex flex-col mt-4">
-                    <x-mary-button type="submit"
-                        label="Add to Order"
-                        class="w-full btn-primary" />
-                    <a href="{{ route('events') }}">
-                        <x-mary-button label="Back to Events"
-                            class="w-full mt-4 btn-outline" />
-                    </a>
+                <div x-data="{showPopup:{{session('caterer') ? 'false' : 'true'}}}" 
+                    class="flex flex-col mt-4">
+                    <template x-if="showPopup">
+                        <x-popup.select-caterer />
+                    </template>
+                    @if (session('caterer'))
+                        <x-mary-button type="submit" label="Add to Order" class="w-full btn-primary" />
+                        <a href="{{ route('events') }}">
+                            <x-mary-button label="Back to Events" class="w-full mt-4 btn-outline" />
+                        </a>
+                    @else
+                        <x-mary-button @click="showPopup=true" label="Add to Order" class="w-full mb-2 btn-primary" />
+                        <a href="{{ route('caterers') }}">
+                            <x-mary-button label="Select Caterer" class="w-full btn-outline" />
+                        </a>
+                    @endif
+                    
                 </div>
             </form>
         </div>

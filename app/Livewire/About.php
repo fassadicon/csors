@@ -26,7 +26,7 @@ class About extends Component
         $this->servingTypes = $caterer->servingTypes->take(4);
         $this->utilities = $caterer->utilities->take(4);
         // dd($this->utilities->first()->images->first()->path);
-        if (!($this->caterer->images->isEmpty())) {
+        if ($this->caterer->images != null) {
             $this->slides = $this->caterer->images->map(function ($image) {
                 return [
                     'image' => asset('storage/' . $image->path),
@@ -43,6 +43,11 @@ class About extends Component
         session()->put('caterer', $this->caterer->id);
 
         return redirect()->route('events');
+    }
+
+    public function browseCaterers()
+    {
+        return redirect()->route('caterers');
     }
 
     public function render()
