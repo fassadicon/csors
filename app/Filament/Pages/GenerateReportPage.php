@@ -35,6 +35,11 @@ class GenerateReportPage extends Page implements HasForms
 
     public ?array $data = [];
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->hasRole('caterer');
+    }
+
     public function mount()
     {
         $this->caterer = Caterer::when(auth()->user()->hasRole('caterer'), function ($query) {

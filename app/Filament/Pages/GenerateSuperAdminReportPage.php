@@ -38,6 +38,12 @@ class GenerateSuperAdminReportPage extends Page implements HasForms
     public $customers;
     public $caterers;
 
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->hasRole('superadmin');
+    }
+
     public function mount()
     {
         $this->customers = User::where('is_customer', 1)->get();
