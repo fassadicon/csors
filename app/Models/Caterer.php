@@ -90,6 +90,7 @@ class Caterer extends Model
         })->distinct();
     }
 
+
     public function utilities(): HasMany
     {
         return $this->hasMany(Utility::class);

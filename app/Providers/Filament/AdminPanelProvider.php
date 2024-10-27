@@ -102,6 +102,9 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Other Products')
                     ->icon('heroicon-o-lifebuoy'),
                 NavigationGroup::make()
+                    ->label('Reports')
+                    ->icon('heroicon-o-document'),
+                NavigationGroup::make()
                     ->label('Configuration')
                     ->icon('heroicon-o-adjustments-horizontal'),
                 NavigationGroup::make()
