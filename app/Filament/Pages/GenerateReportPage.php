@@ -13,6 +13,7 @@ use App\Enums\PaymentStatus;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 
 class GenerateReportPage extends Page implements HasForms
 {
@@ -123,6 +124,15 @@ class GenerateReportPage extends Page implements HasForms
             ->when(auth()->user()->hasRole('caterer'), function ($query) {
                 return $query->where('caterer_id', auth()->user()->caterer->id);
             })
+            ->when($state['created_at_end'], function ($query) use ($state) {
+                return $query->whereBetween('created_at', [$state['created_at_start'], $state['created_at_end']]);
+            })
+            ->when($state['start'], function ($query) use ($state) {
+                return $query->where('created_at', '>=', $state['start']);
+            })
+            ->when($state['end'], function ($query) use ($state) {
+                return $query->where('created_at', '<=', $state['end']);
+            })
             ->when($state['order_status'], function ($query) use ($state) {
                 return $query->where('order_status', $state['order_status']);
             })
@@ -149,22 +159,4 @@ class GenerateReportPage extends Page implements HasForms
             echo $pdf->stream();
         }, 'report.pdf');
     }
-
-
-    // $this->caterer = Caterer::with(
-    //     'foodDetails',
-    //     'servingTypes',
-    //     'packages',
-    //     'utilities',
-    // )->when(auth()->user()->hasRole('caterer'), function ($query) {
-    //     return $query->where('id', auth()->user()->caterer->id);
-    // })->first();
-
-    // $this->orders = Order::with(
-    //     'user',
-    //     'orderItems',
-    //     'cancellationRequest',
-    // )->when(auth()->user()->hasRole('caterer'), function ($query) {
-    //     return $query->where('caterer_id', auth()->user()->caterer->id);
-    // })->get();
 }
