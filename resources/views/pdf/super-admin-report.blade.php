@@ -145,6 +145,9 @@
     <table>
         <thead>
             <th>Id</th>
+            @if ($selectedCaterer == null)
+                <th>Caterer</th>
+            @endif
             <th>Name</th>
             <th>Description</th>
         </thead>
@@ -152,6 +155,9 @@
             @foreach ($foodCategories as $foodCategory)
                 <tr>
                     <td>{{ $foodCategory->id }}</td>
+                    @if ($selectedCaterer == null)
+                        <td>{{ $foodCategory->caterer->name }}</td>
+                    @endif
                     <td>{{ $foodCategory->name }}</td>
                     <td>{{ $foodCategory->description }}</td>
                 </tr>
@@ -163,6 +169,9 @@
     <table>
         <thead>
             <th>Id</th>
+            @if ($selectedCaterer == null)
+                <th>Caterer</th>
+            @endif
             <th>Name</th>
             <th>Description</th>
         </thead>
@@ -170,6 +179,9 @@
             @foreach ($servingTypes as $servingType)
                 <tr>
                     <td>{{ $servingType->id }}</td>
+                    @if ($selectedCaterer == null)
+                        <td>{{ $servingType->caterer->name }}</td>
+                    @endif
                     <td>{{ $servingType->name }}</td>
                     <td>{{ $servingType->description }}</td>
                 </tr>
@@ -180,6 +192,9 @@
     <h2>Food Items</h2>
     <table>
         <thead>
+            @if ($selectedCaterer == null)
+                <th>Caterer</th>
+            @endif
             <th>Category</th>
             <th>Name</th>
             <th>Serving Type</th>
@@ -189,6 +204,9 @@
             @foreach ($foodDetails as $foodDetail)
                 @foreach ($foodDetail->servingTypes as $servingType)
                     <tr>
+                        @if ($selectedCaterer == null)
+                            <td>{{ $foodDetail->foodCategory->caterer->name }}</td>
+                        @endif
                         <td>{{ $foodDetail->foodCategory->name }}</td>
                         <td>{{ $foodDetail->name }}</td>
                         <td>{{ $servingType->name }}</td>
@@ -203,6 +221,9 @@
     <table>
         <thead>
             <th>Id</th>
+            @if ($selectedCaterer == null)
+                <th>Caterer</th>
+            @endif
             <th>Name</th>
             <th>Desc</th>
             <th>Price</th>
@@ -211,6 +232,9 @@
             @foreach ($utilities as $utility)
                 <tr>
                     <td>{{ $utility->id }}</td>
+                    @if ($selectedCaterer == null)
+                        <td>{{ $utility->caterer->name }}</td>
+                    @endif
                     <td>{{ $utility->name }}</td>
                     <td>{{ $utility->description }}</td>
                     <td>P {{ $utility->price }}</td>

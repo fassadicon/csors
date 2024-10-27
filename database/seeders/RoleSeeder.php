@@ -18,7 +18,6 @@ class RoleSeeder extends Seeder
         Artisan::call('shield:generate --all');
         $superadmin = Role::where(['name' => 'superadmin'])->first();
         $superadmin->revokePermissionTo('page_EditCatererPage');
-        $superadmin->revokePermissionTo('page_EditCatererPage');
 
         $caterer = Role::create(['name' => 'caterer']);
         $catererpermissions = Permission::whereNotIn(
