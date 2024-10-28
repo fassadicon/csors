@@ -6,9 +6,9 @@ use App\Models\User;
 use Filament\Actions;
 use App\Mail\OrderUpdateMail;
 use Illuminate\Support\Facades\Mail;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\OrderResource;
-use Filament\Notifications\Notification;
 
 class EditOrder extends EditRecord
 {
@@ -26,22 +26,41 @@ class EditOrder extends EditRecord
 
     protected function afterSave()
     {
+        if ($this->record->order_status == 'cancelled' || $this->record->order_status == 'declined') {
+            $this->record->payment_status = 'cancelled';
+            $this->record->save();
+        }
+
+        // Caterer
+        $notification = 'Order #' . $this->record->id . ' has been updated.';
         if (auth()->user()->hasRole('caterer')) {
             Mail::to(auth()->user()->caterer->email)->send(new OrderUpdateMail(
                 $this->record->id,
             ));
+            Notification::make()
+                ->title($notification)
+                ->sendToDatabase(auth()->user());
         }
 
-        Mail::to('sa.csors.offical@gmail.com')->send(new OrderUpdateMail(
+        // Superadmin
+        // sa.csors.offical@gmail.com
+        $notification = 'Order #' . $this->record->id . ' of ' . $this->record->caterer->name . ' has been updated.';
+        $superadmin = User::where('id', 1)->first();
+        Mail::to($superadmin->email)->send(new OrderUpdateMail(
             $this->record->id,
         ));
+        Notification::make()
+            ->title($notification)
+            ->sendToDatabase($superadmin);
 
-        $recipient = User::find($this->record->user_id);
-
-        // Add conditional messages
-        $notification = 'Your order ' . $this->record->id . 'has been updated.';
+        // Customer
+        $recipient = User::where('is_customer', 1)->where('id', $this->record->user->id)->first();
+        $notification = 'Your order ' . $this->record->id . ' has been updated.';
         Notification::make()
             ->title($notification)
             ->sendToDatabase($recipient);
+        Mail::to($recipient->email)->send(new OrderUpdateMail(
+            $this->record->id,
+        ));
     }
 }

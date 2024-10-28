@@ -9,12 +9,13 @@ use App\Models\Customer;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\FormsComponent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\CustomerResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Filament\Resources\CustomerResource\RelationManagers\OrdersRelationManager;
-use Filament\Forms\FormsComponent;
 
 class CustomerResource extends Resource
 {
@@ -62,6 +63,7 @@ class CustomerResource extends Resource
                     ->visible(auth()->user()->hasRole('superadmin')),
                 // ->columnSpan(2),
                 Forms\Components\FileUpload::make('verification_image_path')
+                    ->visible(auth()->user()->hasRole('superadmin'))
                     ->label('Valid ID')
                     ->directory('users/' . auth()->id() . '/verification')
                     ->nullable()
@@ -86,6 +88,9 @@ class CustomerResource extends Resource
                     ->color(fn($record) => $record->is_verified == 1 ? 'success' : 'danger')
                     ->label('Verified'),
                 Tables\Columns\TextColumn::make('orders_count')
+                    ->formatStateUsing(function (Model $record) {
+                        return $record->orders->where('caterer_id', auth()->user()->caterer->id)->count();
+                    })
                     ->label('# of Orders'),
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime()
@@ -159,8 +164,8 @@ class CustomerResource extends Resource
             ]);
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::where('is_customer', 1)->count();
-    }
+    // public static function getNavigationBadge(): ?string
+    // {
+    //     return static::getModel()::where('is_customer', 1)->count();
+    // }
 }

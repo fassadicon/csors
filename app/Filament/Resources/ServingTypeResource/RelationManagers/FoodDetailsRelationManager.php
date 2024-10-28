@@ -76,7 +76,7 @@ class FoodDetailsRelationManager extends RelationManager
                         Forms\Components\TextInput::make('price')
                             ->numeric()
                             ->prefix('₱'),
-                        Forms\Components\TextArea::make('description')
+                        Forms\Components\Textarea::make('description')
                             ->nullable(),
                     ]),
             ])

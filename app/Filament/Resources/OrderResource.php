@@ -240,7 +240,7 @@ class OrderResource extends Resource
                         $set('final_amount', floatval($get('total_amount') + $get('delivery_amount')));
                     })
                     ->required(),
-                Forms\Components\TextArea::make('decline_reason')
+                Forms\Components\Textarea::make('decline_reason')
                     ->live()
                     ->visible(fn(Get $get) => $get('order_status') == 'declined')
                     ->nullable()
@@ -309,15 +309,16 @@ class OrderResource extends Resource
                             ->label('Cancellation Status')
                             ->options(CancellationRequestStatus::class)
                             ->required(),
+                        // ->required(fn(?Model $record) => dd($record)),
                         Forms\Components\Textarea::make('reason')
                             // ->readOnlyOn('edit')
                             ->required(),
                         Forms\Components\Textarea::make('response')
-                            ->nullable(),
+                            ->required(),
                     ])
                     ->columns(3),
             ])
-                ->visibleOn('edit')
+                ->visible(fn(?Model $record, Get $get) => ($record && $record->cancellationRequest != null) || $get('order_status') == 'cancelled')
             // ->visible(fn(?Model $record, $livewire) => $record->cancellationRequest && $livewire instanceof \Filament\Resources\Pages\EditRecord)
             // ->visible(fn($record) => $record->cancellationRequest !== null)
         ];
@@ -585,15 +586,13 @@ class OrderResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('created_at', '>=', today())
-            ->when(auth()->user()->hasRole('caterer'), function ($query) {
-                $query->where('caterer_id', auth()->user()->caterer->id);
+        return static::getModel()::when(auth()->user()->hasRole('caterer'), function ($query) {
+            $query->where('caterer_id', auth()->user()->caterer->id);
+        })
+            ->where(function ($query) {
+                $query->where('order_status', 'pending')
+                    ->orWhere('order_status', 'confirmed');
             })
-            // ->where(function ($query) {
-            //     $query->where('order_status', OrderStatus::Pending)
-            //         ->orWhere('payment_status', PaymentStatus::Pending)
-            //         ->orWhereIn('payment_status', [PaymentStatus::Pending, PaymentStatus::Partial]);
-            // })
             ->count();
     }
 }

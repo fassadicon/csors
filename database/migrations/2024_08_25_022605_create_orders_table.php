@@ -26,6 +26,7 @@ return new class extends Migration
             $table->decimal('final_amount', 8, 2);
             $table->enum('payment_status', [
                 'pending',
+                'cancelled',
                 'partial',
                 'paid',
             ])->default('pending');
