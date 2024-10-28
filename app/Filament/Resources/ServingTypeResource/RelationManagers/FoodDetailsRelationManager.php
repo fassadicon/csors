@@ -63,6 +63,7 @@ class FoodDetailsRelationManager extends RelationManager
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make()
+                    ->visible(fn() => auth()->user()->hasRole('caterer'))
                     ->preloadRecordSelect()
                     ->recordSelectOptionsQuery(
                         fn(Builder $query) => $query->whereHas('foodCategory', function ($query) {
@@ -81,9 +82,9 @@ class FoodDetailsRelationManager extends RelationManager
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DetachAction::make(),
+                Tables\Actions\ViewAction::make()->visible(fn() => auth()->user()->hasRole('caterer')),
+                Tables\Actions\EditAction::make()->visible(fn() => auth()->user()->hasRole('caterer')),
+                Tables\Actions\DetachAction::make()->visible(fn() => auth()->user()->hasRole('caterer')),
                 // Tables\Actions\DeleteAction::make(),
                 // Tables\Actions\ForceDeleteAction::make(),
                 // Tables\Actions\RestoreAction::make(),

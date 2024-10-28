@@ -88,8 +88,10 @@ class ServingTypesRelationManager extends RelationManager
 
                             return $data;
                         }
-                    ),
+                    )
+                    ->visible(fn() => auth()->user()->hasRole('caterer')),
                 Tables\Actions\AttachAction::make()
+                    ->visible(fn() => auth()->user()->hasRole('caterer'))
                     ->recordSelectOptionsQuery(
                         fn(Builder $query) => $query->whereBelongsTo(auth()->user()->caterer)
                     )
@@ -100,14 +102,15 @@ class ServingTypesRelationManager extends RelationManager
                         Forms\Components\TextInput::make('price')
                             ->numeric()
                             ->prefix('₱'),
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\TextArea::make('description')
                             ->nullable(),
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DetachAction::make(),
+                Tables\Actions\ViewAction::make()->visible(fn() => auth()->user()->hasRole('caterer')),
+                Tables\Actions\EditAction::make()->visible(fn() => auth()->user()->hasRole('caterer')),
+                Tables\Actions\DetachAction::make()
+                    ->visible(fn() => auth()->user()->hasRole('caterer')),
                 // Tables\Actions\DeleteAction::make(),
                 // Tables\Actions\ForceDeleteAction::make(),
                 // Tables\Actions\RestoreAction::make(),
