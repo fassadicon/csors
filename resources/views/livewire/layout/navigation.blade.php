@@ -148,7 +148,7 @@
             <!-- Settings Dropdown -->
             <div class="hidden space-x-2 sm:flex sm:items-center sm:ms-6">
                 @if ($caterer)
-                    <div class="flex items-center -mr-10 space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
+                    <div class="flex items-center space-x-8 sm:-my-px sm:ms-10 sm:flex shrink-0">
                         <a href="{{ route('cart') }}">
                             <x-mary-button icon="o-shopping-cart"
                                 class="relative btn-circle">
@@ -160,9 +160,9 @@
                 @endif
                 @if (auth()->user())
                 {{-- Notifications --}}
-                <div class="w-fit">
+                <div class="">
                     <div x-data="{showNotif: false, notifCount:false}"
-                        class="flex items-end sm:-my-px sm:ms-10 sm:flex shrink-0">
+                        class="sm:-my-px sm:flex shrink-0">
                         <x-mary-button wire:click='readAllNotif' @click="showNotif = true, notifCount = true" icon="o-bell"
                             class="relative btn-circle">
                             <template x-if="!notifCount">

@@ -45,7 +45,11 @@ class Order extends Component
     {
         $this->caterer = Caterer::find(session()->get('caterer'));
 
-        $this->promos = $this->caterer->promos; // Add start and end conditions
+        // get between dates
+        $this->promos = $this->caterer->promos()
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now())
+            ->get(); // Add start and end conditions
 
         $this->cart = session()->get('cart') ?? [];
 
