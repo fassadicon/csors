@@ -309,15 +309,16 @@ class OrderResource extends Resource
                             ->label('Cancellation Status')
                             ->options(CancellationRequestStatus::class)
                             ->required(),
+                        // ->required(fn(?Model $record) => dd($record)),
                         Forms\Components\Textarea::make('reason')
                             // ->readOnlyOn('edit')
                             ->required(),
                         Forms\Components\Textarea::make('response')
-                            ->nullable(),
+                            ->required(),
                     ])
                     ->columns(3),
             ])
-                ->visibleOn('edit')
+                ->visible(fn(?Model $record, Get $get) => ($record && $record->cancellationRequest != null) || $get('order_status') == 'cancelled')
             // ->visible(fn(?Model $record, $livewire) => $record->cancellationRequest && $livewire instanceof \Filament\Resources\Pages\EditRecord)
             // ->visible(fn($record) => $record->cancellationRequest !== null)
         ];
