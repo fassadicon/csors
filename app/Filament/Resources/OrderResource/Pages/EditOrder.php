@@ -26,6 +26,11 @@ class EditOrder extends EditRecord
 
     protected function afterSave()
     {
+        if ($this->record->order_status == 'cancelled' || $this->record->order_status == 'declined') {
+            $this->record->payment_status = 'cancelled';
+            $this->record->save();
+        }
+
         // Caterer
         $notification = 'Order #' . $this->record->id . ' has been updated.';
         if (auth()->user()->hasRole('caterer')) {

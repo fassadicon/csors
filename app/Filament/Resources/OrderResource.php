@@ -586,15 +586,13 @@ class OrderResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('created_at', '>=', today())
-            ->when(auth()->user()->hasRole('caterer'), function ($query) {
-                $query->where('caterer_id', auth()->user()->caterer->id);
+        return static::getModel()::when(auth()->user()->hasRole('caterer'), function ($query) {
+            $query->where('caterer_id', auth()->user()->caterer->id);
+        })
+            ->where(function ($query) {
+                $query->where('order_status', 'pending')
+                    ->orWhere('order_status', 'confirmed');
             })
-            // ->where(function ($query) {
-            //     $query->where('order_status', OrderStatus::Pending)
-            //         ->orWhere('payment_status', PaymentStatus::Pending)
-            //         ->orWhereIn('payment_status', [PaymentStatus::Pending, PaymentStatus::Partial]);
-            // })
             ->count();
     }
 }
