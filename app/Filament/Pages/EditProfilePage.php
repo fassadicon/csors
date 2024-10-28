@@ -84,7 +84,7 @@ class EditProfilePage extends Page implements HasForms
                 Forms\Components\Group::make([
                     Forms\Components\TextInput::make('old_password')
                         ->password()
-                        ->label('Old Password')
+                        ->label('Old Password')->nullable()
                         ->requiredWith('new_password')  // Required if 'new_password' has input
                         ->dehydrated(fn($state) => filled($state)),  // Only include in form data if filled
                     Forms\Components\TextInput::make('new_password')
@@ -120,8 +120,8 @@ class EditProfilePage extends Page implements HasForms
     {
         $state = $this->form->getState();
 
-        // Validate the old password
-        if (!\Hash::check($state['old_password'], auth()->user()->password)) {
+        // Check if the old_password key exists in the state
+        if (isset($state['old_password']) && !\Hash::check($state['old_password'], auth()->user()->password)) {
             Notification::make()
                 ->title('Old password is incorrect!')
                 ->danger()
@@ -131,7 +131,7 @@ class EditProfilePage extends Page implements HasForms
         }
 
         // Validate new password and confirm password match
-        if ($state['new_password'] !== $state['confirm_password']) {
+        if (isset($state['new_password']) && $state['new_password'] !== $state['confirm_password']) {
             Notification::make()
                 ->title('New password and confirm password do not match!')
                 ->danger()
@@ -140,8 +140,8 @@ class EditProfilePage extends Page implements HasForms
             return;
         }
 
-        // Update user profile
-        auth()->user()->update([
+        // Proceed to update user profile and password
+        $userData = [
             'name' => $state['name'],
             'email' => $state['email'],
             'phone_number' => $state['phone_number'],
@@ -149,12 +149,25 @@ class EditProfilePage extends Page implements HasForms
             'last_name' => $state['last_name'],
             'middle_name' => $state['middle_name'],
             'ext_name' => $state['ext_name'],
-            'password' => bcrypt($state['new_password']), // Encrypt and update password
-        ]);
+        ];
 
-        Notification::make()
-            ->title('Profile and password updated!')
-            ->success()
-            ->send();
+        // Check if passwords are provided
+        if (!empty($state['old_password']) && !empty($state['new_password']) && !empty($state['confirm_password']) && isset($state['new_password']) !== "" && isset($state['confirm_password']) !== "") {
+            $userData['password'] = bcrypt($state['new_password']); // Encrypt and update password
+            auth()->user()->update($userData);
+            Notification::make()
+                ->title('Profile information and password change successfully!')
+                ->success()
+                ->send();
+        } else {
+            auth()->user()->update($userData);
+            Notification::make()
+                ->title('Profile information updated successfully!')
+                ->success()
+                ->send();
+        }
+
+        // Update user profile
+
     }
 }
