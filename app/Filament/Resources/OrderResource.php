@@ -67,6 +67,10 @@ class OrderResource extends Resource
                     )
                     ->visibleOn('create')
                     ->required(),
+                Forms\Components\TextInput::make('recipient')
+                    ->required(),
+                Forms\Components\Textarea::make('location')
+                    ->required(),
                 Forms\Components\DateTimePicker::make('start')
                     ->date()
                     ->beforeOrEqual('end')
@@ -80,11 +84,9 @@ class OrderResource extends Resource
                     ->relationship('caterer', 'name')
                     ->hidden(auth()->user()->hasRole('caterer'))
                     ->required(),
-                Forms\Components\Textarea::make('location')
-                    ->required(),
+
                 Forms\Components\Textarea::make('remarks')
-                    ->nullable()
-                    ->columnSpan(fn() => auth()->user()->hasRole('superadmin') ? 1 : 2),
+                    ->nullable(),
             ])
                 ->columns(3),
             Forms\Components\Section::make([
@@ -231,7 +233,7 @@ class OrderResource extends Resource
 
                         return false;
                     })
-                    ->afterStateUpdated(function($state, $get, $set) {
+                    ->afterStateUpdated(function ($state, $get, $set) {
                         if ($state == 'pending') {
                             $set('delivery_amount', 0.00);
                         }
@@ -315,8 +317,8 @@ class OrderResource extends Resource
                     ])
                     ->columns(3),
             ])
-                ->visible(fn(Model $record, $livewire) => $record->cancellationRequest && $livewire instanceof \Filament\Resources\Pages\EditRecord)
-            // ->visibleOn('edit')
+                ->visibleOn('edit')
+            // ->visible(fn(?Model $record, $livewire) => $record->cancellationRequest && $livewire instanceof \Filament\Resources\Pages\EditRecord)
             // ->visible(fn($record) => $record->cancellationRequest !== null)
         ];
     }
