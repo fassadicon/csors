@@ -2,20 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Components\Rating;
-use App\Filament\Resources\FeedbackResource\Pages;
-use App\Filament\Resources\FeedbackResource\RelationManagers;
-use App\Models\Feedback;
 use Filament\Forms;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
+use App\Models\Feedback;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use IbrahimBougaoua\FilamentRatingStar\Forms\Components\RatingStar;
+use Filament\Resources\Resource;
+use App\Filament\Components\Rating;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\FeedbackResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\FeedbackResource\RelationManagers;
+use IbrahimBougaoua\FilamentRatingStar\Forms\Components\RatingStar;
 
 class FeedbackResource extends Resource
 {
@@ -59,7 +60,10 @@ class FeedbackResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->recordUrl(
+                fn(Model $record): string => Pages\ViewFeedback::getUrl([$record->id]),
+            );;
     }
 
     public static function getRelations(): array
@@ -80,6 +84,7 @@ class FeedbackResource extends Resource
             'index' => Pages\ListFeedback::route('/'),
             'create' => Pages\CreateFeedback::route('/create'),
             'edit' => Pages\EditFeedback::route('/{record}/edit'),
+            'view' => Pages\ViewFeedback::route('/{record}'),
         ];
     }
 }
