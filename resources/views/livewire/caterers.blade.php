@@ -5,16 +5,18 @@
         @foreach ($caterers as $caterer)
         <a href="{{ route('about', ['caterer' => $caterer]) }}">
             <x-mary-card title="{!! $caterer->name !!}" class="flex items-center justify-center">
-                <div class="flex gap-x-2">
+                <div class="flex items-center justify-center gap-x-2">
                     {!! \Illuminate\Support\Str::limit($caterer->about, 50) !!}
-                    <x-mary-badge value="+99" class="text-white badge-success" />
+                    
                 </div>
                 {{-- <x-mary-rating class="!my-4 badge-warning"/> --}}
-                <div class="flex justify-center mt-2">
+                <div class="flex items-center justify-center mt-2 gap-x-2">
                     @if ($ratings[$caterer->id])
                         <x-rating :starCount="5" :fillStar="$ratings[$caterer->id] ?? 0" />
+                        <x-mary-badge value="+{{ $numOfRating[$caterer->id]     }}" class="text-white badge-success" />
                     @else
                         <p >Not rated yet.</p>
+                        <x-mary-badge value="0" class="text-white badge-success" />
                     @endif
                 </div>
                 <x-slot:figure>
