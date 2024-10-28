@@ -24,7 +24,7 @@
 
     <div class="flex items-center gap-x-4">
         <img src="{{ asset('images/icons/event.png') }}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Events" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <x-mary-header title="Events"  class="!my-4 !mt-8" size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($events as $event)
@@ -42,7 +42,7 @@
     <div class="flex items-center gap-x-4">
         <img src="{{ asset('images/icons/food-package.png') }}" alt=""
             class="mt-4 w-[40px] h-[40] object-scale-down !max-h-[250px]">
-        <x-mary-header title="Packages" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <x-mary-header title="Packages"  class="!my-4 !mt-8" size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($packages as $package)
@@ -60,7 +60,7 @@
 
     <div class="flex items-center gap-x-4">
         <img src="{{ asset('images/icons/burger.png') }}" alt="" class="w-[40px] mt-4 h-[40] object-scale-down">
-        <x-mary-header title="Food Categories" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <x-mary-header title="Food Categories"  class="!my-4 !mt-8" size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($foodCategories as $foodCategory)
@@ -76,7 +76,7 @@
 
     <div class="flex items-center gap-x-4">
         <img src="{{ asset('images/icons/menu.png') }}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Menu" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <x-mary-header title="Menu" class="!my-4 !mt-8" size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($foodDetails as $foodDetail)
@@ -94,7 +94,7 @@
 
     <div class="flex items-center gap-x-4">
         <img src="{{ asset('images/icons/buffet.png') }}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Serving Types" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <x-mary-header title="Serving Types" class="!my-4 !mt-8" size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($servingTypes as $servingType)
@@ -110,7 +110,7 @@
 
     <div class="flex items-center gap-x-4">
         <img src="{{ asset('images/icons/balloons.png') }}" alt="" class="mt-4 w-[40px] h-[40] object-scale-down">
-        <x-mary-header title="Utilities" subtitle="lorem ipsum" class="!my-4 !mt-8" size='text-xl' />
+        <x-mary-header title="Utilities"  class="!my-4 !mt-8" size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($utilities as $utility)

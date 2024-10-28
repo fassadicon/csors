@@ -10,6 +10,7 @@ class Caterers extends Component
 {
     public $caterers;
     public $ratings = [];
+    public $numOfRating = [];
 
     public function mount()
     {
@@ -21,7 +22,15 @@ class Caterers extends Component
             ->get();
         foreach ($this->caterers as $caterer) {
             $this->ratings[$caterer->id] = $this->getRating($caterer);
+            $this->numOfRating[$caterer->id] = $this->getTotalNumberOfRatingPerCaterer($caterer);
         }
+    }
+
+    public function getTotalNumberOfRatingPerCaterer(Caterer $caterer)
+    {
+        return Feedback::whereHas('order', function ($query) use ($caterer) {
+            $query->where('caterer_id', $caterer->id);
+        })->count();
     }
 
     public function getRating(Caterer $caterer)

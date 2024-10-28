@@ -27,10 +27,10 @@ class EditUser extends EditRecord
                     $notification = 'Requirements do not pass the verification. Please reupload the correct and updated requirements. Contact the superadmin for more information';
                     // dd($recipient->is_customer);
                     if ($recipient->is_customer === 0) {
-                        dd('sent to caterer ' . $recipient->caterer->email);
+                        // dd('sent to caterer ' . $recipient->caterer->email);
                         Mail::to($recipient->email)->send(new NotifyUser('Reupload Requirements - (Caterer)', 'We need you to reupload the requirements.', $notification));
                     } else {
-                        dd('sent to customer ' . $recipient->email);
+                        // dd('sent to customer ' . $recipient->email);
                         Mail::to($recipient->email)->send(new NotifyUser('Reupload Requirements - (Customer)', 'We need you to reupload the requirements.', $notification));
                     }
                     Notification::make()
