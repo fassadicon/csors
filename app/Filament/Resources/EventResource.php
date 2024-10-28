@@ -32,7 +32,7 @@ class EventResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextArea::make('description')
+                Forms\Components\Textarea::make('description')
                     ->nullable(),
                 Forms\Components\FileUpload::make('images')
                     ->directory('caterers/images/events')

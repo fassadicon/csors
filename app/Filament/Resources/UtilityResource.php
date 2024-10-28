@@ -35,7 +35,7 @@ class UtilityResource extends Resource
                     ->required()
                     ->numeric()
                     ->prefix('₱'),
-                Forms\Components\TextArea::make('description')
+                Forms\Components\Textarea::make('description')
                     ->columnSpanFull()
                     ->nullable(),
                 Forms\Components\FileUpload::make('images')

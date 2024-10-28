@@ -46,7 +46,7 @@ class PackageResource extends Resource
                     ->preload()
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextArea::make('description')
+                Forms\Components\Textarea::make('description')
                     ->columnSpanFull()
                     ->nullable(),
                 Forms\Components\Section::make([

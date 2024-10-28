@@ -240,7 +240,7 @@ class OrderResource extends Resource
                         $set('final_amount', floatval($get('total_amount') + $get('delivery_amount')));
                     })
                     ->required(),
-                Forms\Components\TextArea::make('decline_reason')
+                Forms\Components\Textarea::make('decline_reason')
                     ->live()
                     ->visible(fn(Get $get) => $get('order_status') == 'declined')
                     ->nullable()

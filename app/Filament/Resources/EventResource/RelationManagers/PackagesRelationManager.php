@@ -26,7 +26,7 @@ class PackagesRelationManager extends RelationManager
                     ->required()
                     ->numeric()
                     ->prefix('₱'),
-                Forms\Components\TextArea::make('description')
+                Forms\Components\Textarea::make('description')
                     ->columnSpanFull()
                     ->nullable(),
                 Forms\Components\FileUpload::make('image_path')
