@@ -34,36 +34,40 @@ class CatererResource extends Resource
                             });
                         }
                     )
-                    ->required()->disabled(),
+                    ->required()
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)
+                    ->disabledOn('edit'),
                 Forms\Components\TextInput::make('phone_number')
                     ->tel()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)
+                    ->disabledOn('edit'),
                 TinyEditor::make('about')
-                    ->columnSpanFull()->disabled(),
+                    ->columnSpanFull()->disabledOn('edit'),
                 Forms\Components\FileUpload::make('logo_path')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/images/logo')
                     ->label('Logo')
                     ->image()
                     ->nullable()
-                    ->visibleOn('edit')->disabled(),
+                    ->visibleOn('edit')->disabledOn('edit'),
                 Forms\Components\FileUpload::make('qr_path')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/images/qr')
                     ->label('QR Payment')
                     ->image()
                     ->nullable()
                     ->image()
-                    ->visibleOn('edit')->disabled(),
+                    ->visibleOn('edit')->disabledOn('edit'),
                 Forms\Components\FileUpload::make('requirements_path')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/requirements')
                     ->label('Business Requirements (.zip)')
-                    ->nullable()->disabled()
+                    ->nullable()->disabledOn('edit')
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/images/profile')
@@ -76,7 +80,7 @@ class CatererResource extends Resource
                     ->uploadingMessage('Uploading images...')
                     ->nullable()
                     ->columnSpanFull()
-                    ->visibleOn('edit')->disabled(),
+                    ->visibleOn('edit')->disabledOn('edit'),
                 Forms\Components\Toggle::make('is_verified')
                     ->label('Verified?')
                     ->required(),

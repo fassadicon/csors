@@ -36,34 +36,34 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Username')
                     ->required()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)->disabledOn('edit'),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)->disabledOn('edit'),
                 Forms\Components\TextInput::make('phone_number')
                     ->nullable()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)->disabledOn('edit'),
                 Forms\Components\TextInput::make('password')
                     ->visibleOn('create')
                     ->password()
                     ->required()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)->disabledOn('edit'),
                 Forms\Components\TextInput::make('first_name')
                     ->required()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)->disabledOn('edit'),
                 Forms\Components\TextInput::make('last_name')
                     ->required()
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)->disabledOn('edit'),
                 Forms\Components\TextInput::make('middle_name')
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)->disabledOn('edit'),
                 Forms\Components\TextInput::make('ext_name')
-                    ->maxLength(255)->readOnly(),
+                    ->maxLength(255)->disabledOn('edit'),
                 Forms\Components\FileUpload::make('verification_image_path')
                     ->label('Valid ID')
                     ->directory('users/' . auth()->id() . '/verification')
                     ->columnSpan(2)
-                    ->nullable()->disabled(),
+                    ->nullable()->disabledOn('edit'),
                 Forms\Components\Toggle::make('is_verified')
                     ->visible(auth()->user()->hasRole('superadmin')),
                 // Forms\Components\Select::make('roles')
