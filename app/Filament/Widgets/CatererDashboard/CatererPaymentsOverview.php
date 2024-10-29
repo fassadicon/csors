@@ -18,6 +18,7 @@ class CatererPaymentsOverview extends BaseWidget
                 $query->where('caterer_id', $caterer_id);
             })->sum('amount');
             $totalTargetPayment = Order::where('caterer_id', $caterer_id)
+                ->whereNotIn('order_status', ['declined'])
                 ->whereIn('payment_status', ['partial', 'paid'])
                 ->sum('final_amount');
             $totalPendingPayments = $totalTargetPayment - $totalPaymentReceived;

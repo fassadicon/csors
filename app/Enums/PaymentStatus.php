@@ -10,7 +10,7 @@ enum PaymentStatus: string implements HasLabel, HasColor
     case Pending = 'pending';
     case Partial = 'partial';
     case Paid = 'paid';
-    // case Cancelled = 'cancelled';
+    case Cancelled = 'cancelled';
 
     public function getLabel(): ?string
     {
@@ -23,7 +23,7 @@ enum PaymentStatus: string implements HasLabel, HasColor
             self::Pending => 'danger',
             self::Partial => 'amber',
             self::Paid => 'success',
-            // self::Cancelled => 'danger',
+            self::Cancelled => 'danger',
         };
     }
 
@@ -31,7 +31,7 @@ enum PaymentStatus: string implements HasLabel, HasColor
     {
         return match ($this) {
             self::Pending => 'warning bg-orange-800 badge-warning',
-            // self::Cancelled => 'warning bg-orange-800 badge-warning',
+            self::Cancelled => 'warning bg-orange-800 badge-warning',
             self::Partial => ' bg-orange-500 border-transparent text-white',
             self::Paid => 'success !bg-green-500 text-white border-transparent',
         };

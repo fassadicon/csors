@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\CancellationRequestStatus;
 use Filament\Forms;
 use App\Models\Food;
+use App\Models\User;
 use Filament\Tables;
 use App\Models\Order;
 use App\Models\Promo;
@@ -15,23 +15,24 @@ use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Enums\OrderStatus;
 use Filament\Tables\Table;
-use App\Enums\PaymentStatus;
-use Filament\Resources\Resource;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\MorphToSelect;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
-use App\Filament\Resources\OrderResource\Pages;
-use App\Models\ReportedUser;
-use App\Models\User;
 use Filament\Notifications;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Button;
+use App\Enums\PaymentStatus;
+use App\Models\ReportedUser;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Modal;
+use Filament\Forms\Components\Button;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Illuminate\Database\Eloquent\Model;
+use App\Enums\CancellationRequestStatus;
 use Filament\Notifications\Notification;
+use Filament\Tables\Actions\ActionGroup;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\MorphToSelect;
+use App\Filament\Resources\OrderResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderResource extends Resource
 {
@@ -487,6 +488,30 @@ class OrderResource extends Resource
                                 'payments' => $payments
                             ]);
                         })->modalSubmitAction(false)->modalCancelActionLabel('Close'),
+                    Action::make('downloadReceipt')->label('Download Receipt')
+                        ->visible(fn($record) => $record->payment_status->value != 'pending')
+                        ->icon('heroicon-m-printer')
+                        ->action(function ($record) {
+                            $order = $record->load([
+                                'caterer',
+                                'orderItems',
+                                'payments',
+                                'orderItems',
+                                'user',
+                            ]);
+
+                            $pdf  = Pdf::setOption([
+                                'isRemoteEnabled' => true,
+                            ])
+                                ->setPaper('a4', 'portrait')
+                                ->loadHtml(view('pdf.receipt', [
+                                    'order' => $order
+                                ])->render());
+
+                            return response()->streamDownload(function () use ($pdf) {
+                                echo $pdf->stream();
+                            }, 'receipt.pdf');
+                        }),
 
                     Action::make('user_id')->label('Report Customer')
                         ->icon('heroicon-m-flag')
