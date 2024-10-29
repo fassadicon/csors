@@ -72,10 +72,20 @@
         </table>
 
         <div style="margin-top: 20px; text-align: right;">
-            Subtotal: 0<br>
-            Tax: 0<br>
-            <strong>Total: {{ $order->total_amount }}</strong><br>
-            <small>Tax - 12%</small>
+            <?php
+                $subtotal = $order->final_amount; // Assuming final_amount is the subtotal
+                $taxRate = 0.12;
+                $deliveryFee = $order->deducted_amount ? $order->delivery_amount : 0;
+        
+                $tax = $subtotal * $taxRate;
+                $total = $subtotal + $tax + $deliveryFee;
+            ?>
+        
+            Subtotal: Php {{ number_format($subtotal, 2) }}<br>
+            Tax: Php {{ number_format($tax, 2) }}<br>
+            Delivery Fee: Php {{ number_format($deliveryFee, 2) }}<br>
+            <strong>Total: Php {{ number_format($total, 2) }}</strong><br>
+            <small>Tax Rate: 12%</small>
         </div>
 
         <h3>Payment History</h3>
@@ -90,13 +100,6 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td style="border: 1px solid #000; padding: 8px;">test</td>
-                    <td style="border: 1px solid #000; padding: 8px;">test</td>
-                    <td style="border: 1px solid #000; padding: 8px;">test</td>
-                    <td style="border: 1px solid #000; padding: 8px;">test</td>
-                    <td style="border: 1px solid #000; padding: 8px;">test</td>
-                </tr>
                 @foreach ($order->payments as $payment)
                 <tr>
                     <td style="border: 1px solid #000; padding: 8px;">{{ $payment->type }}</td>

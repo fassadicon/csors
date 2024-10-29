@@ -111,7 +111,7 @@ use Illuminate\Support\Str;
                     </div>
                 @endif
                 <p>Delivery Fee: Php {{ number_format($order->delivery_amount, 2) }}</p>
-                <h4>Total Amount: Php {{ number_format($order->final_amount, 2) }}</h4>
+                <h4>Total Amount: Php {{ number_format($order->final_amount + $order->delivery_amount, 2) }}</h4>
                 <hr class="mx-4 my-4">
                 @if ($order->cancellationRequest)
                 <x-mary-header title="Cancellation Request" class="!my-2" separator />
@@ -141,9 +141,9 @@ use Illuminate\Support\Str;
                     @if ($order->payment_status->value == 'pending')
                     <x-primary-button class="w-full bg-slate-800 flex !justify-center !text-center"
                         wire:click='payPartial'>{{ __('Pay DP (') . $order->caterer->downpayment . '%) - ₱' .
-                        $order->final_amount * ($order->caterer->downpayment / 100) }}</x-primary-button>
+                        ($order->final_amount + $order->delivery_amount) * ($order->caterer->downpayment / 100) }}</x-primary-button>
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payFull'>{{ __('Pay
-                        Full - ₱') . $order->final_amount}}
+                        Full - ₱') . ($order->final_amount + $order->delivery_amount)}}
                     </x-primary-button>
                     @elseif ($order->payment_status->value == 'partial')
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payRemaining'>{{

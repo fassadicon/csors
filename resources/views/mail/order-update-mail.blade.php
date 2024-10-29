@@ -102,7 +102,6 @@
                 <th>Name</th>
                 <th>Unit Price</th>
                 <th>Amount</th>
-                <th>Quantity</th>
             </thead>
             @foreach ($order->orderItems as $orderItem)
                 <tr>
