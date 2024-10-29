@@ -24,7 +24,7 @@ new #[Layout('layouts.guest')] class extends Component {
     /**
      * Handle an incoming registration request.
      */
-    
+
     public function register(): void
     {
         $validated = $this->validate([
@@ -39,9 +39,11 @@ new #[Layout('layouts.guest')] class extends Component {
 
         $validated['password'] = Hash::make($validated['password']);
         // SEND MAIL
-        Mail::to($this->email)->send(new CustomerSignup($this->first_name, $this->email, $this->password));        
-        
+        Mail::to($this->email)->send(new CustomerSignup($this->first_name, $this->email, $this->password));
+
         event(new Registered(($user = User::create($validated))));
+
+        $user->assignRole('customer');
 
         Auth::login($user);
 
