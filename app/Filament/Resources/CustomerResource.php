@@ -89,7 +89,10 @@ class CustomerResource extends Resource
                     ->label('Verified'),
                 Tables\Columns\TextColumn::make('orders_count')
                     ->formatStateUsing(function (Model $record) {
-                        return $record->orders->where('caterer_id', auth()->user()->caterer->id)->count();
+                        if (auth()->user()->hasRole('caterer')) {
+                            return $record->orders->where('caterer_id', auth()->user()->caterer->id)->count();
+                        }
+                        return $record->orders->count();
                     })
                     ->label('# of Orders'),
                 // Tables\Columns\TextColumn::make('email_verified_at')
