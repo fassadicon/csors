@@ -32,7 +32,7 @@ class EditOrder extends EditRecord
         }
 
         // Caterer
-        $notification = 'Order #' . $this->record->id . ' has been updated.';
+        $notification = 'Order #' . $this->record->id . ' has been ' . $this->record->order_status;
         if (auth()->user()->hasRole('caterer')) {
             Mail::to(auth()->user()->caterer->email)->send(new OrderUpdateMail(
                 $this->record->id,
@@ -44,7 +44,7 @@ class EditOrder extends EditRecord
 
         // Superadmin
         // sa.csors.offical@gmail.com
-        $notification = 'Order #' . $this->record->id . ' of ' . $this->record->caterer->name . ' has been updated.';
+        $notification = 'Order #' . $this->record->id . ' of ' . $this->record->caterer->name . ' has been ' . $this->record->order_status;
         $superadmin = User::where('id', 1)->first();
         Mail::to($superadmin->email)->send(new OrderUpdateMail(
             $this->record->id,
@@ -55,7 +55,7 @@ class EditOrder extends EditRecord
 
         // Customer
         $recipient = User::where('is_customer', 1)->where('id', $this->record->user->id)->first();
-        $notification = 'Your order ' . $this->record->id . ' has been updated.';
+        $notification = 'Your order ' . $this->record->id . ' has been ' . $this->record->order_status;
         Notification::make()
             ->title($notification)
             ->sendToDatabase($recipient);
