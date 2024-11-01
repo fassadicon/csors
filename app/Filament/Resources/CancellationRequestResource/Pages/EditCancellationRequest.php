@@ -6,6 +6,7 @@ use App\Models\User;
 use Filament\Actions;
 use App\Enums\OrderStatus;
 use App\Enums\CancellationRequestStatus;
+use App\Enums\PaymentStatus;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\CancellationRequestResource;
@@ -29,6 +30,7 @@ class EditCancellationRequest extends EditRecord
         $record = $this->record;
         if ($record->status == CancellationRequestStatus::Approved) {
             $record->order->order_status = OrderStatus::Cancelled;
+            $record->order->payment_status = PaymentStatus::Cancelled;
             $record->order->save();
         }
 
