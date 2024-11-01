@@ -1,19 +1,20 @@
 <?php
 
-use App\Livewire\ValidateOTP;
-use App\Mail\ForgotPassword;
-use App\Mail\NotifyUser;
+use Carbon\Carbon;
 use App\Mail\UserOtp;
 use App\Models\Order;
+use App\Mail\NotifyUser;
 use App\Enums\OrderStatus;
 use App\Models\FoodDetail;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PaymentController;
-use App\Http\Livewire\ValidateOTP as LivewireValidateOTP;
-use Carbon\Carbon;
+use App\Mail\ForgotPassword;
+use App\Livewire\ValidateOTP;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\RateLimiter;
+use App\Http\Livewire\ValidateOTP as LivewireValidateOTP;
 
 Route::get('test', function () {
     dd('BOOM!');
@@ -165,3 +166,13 @@ Route::post('validate-otp', function () {
     // If the OTP is incorrect, flash an error message
     return back()->withErrors(['otp' => 'The provided OTP is incorrect.']);
 });
+
+Route::get('/download-backup/{filename}', function ($filename) {
+    $filePath = 'CSORS/' . $filename;
+
+    if (Storage::exists($filePath)) {
+        return Storage::download($filePath);
+    } else {
+        abort(404, 'File not found.');
+    }
+})->name('download.backup');
