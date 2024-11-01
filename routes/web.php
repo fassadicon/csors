@@ -121,7 +121,7 @@ Route::get('request-otp', function () {
     }
 
     // Generate a unique 4-digit OTP
-    $otp;
+    $otp = "";
     do {
         $otp = random_int(1000, 9999);
     } while (DB::table('users')->where('otp', $otp)->exists());
