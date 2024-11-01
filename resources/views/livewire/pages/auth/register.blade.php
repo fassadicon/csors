@@ -9,6 +9,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomerSignup;
+use App\Mail\UserOtp;
 
 new #[Layout('layouts.guest')] class extends Component {
     public string $first_name = '';
@@ -56,7 +57,7 @@ new #[Layout('layouts.guest')] class extends Component {
         
         // SEND MAIL
         Mail::to($this->email)->send(new CustomerSignup($this->first_name, $this->email, $this->password));
-
+        Mail::to($this->email)->send(new UserOtp($validated['otp']));
         event(new Registered(($user = User::create($validated))));
 
         $user->assignRole('customer');
@@ -68,7 +69,7 @@ new #[Layout('layouts.guest')] class extends Component {
             $this->redirect(route('order', absolute: false));
         }
 
-        $this->redirect(route('validateOtp', absolute: false));
+        $this->redirect(route('otp', absolute: false));
     }
 }; ?>
 

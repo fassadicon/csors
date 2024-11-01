@@ -21,7 +21,7 @@ class CheckIfVerified
         // dd('test');
         // If the user is authenticated and email_verified_at is null, redirect
         if ($user && !$user->email_verified_at) {
-            return redirect()->route('validateOtp'); // Adjust this to your route for email verification notice
+            return redirect()->route('otp'); // Adjust this to your route for email verification notice
         }
 
         return $next($request); // Proceed to the next middleware or request

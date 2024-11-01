@@ -16,7 +16,13 @@
             <h3 class="ml-2 font-bold">Verify you account</h3>
         </div>
         <p class="text-center md:text-left">You need to verify your account before you can place an order / reservations.</p>
-        <button wire:click='test'>TEST</button>
+        @if (session('error'))
+        <div class="text-red-500">{{ session('error') }}</div>
+        @endif
+        
+        @if (session('message'))
+        <div class="text-green-500">{{ session('message') }}</div>
+        @endif
     </div>
     <form method="POST" action="validate-otp"
         class=" z-10 px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md bg-jt-white w-[90%] md:min-w-[450px] md:w-[30%]">
@@ -34,9 +40,10 @@
             <x-primary-button class="ms-3 btn-primary">
                 {{ __('Verify') }}
             </x-primary-button>
+            <br>
         </div>
-        
+        <a href="{{ route('request-otp') }}">Request new OTP</a>
+        <hr class="my-4">
     </form>
-
     
 </div>

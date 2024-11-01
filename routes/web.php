@@ -2,13 +2,18 @@
 
 use App\Livewire\ValidateOTP;
 use App\Mail\ForgotPassword;
+use App\Mail\NotifyUser;
+use App\Mail\UserOtp;
 use App\Models\Order;
 use App\Enums\OrderStatus;
 use App\Models\FoodDetail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
 use App\Http\Livewire\ValidateOTP as LivewireValidateOTP;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 
 Route::get('test', function () {
     dd('BOOM!');
@@ -102,9 +107,39 @@ require __DIR__ . '/auth.php';
 //     //     ->send(new ForgotPassword());
 // });
 
-Route::get('validate-otp', function () {
+Route::get('otp', function () {
     return view('validateOTP');
-});
+})->name('otp');
+
+Route::get('request-otp', function () {
+    $user = auth()->user();
+
+    // Check if the user has hit the rate limit
+    if (RateLimiter::tooManyAttempts('otp-request', $user->id)) {
+        $timeLeft = RateLimiter::availableIn('otp-request', $user->id);
+        return back()->with('error', "Please wait {$timeLeft} seconds before requesting a new OTP.");
+    }
+
+    // Generate a unique 4-digit OTP
+    $otp;
+    do {
+        $otp = random_int(1000, 9999);
+    } while (DB::table('users')->where('otp', $otp)->exists());
+
+    // Assign the OTP and save it to the user
+    $user->otp = $otp;
+    $user->save();
+
+    // Record the OTP request attempt
+    RateLimiter::hit('otp-request', $user->id);
+
+    Mail::to($user->email)->send(new UserOtp($otp));
+
+    // Redirect to the OTP validation page
+    return redirect('otp')->with('message', 'A new OTP has been sent!');
+})->name('request-otp')->middleware('auth');
+
+
 
 Route::post('validate-otp', function () {
     // Validate the OTP input
