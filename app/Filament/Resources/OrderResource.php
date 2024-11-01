@@ -98,13 +98,25 @@ class OrderResource extends Resource
                         Forms\Components\MorphToSelect::make('orderable')
                             ->label('Order Item')
                             ->preload()
-                            ->searchable()
                             ->types([
                                 MorphToSelect\Type::make(Utility::class)
+                                    ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                        $query->where('caterer_id', auth()->user()->caterer->id);
+                                    }))
                                     ->getOptionLabelFromRecordUsing(fn(Utility $record): string => "$record->name - (₱$record->price/[pc/set])"),
                                 MorphToSelect\Type::make(Package::class)
+                                    ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                        $query->whereHas('events', function ($query) {
+                                            $query->where('caterer_id', auth()->user()->caterer->id);
+                                        });
+                                    }))
                                     ->getOptionLabelFromRecordUsing(fn(Package $record): string => "$record->name - (₱$record->price/pax)"),
                                 MorphToSelect\Type::make(Food::class)
+                                    ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                        $query->whereHas('servingType', function ($query) {
+                                            $query->where('caterer_id', auth()->user()->caterer->id);
+                                        });
+                                    }))
                                     ->getOptionLabelFromRecordUsing(fn(Food $record): string =>
                                     $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"),
                             ])
