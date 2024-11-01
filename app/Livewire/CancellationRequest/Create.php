@@ -2,6 +2,7 @@
 
 namespace App\Livewire\CancellationRequest;
 
+use App\Models\User;
 use App\Models\Order;
 use Livewire\Component;
 use App\Models\CancellationRequest;
@@ -29,11 +30,22 @@ class Create extends Component
             'reason' => $this->reason,
         ]);
 
-        $recipient = $this->order->caterer->user;
-        $notification = 'Order #' . $this->order->id . ' has been requested for cancellation ';
+        // Caterer
+        $recipient = User::where('is_customer', 1)->where('id', $this->order->user->id)->first();
+        $notification = 'Order #' . $this->order->id . ' has been requested for cancellation';
         Notification::make()
             ->title($notification)
             ->sendToDatabase($recipient);
+
+        // Superadmin
+        $notification = 'Order #' . $this->record->id . ' of ' . $this->record->caterer->name . ' has been requested for cancellation';
+        $superadmin = User::where('id', 1)->first();
+        Notification::make()
+            ->title($notification)
+            ->sendToDatabase($superadmin);
+
+        // Customer
+        $notification = 'Your Order #' . $this->order->id . ' has been requested for cancellation ';
         Notification::make()
             ->title($notification)
             ->sendToDatabase(auth()->user());
