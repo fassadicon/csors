@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Exception;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Artisan;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 
 class BackupPage extends Page
 {
+    use HasPageShield;
+
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
     protected static string $view = 'filament.pages.backup-page';
