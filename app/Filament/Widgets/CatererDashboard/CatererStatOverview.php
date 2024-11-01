@@ -31,7 +31,7 @@ class CatererStatOverview extends BaseWidget
 
         $completedOrdersCount = Order::when($caterer_id, function ($query) use ($caterer_id) {
             $query->where('caterer_id', $caterer_id);
-        })->whereIn('order_status', ['completed', 'to_review'])->count();
+        })->whereIn('order_status', ['completed'])->count();
 
         $forReviewOrdersCount = Order::when($caterer_id, function ($query) use ($caterer_id) {
             $query->where('caterer_id', $caterer_id);

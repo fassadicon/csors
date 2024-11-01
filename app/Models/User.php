@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -43,6 +44,7 @@ class User extends Authenticatable implements FilamentUser
         'verification_image_path',
         'is_verified',
         'is_customer',
+        'otp',
     ];
 
     /**
@@ -116,4 +118,13 @@ class User extends Authenticatable implements FilamentUser
     // {
     //    orders->payments
     // }
+
+    // CHECK IF CUSTOMER IS REPORTED LAST 15 Days
+    public function isReported(): HasOne
+    {
+        $daysAgo = Carbon::now()->subDays(15);
+
+        return $this->hasOne(ReportedUser::class, 'reported_user')
+            ->where('created_at', '>=', $daysAgo);
+    }
 }

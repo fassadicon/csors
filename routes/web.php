@@ -1,12 +1,19 @@
 <?php
 
+use App\Livewire\ValidateOTP;
 use App\Mail\ForgotPassword;
+use App\Mail\NotifyUser;
+use App\Mail\UserOtp;
 use App\Models\Order;
 use App\Enums\OrderStatus;
 use App\Models\FoodDetail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
+use App\Http\Livewire\ValidateOTP as LivewireValidateOTP;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 
 Route::get('test', function () {
     dd('BOOM!');
@@ -53,7 +60,7 @@ Route::get('cart', App\Livewire\Cart::class)
 
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'emailVerified']], function () {
     Route::view('profile', 'profile')
         ->name('profile');
 
@@ -93,9 +100,68 @@ Route::get('payment-cancelled', [PaymentController::class, 'cancelled'])
 require __DIR__ . '/auth.php';
 
 
-Route::get('emailPreview', function () {
-    // $order = Order::findOrFail(7);
-    return view('mail.caterer-requirement');
-    // Mail::to('jjarts1028@gmail.com')
-    //     ->send(new ForgotPassword());
+// Route::get('emailPreview', function () {
+//     // $order = Order::findOrFail(7);
+//     return view('mail.caterer-requirement');
+//     // Mail::to('jjarts1028@gmail.com')
+//     //     ->send(new ForgotPassword());
+// });
+
+Route::get('otp', function () {
+    return view('validateOTP');
+})->name('otp');
+
+Route::get('request-otp', function () {
+    $user = auth()->user();
+
+    // Check if the user has hit the rate limit
+    if (RateLimiter::tooManyAttempts('otp-request', $user->id)) {
+        $timeLeft = RateLimiter::availableIn('otp-request', $user->id);
+        return back()->with('error', "Please wait {$timeLeft} seconds before requesting a new OTP.");
+    }
+
+    // Generate a unique 4-digit OTP
+    $otp = "";
+    do {
+        $otp = random_int(1000, 9999);
+    } while (DB::table('users')->where('otp', $otp)->exists());
+
+    // Assign the OTP and save it to the user
+    $user->otp = $otp;
+    $user->save();
+
+    // Record the OTP request attempt
+    RateLimiter::hit('otp-request', $user->id);
+
+    Mail::to($user->email)->send(new UserOtp($otp));
+
+    // Redirect to the OTP validation page
+    return redirect('otp')->with('message', 'A new OTP has been sent!');
+})->name('request-otp')->middleware('auth');
+
+
+
+Route::post('validate-otp', function () {
+    // Validate the OTP input
+    $validatedData = request()->validate([
+        'otp' => ['required', 'min:4', 'max:4']
+    ]);
+
+    $otp = $validatedData['otp']; // Get the validated OTP
+
+    // Retrieve the authenticated user
+    $user = auth()->user();
+
+    if ($user && $user->otp === $otp) {
+        // Mark the email as verified and save the user
+        $user->email_verified_at = now();
+        $user->save();
+
+        // Flash a success message to the session
+        session()->flash('message', 'OTP verified successfully!');
+        return redirect()->route('landing'); // Redirect to the landing page
+    }
+
+    // If the OTP is incorrect, flash an error message
+    return back()->withErrors(['otp' => 'The provided OTP is incorrect.']);
 });

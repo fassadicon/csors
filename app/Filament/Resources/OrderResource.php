@@ -98,13 +98,25 @@ class OrderResource extends Resource
                         Forms\Components\MorphToSelect::make('orderable')
                             ->label('Order Item')
                             ->preload()
-                            ->searchable()
                             ->types([
                                 MorphToSelect\Type::make(Utility::class)
+                                    ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                        $query->where('caterer_id', auth()->user()->caterer->id);
+                                    }))
                                     ->getOptionLabelFromRecordUsing(fn(Utility $record): string => "$record->name - (₱$record->price/[pc/set])"),
                                 MorphToSelect\Type::make(Package::class)
+                                    ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                        $query->whereHas('events', function ($query) {
+                                            $query->where('caterer_id', auth()->user()->caterer->id);
+                                        });
+                                    }))
                                     ->getOptionLabelFromRecordUsing(fn(Package $record): string => "$record->name - (₱$record->price/pax)"),
                                 MorphToSelect\Type::make(Food::class)
+                                    ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                        $query->whereHas('servingType', function ($query) {
+                                            $query->where('caterer_id', auth()->user()->caterer->id);
+                                        });
+                                    }))
                                     ->getOptionLabelFromRecordUsing(fn(Food $record): string =>
                                     $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"),
                             ])
@@ -115,7 +127,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
-                                $set('../../final_amount', $totalAmount);
+                                $set('../../final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('../../delivery_amount'));
                             })
                             ->live(debounce: 500)
                             ->required()
@@ -133,7 +145,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
-                                $set('../../final_amount', $totalAmount);
+                                $set('../../final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('../../delivery_amount'));
                             })
                             ->columnSpan(2),
                         Forms\Components\TextInput::make('amount')
@@ -148,7 +160,7 @@ class OrderResource extends Resource
                         $deductedAmount = static::getDeductedAmount($get('promo_id'), $totalAmount);
                         $set('deducted_amount', $deductedAmount);
                         $set('total_amount', $totalAmount - $deductedAmount);
-                        $set('final_amount', $totalAmount);
+                        $set('final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('delivery_amount'));
                     })
                     ->reorderable()
                     ->columns(12)
@@ -167,7 +179,7 @@ class OrderResource extends Resource
                     ->afterStateUpdated(function ($state, $get, $set) {
                         $set('deducted_amount', static::getDeductedAmount($state, static::getTotalAmount($get('orderItems'))));
                         $set('total_amount', static::getTotalAmount($get('orderItems')) - $get('deducted_amount'));
-                        $set('final_amount', $get('total_amount'));
+                        $set('final_amount', ($get('total_amount') + ($get('total_amount') * 0.12)) + $get('delivery_amount'));
                     }),
                 Forms\Components\TextInput::make('deducted_amount')
                     ->live(debounce: 500)
@@ -187,7 +199,7 @@ class OrderResource extends Resource
                     ->numeric()
                     ->live(debounce: 500)
                     ->afterStateUpdated(function ($state, $get, $set) {
-                        $set('final_amount', floatval($get('total_amount') + $state));
+                        $set('final_amount', floatval(($get('total_amount') + ($get('total_amount') * 0.12)) + $state));
                     }),
                 Forms\Components\TextInput::make('total_amount')
                     ->readOnly()
@@ -196,6 +208,12 @@ class OrderResource extends Resource
                     ->required()
                     ->numeric()
                     ->live(debounce: 500),
+                Forms\Components\Placeholder::make('VAT')
+                    ->live()
+                    ->content(function (Get $get): string {
+                        return '₱ ' . number_format($get('total_amount') * 0.12, 2);
+                    })
+                    ->label('VAT'),
                 Forms\Components\TextInput::make('final_amount')
                     ->live(debounce: 500)
                     ->numeric()
@@ -209,27 +227,23 @@ class OrderResource extends Resource
                     ->visibleOn('edit')
                     ->disableOptionWhen(function (string $value, Model $record) {
                         if ($record->order_status === OrderStatus::Completed) {
-                            return in_array($value, ['pending', 'confirmed', 'cancelled', 'declined', 'to_review']);
+                            return in_array($value, ['pending', 'confirmed', 'cancelled', 'declined']);
                         }
 
                         if ($record->order_status === OrderStatus::Confirmed) {
-                            return in_array($value, ['pending', 'to_review', 'declined']);
+                            return in_array($value, ['pending', 'declined']);
                         }
 
                         if ($record->order_status === OrderStatus::Cancelled) {
-                            return in_array($value, ['pending', 'confirmed', 'completed', 'to_review', 'declined']);
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'declined']);
                         }
 
                         if ($record->order_status === OrderStatus::Pending) {
-                            return in_array($value, ['completed', 'cancelled', 'to_review']);
+                            return in_array($value, ['completed', 'cancelled']);
                         }
 
                         if ($record->order_status === OrderStatus::Declined) {
-                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled', 'to_review']);
-                        }
-
-                        if ($record->order_status === OrderStatus::To_Review) {
-                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled', 'to_review', 'declined']);
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled']);
                         }
 
                         return false;
@@ -238,7 +252,7 @@ class OrderResource extends Resource
                         if ($state == 'pending') {
                             $set('delivery_amount', 0.00);
                         }
-                        $set('final_amount', floatval($get('total_amount') + $get('delivery_amount')));
+                        $set('final_amount', floatval(($get('total_amount') + $get('total_amount') * 0.12) + $get('delivery_amount')));
                     })
                     ->required(),
                 Forms\Components\Textarea::make('decline_reason')

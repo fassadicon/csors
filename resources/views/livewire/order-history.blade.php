@@ -5,13 +5,21 @@
             {{ session('success') }}
         </x-mary-alert>
     @endsession
+
+    @session('warning')
+        <x-mary-alert icon="o-banknotes"
+            class="alert-warning">
+            {{ session('warning') }}
+        </x-mary-alert>
+    @endsession
     <x-mary-header title="My Orders"
         class="!my-2">
     </x-mary-header>
 
     <x-mary-table :headers="$headers"
         :rows="$orders"
-        striped hover
+        striped
+        hover
         class="!gap-y-4"
         {{-- show-empty-text --}}
         {{-- empty-text="No orders found" --}}
@@ -31,14 +39,14 @@
                 class="badge-{{ $order->order_status->getMaryColor() }}" />
         @endscope
         @scope('cell_duration', $order)
-            {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') .' - '. \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
+            {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') . ' - ' . \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
         @endscope
-        
+
         {{-- DECLINE REASON  --}}
         @scope('cell_final_amount', $order)
-            {{ $order->decline_reason ? $order->decline_reason : ' - - - '  }}
+            {{ $order->decline_reason ? $order->decline_reason : ' - - - ' }}
         @endscope
-        
+
         {{-- @scope('cell_end', $order)
             {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
         @endscope --}}
@@ -63,7 +71,9 @@
     @if (count($orders) <= 0)
         <div class="flex items-center justify-center w-full mt-12">
             <div class="flex flex-col items-center gap-y-4">
-                <img src="{{asset('images/icons/no-order.png')}}" alt="Empty Box" class="w-[100px]">
+                <img src="{{ asset('images/icons/no-order.png') }}"
+                    alt="Empty Box"
+                    class="w-[100px]">
                 <p>No orders found.</p>
             </div>
         </div>
