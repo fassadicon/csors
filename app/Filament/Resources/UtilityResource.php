@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UtilityResource\Pages;
-use App\Filament\Resources\UtilityResource\RelationManagers;
-use App\Models\Utility;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Utility;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use App\Filament\Exports\UtilityExporter;
+use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UtilityResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UtilityResource\RelationManagers;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class UtilityResource extends Resource
@@ -54,6 +56,10 @@ class UtilityResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(UtilityExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
                     ->visible(auth()->user()->hasRole('superadmin'))
