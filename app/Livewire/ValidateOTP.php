@@ -15,7 +15,6 @@ class ValidateOTP extends Component
     public function validateOTP()
     {
         $this->validate();
-        dd('wtf');
         $user = auth()->user();
         if ($user && $user->otp === $this->otp) {
             $user->email_verified_at = now();
@@ -26,11 +25,6 @@ class ValidateOTP extends Component
         }
 
         $this->addError('otp', 'The provided OTP is incorrect.');
-    }
-
-    public function test()
-    {
-        dd('Test button clicked!');
     }
 
     public function render()

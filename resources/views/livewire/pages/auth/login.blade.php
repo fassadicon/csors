@@ -24,7 +24,7 @@ new #[Layout('layouts.guest')] class extends Component {
         $reported = ReportedUser::where('id', $user)
             ->where('created_at', '>=', $daysAgo)
             ->firstOrFail();
-        dd($reported);
+        // dd($reported);
         // if ($reported) {
         //     return true;
         // }
