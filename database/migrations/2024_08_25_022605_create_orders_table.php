@@ -29,6 +29,7 @@ return new class extends Migration
                 'cancelled',
                 'partial',
                 'paid',
+                'refunded',
             ])->default('pending');
             $table->enum('order_status', [
                 'pending',

@@ -4,30 +4,93 @@ use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Carbon\Carbon;
+use App\Models\ReportedUser;
 new #[Layout('layouts.guest')] class extends Component {
     public LoginForm $form;
 
     /**
      * Handle an incoming authentication request.
      */
+
+    public function checkIfReported(User $user)
+    {
+        // Calculate the date 15 days ago from today
+        $daysAgo = Carbon::now()->subDays(15);
+        // Auth
+        // Retrieve the reported user only if created within the last 15 days
+        $reported = ReportedUser::where('id', $user)
+            ->where('created_at', '>=', $daysAgo)
+            ->firstOrFail();
+        dd($reported);
+        // if ($reported) {
+        //     return true;
+        // }
+
+        // return false;
+    }
+
     public function login(): void
     {
         $this->validate();
-
+        
         $this->form->authenticate();
-
-        Session::regenerate();
-
-        // $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-        if (session()->has('cart') && session()->has('caterer')) {
-            $this->redirectIntended(route('order', absolute: false));
-        } elseif (session()->has('caterer') && !session()->has('cart')) {
-            $caterer = App\Models\Caterer::find(session()->get('caterer'));
-            $this->redirectIntended(route('about', ['caterer' => $caterer], absolute: false));
-        } else {
-            $this->redirectIntended(route('landing', absolute: false));
+        
+        // Session::regenerate();
+        
+        $user = Auth::user();
+        
+        if ($user) {
+            if ($user->isReported) {
+                $reportedDate = Carbon::parse($user->isReported->created_at)->diffForHumans();
+                $createdAt = Carbon::parse($user->isReported->created_at); // created date
+                $currentDate = Carbon::now(); // Get the current date
+                
+                // Set the wait time in days
+                $waitTime = 15; // The number of days to wait
+                $endDate = $createdAt->addDays($waitTime); // Calculate the end date of the wait period
+                
+                // Calculate the remaining wait time
+                $remainingWaitDays = floor($currentDate->diffInDays($endDate));
+                
+                if ($remainingWaitDays > 0) {
+                // If there are remaining days, use them in the message
+                $waitMessage = "You need to wait $remainingWaitDays days to be able to log in again.";
+            } else {
+                // If no remaining days, calculate remaining hours and minutes
+                $remainingMinutes = $currentDate->diffInMinutes($endDate);
+                $remainingHours = floor($remainingMinutes / 60);
+                $remainingMinutes = $remainingMinutes % 60; // Get the remaining minutes after hours
+                
+                // Format the wait message
+                $waitMessage = "You need to wait $remainingHours hrs and $remainingMinutes mins to be able to log in again.";
+                }
+                
+                // Redirect
+                Auth::logout();
+                redirect()->route('login')->with('reported', "You've been reported by a caterer $reportedDate. $waitMessage");
+            } else {
+                // $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+                if (session()->has('cart') && session()->has('caterer')) {
+                    $this->redirectIntended(route('order', absolute: false));
+                } elseif (session()->has('caterer') && !session()->has('cart')) {
+                    $caterer = App\Models\Caterer::find(session()->get('caterer'));
+                    $this->redirectIntended(route('about', ['caterer' => $caterer], absolute: false));
+                } else {
+                    $this->redirectIntended(route('landing', absolute: false));
+                }
+            }
         }
+        // $this->checkIfReported($user);
+        // if($user) {
+        //     dd($this->form->checkIfReported($user));
+        //     // if($this->form->checkIfReported($user) === true) {
+        //     //     dd($)
+        //     //     // $this->redirect()->with('reported', "You've been reported by a caterer.");
+        //     // } 
+        // }
     }
 }; ?>
 
@@ -47,6 +110,11 @@ new #[Layout('layouts.guest')] class extends Component {
         <p class="text-center md:text-left">Log in to manage your catering orders, explore our services, and plan your next event with ease.</p>
     </div>
     <form wire:submit="login" class=" z-10 px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md bg-jt-white w-[90%] md:min-w-[450px] md:w-[30%]">
+        @if (session('reported'))
+            <div class="p-4 mb-2 text-white bg-red-500">
+                <p>{{ session('reported') }}</p>
+            </div>
+        @endif
         <!-- Email Address -->
         <div>
             <x-input-label for="email"
