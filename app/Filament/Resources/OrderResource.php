@@ -24,11 +24,13 @@ use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Modal;
 use Filament\Forms\Components\Button;
 use Filament\Forms\Components\Select;
+use App\Filament\Exports\OrderExporter;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\CancellationRequestStatus;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MorphToSelect;
 use App\Filament\Resources\OrderResource\Pages;
@@ -390,6 +392,10 @@ class OrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(OrderExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->searchable()
