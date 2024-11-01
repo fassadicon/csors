@@ -14,6 +14,8 @@ class CancellationRequest extends Model
 {
     use SoftDeletes, LogsActivity;
 
+    protected $table = 'cancellation_requests';
+
     protected $fillable = [
         'order_id',
         'status',
