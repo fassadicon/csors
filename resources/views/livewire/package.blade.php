@@ -35,7 +35,7 @@
             <hr class="mx-4 my-4">
             @if ($package->packageItems)
             <h4>This package includes:</h4>
-            <div class="grid grid-cols-2 p-4 shadow-md md:grid-cols-3 gap-y-4">
+            <div class="grid grid-cols-2 p-4 shadow-md md:grid-cols-2 gap-y-4">
                 @foreach ($package->packageItems as $item)
                 @php
                     $model = $item->packageable; // Access the polymorphic relation
@@ -47,7 +47,16 @@
                         @else
                             <img src="https://placehold.co/50" alt="Food Image" class="mini-card">
                         @endif
-                        <p>{{ $model->foodDetail->name }}</p>
+                        <p>{{ $model->foodDetail->name }} - {{$model->servingType->name}}</p>
+                    </div>
+                @elseif ($model instanceof \App\Models\Utility)
+                    <div class="flex flex-row items-center gap-x-4">
+                        @if ($model->getFirstImagePath() !== null)
+                        <img src="{{asset('storage/'.$model->foodDetail->getFirstImagePath())}}" alt="Utility Image" class="mini-card">
+                        @else
+                        <img src="https://placehold.co/50" alt="Utility Image" class="mini-card">
+                        @endif
+                        <p>{{ $model->name }}</p>
                     </div>
                 @endif
                 @endforeach

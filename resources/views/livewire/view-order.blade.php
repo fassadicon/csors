@@ -97,7 +97,8 @@ use Illuminate\Support\Str;
             </div>
             <hr class="block my-4 md:my-0 md:hidden">
             <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] ">
-                <p>Subtotal: Php {{ number_format($order->total_amount + $order->deducted_amount, 2) }}</p>
+                <p>Subtotal: Php {{ number_format($order->total_amount , 2) }}</p>
+                <p>Tax: Php {{ number_format($order->total_amount * 0.12, 2) }}</p>
                 @if ($order->promo)
                     <div class="flex gap-x-2 w-fit">
                         <p>Promo:</p>
@@ -111,7 +112,7 @@ use Illuminate\Support\Str;
                     </div>
                 @endif
                 <p>Delivery Fee: Php {{ number_format($order->delivery_amount, 2) }}</p>
-                <h4>Total Amount: Php {{ number_format($order->final_amount + $order->delivery_amount, 2) }}</h4>
+                <h4>Total Amount: Php {{ number_format($order->total_amount + ($order->total_amount * $taxRate) + $order->delivery_amount, 2) }}</h4>
                 <hr class="mx-4 my-4">
                 @if ($order->cancellationRequest)
                 <x-mary-header title="Cancellation Request" class="!my-2" separator />
@@ -120,12 +121,13 @@ use Illuminate\Support\Str;
                     @if ($cancellationRequestStatus->value == 'approved' || $cancellationRequestStatus->value ==
                     'declined')
                     <p>Reason: {{ $cancellationRequestReason }}</p>
+                    <x-mary-textarea label="Response of Caterer" wire:model="cancellationRequestReason" placeholder="Notes for the Caterer"
+                        rows="4" inline />
                     @else
-                    <x-mary-textarea label="Reason for Cancellation" wire:model="cancellationRequestReason"
-                        placeholder="Notes for the Caterer" rows="4" inline />
-                    @endif
-                    <x-mary-textarea label="Reason for Cancellation" wire:model="cancellationRequestResponse"
+                    
+                    <x-mary-textarea label="Response of Caterer" wire:model="cancellationRequestResponse"
                         placeholder="Awaiting Reply from the Caterer..." rows="4" inline readonly />
+                    @endif
                 </div>
                 <hr class="my-4">
                 @if ($cancellationRequestStatus->value == 'pending')
@@ -140,10 +142,10 @@ use Illuminate\Support\Str;
                 <div class="flex gap-x-2">
                     @if ($order->payment_status->value == 'pending')
                     <x-primary-button class="w-full bg-slate-800 flex !justify-center !text-center"
-                        wire:click='payPartial'>{{ __('Pay DP (') . $order->caterer->downpayment . '%) - ₱' .
-                        ($order->final_amount + $order->delivery_amount) * ($order->caterer->downpayment / 100) }}</x-primary-button>
+                        wire:click='payPartial'>{{ __('Pay DP (') . ($order->caterer->downpayment / 100) . '%) - ₱' .
+                        number_format(($order->total_amount + ($order->total_amount * $taxRate) + $order->delivery_amount) * ($order->caterer->downpayment / 100), 2)  }}</x-primary-button>
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payFull'>{{ __('Pay
-                        Full - ₱') . ($order->final_amount + $order->delivery_amount)}}
+                        Full - ₱') . number_format(($order->total_amount + ($order->total_amount * $taxRate) + $order->delivery_amount), 2)}}
                     </x-primary-button>
                     @elseif ($order->payment_status->value == 'partial')
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payRemaining'>{{

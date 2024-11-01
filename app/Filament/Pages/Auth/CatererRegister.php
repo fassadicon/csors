@@ -59,7 +59,10 @@ class CatererRegister extends Register
                             Forms\Components\TextInput::make('phone_number')
                                 ->tel()
                                 ->nullable(),
-                            $this->getPasswordFormComponent(),
+                            Forms\Components\TextInput::make('password')
+                                ->password()
+                                ->required()
+                                ->minLength(8),
                             $this->getPasswordConfirmationFormComponent(),
                         ]),
                     Wizard\Step::make('User')
@@ -124,7 +127,6 @@ class CatererRegister extends Register
             $this->rateLimit(2);
         } catch (TooManyRequestsException $exception) {
             $this->getRateLimitedNotification($exception)?->send();
-
             return null;
         }
 
@@ -133,13 +135,20 @@ class CatererRegister extends Register
 
             $data = $this->form->getState();
 
-            // Capture the plain text password before hashing
+            // Capture the plain text password
             $plainPassword = $data['password'];
-            // Send email with the plain text password
-            Mail::to($data['email'])->send(new CustomerSignup($data['first_name'] . ", " . $data['last_name'], $data['email'], $plainPassword));
+
+            // Send the plain text password via email
+            Mail::to($data['email'])->send(new CustomerSignup(
+                $data['first_name'] . ", " . $data['last_name'],
+                $data['email'],
+                $plainPassword
+            ));
 
             $this->callHook('afterValidate');
 
+            // Now hash the password before saving
+            $data['password'] = Hash::make($data['password']);
             $data = $this->mutateFormDataBeforeRegister($data);
 
             $this->callHook('beforeRegister');
@@ -168,11 +177,11 @@ class CatererRegister extends Register
         $this->sendEmailVerificationNotification($user);
 
         Filament::auth()->login($user);
-
         session()->regenerate();
 
         return app(RegistrationResponse::class);
     }
+
 
     protected function mutateFormDataBeforeRegister(array $data): array
     {
