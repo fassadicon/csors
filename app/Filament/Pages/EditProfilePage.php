@@ -72,14 +72,13 @@ class EditProfilePage extends Page implements HasForms
 
                 Forms\Components\Toggle::make('is_verified')
                     ->label('Verified?')
-                    ->disabled()
-                    ->columnSpan(2),
+                    ->disabled(),
                 Forms\Components\FileUpload::make('verification_image_path')
                     ->label('Valid ID')
-                    ->directory('users/' . auth()->id() . '/verification')
+                    ->directory('users/verification')
                     ->nullable()
+                    ->image()
                     ->columnSpan(3),
-
                 // Change Password Section - conditional requirement
                 Forms\Components\Group::make([
                     Forms\Components\TextInput::make('old_password')
@@ -149,6 +148,7 @@ class EditProfilePage extends Page implements HasForms
             'last_name' => $state['last_name'],
             'middle_name' => $state['middle_name'],
             'ext_name' => $state['ext_name'],
+            'verification_image_path' => $state['verification_image_path'],
         ];
 
         // Check if passwords are provided

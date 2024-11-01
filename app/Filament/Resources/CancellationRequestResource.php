@@ -97,15 +97,15 @@ class CancellationRequestResource extends Resource
                     ->url(fn($record) => CancellationRequestResource::getUrl('logs', ['record' => $record]))
                     ->icon('heroicon-m-list-bullet')
                     ->color('gray'),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                // Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                //     Tables\Actions\ForceDeleteBulkAction::make(),
+                //     Tables\Actions\RestoreBulkAction::make(),
+                // ]),
             ])
             ->defaultSort('created_at', 'desc');
     }

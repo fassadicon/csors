@@ -12,7 +12,6 @@ enum OrderStatus: string implements HasLabel, HasColor
     case Completed = 'completed';
     case Cancelled = 'cancelled';
     case Declined = 'declined';
-    case To_Review = 'to_review';
 
     public function getLabel(): ?string
     {
@@ -27,7 +26,6 @@ enum OrderStatus: string implements HasLabel, HasColor
             self::Completed => 'success',
             self::Cancelled => 'danger',
             self::Declined => 'danger',
-            self::To_Review => 'outline',
         };
     }
 
@@ -39,7 +37,6 @@ enum OrderStatus: string implements HasLabel, HasColor
             self::Completed => 'success !bg-blue-500 text-white',
             self::Cancelled => 'error bg-red-500 text-white',
             self::Declined => 'error bg-red-500 text-white',
-            self::To_Review => 'outline',
         };
     }
 }
