@@ -10,6 +10,8 @@ use App\Models\Utility;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use App\Filament\Exports\PackageExporter;
+use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MorphToSelect;
 use App\Filament\Resources\PackageResource\Pages;
@@ -130,6 +132,10 @@ class PackageResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(PackageExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('events.caterer.name')
                     ->label('Caterer')
