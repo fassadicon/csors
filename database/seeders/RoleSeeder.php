@@ -49,7 +49,8 @@ class RoleSeeder extends Seeder
                 'reorder_caterer',
                 'delete_caterer',
                 'delete_any_caterer',
-                'widget_UsersOverview'
+                'widget_UsersOverview',
+                'page_BackupPage',
             ]
         )
             ->get();
