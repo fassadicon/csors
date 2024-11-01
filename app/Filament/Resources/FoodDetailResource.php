@@ -2,18 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\FoodDetailResource\Pages;
-use App\Filament\Resources\FoodDetailResource\RelationManagers;
-use App\Filament\Resources\FoodDetailResource\RelationManagers\ServingTypesRelationManager;
-use App\Models\FoodCategory;
-use App\Models\FoodDetail;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\FoodDetail;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Exports\FoodDetailExporter;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\FoodDetailResource\Pages;
+use App\Filament\Resources\FoodDetailResource\RelationManagers\ServingTypesRelationManager;
 
 class FoodDetailResource extends Resource
 {
@@ -58,6 +58,10 @@ class FoodDetailResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(FoodDetailExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('caterer.name')
                     ->searchable()
