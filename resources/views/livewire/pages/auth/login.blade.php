@@ -15,23 +15,6 @@ new #[Layout('layouts.guest')] class extends Component {
      * Handle an incoming authentication request.
      */
 
-    public function checkIfReported(User $user)
-    {
-        // Calculate the date 15 days ago from today
-        $daysAgo = Carbon::now()->subDays(15);
-        // Auth
-        // Retrieve the reported user only if created within the last 15 days
-        $reported = ReportedUser::where('id', $user)
-            ->where('created_at', '>=', $daysAgo)
-            ->firstOrFail();
-        // dd($reported);
-        // if ($reported) {
-        //     return true;
-        // }
-
-        // return false;
-    }
-
     public function login(): void
     {
         $this->validate();
@@ -43,9 +26,11 @@ new #[Layout('layouts.guest')] class extends Component {
         $user = Auth::user();
         
         if ($user) {
+            
             if ($user->isReported) {
-                $reportedDate = Carbon::parse($user->isReported->created_at)->diffForHumans();
-                $createdAt = Carbon::parse($user->isReported->created_at); // created date
+                // dd($user->isReported);
+                $reportedDate = Carbon::parse($user->isReported->deleted_at)->diffForHumans();
+                $createdAt = Carbon::parse($user->isReported->deleted_at); // created date
                 $currentDate = Carbon::now(); // Get the current date
                 
                 // Set the wait time in days
@@ -56,18 +41,17 @@ new #[Layout('layouts.guest')] class extends Component {
                 $remainingWaitDays = floor($currentDate->diffInDays($endDate));
                 
                 if ($remainingWaitDays > 0) {
-                // If there are remaining days, use them in the message
-                $waitMessage = "You need to wait $remainingWaitDays days to be able to log in again.";
-            } else {
-                // If no remaining days, calculate remaining hours and minutes
-                $remainingMinutes = $currentDate->diffInMinutes($endDate);
-                $remainingHours = floor($remainingMinutes / 60);
-                $remainingMinutes = $remainingMinutes % 60; // Get the remaining minutes after hours
-                
-                // Format the wait message
-                $waitMessage = "You need to wait $remainingHours hrs and $remainingMinutes mins to be able to log in again.";
+                    // If there are remaining days, use them in the message
+                    $waitMessage = "You need to wait $remainingWaitDays days to be able to log in again.";
+                } else {
+                    // If no remaining days, calculate remaining hours and minutes
+                    $remainingMinutes = $currentDate->diffInMinutes($endDate);
+                    $remainingHours = floor($remainingMinutes / 60);
+                    $remainingMinutes = $remainingMinutes % 60; // Get the remaining minutes after hours
+                    
+                    // Format the wait message
+                    $waitMessage = "You need to wait $remainingHours hrs and $remainingMinutes mins to be able to log in again.";
                 }
-                
                 // Redirect
                 Auth::logout();
                 redirect()->route('login')->with('reported', "You've been reported by a caterer $reportedDate. $waitMessage");

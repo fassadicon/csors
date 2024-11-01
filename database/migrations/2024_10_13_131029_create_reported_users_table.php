@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('reported_user')->constrained('users');
             $table->text('comment');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
