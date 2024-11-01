@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\UserExporter;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -11,6 +12,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\FormsComponent;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\CustomerResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -74,6 +76,18 @@ class CustomerResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(UserExporter::class)
+                    ->modifyQueryUsing(function ($query) {
+                        return $query->where('is_customer', 1)
+                            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                                $query->whereHas('orders', function ($query) {
+                                    $query->where('caterer_id', auth()->user()->caterer->id);
+                                });
+                            });
+                    }),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Username')
