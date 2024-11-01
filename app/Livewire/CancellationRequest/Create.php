@@ -31,14 +31,14 @@ class Create extends Component
         ]);
 
         // Caterer
-        $recipient = User::where('is_customer', 1)->where('id', $this->order->user->id)->first();
+        $recipient = User::where('id', $this->order->caterer->user->id)->first();
         $notification = 'Order #' . $this->order->id . ' has been requested for cancellation';
         Notification::make()
             ->title($notification)
             ->sendToDatabase($recipient);
 
         // Superadmin
-        $notification = 'Order #' . $this->record->id . ' of ' . $this->record->caterer->name . ' has been requested for cancellation';
+        $notification = 'Order #' . $this->order->id . ' of ' . $this->order->caterer->name . ' has been requested for cancellation';
         $superadmin = User::where('id', 1)->first();
         Notification::make()
             ->title($notification)
