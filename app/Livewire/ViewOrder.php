@@ -20,7 +20,8 @@ class ViewOrder extends Component
     public $canPay = false;
 
     public $payments;
-
+    public $taxAdd;
+    public $taxRate = .12;
     public array $headers = [
         [
             'key' => 'type',
@@ -76,6 +77,9 @@ class ViewOrder extends Component
             $this->canPay = true;
         }
 
+        // COMPUTE TAX
+        $this->taxAdd = $this->order->final_amount * $this->taxRate;
+
         if ($this->order->payments) {
             $this->payments = $this->order->payments;
         }
@@ -114,7 +118,7 @@ class ViewOrder extends Component
 
     public function payPartial()
     {
-        $downPayment = (($this->order->final_amount + $this->order->delivery_amount)) * ($this->order->caterer->downpayment / 100);
+        $downPayment = ($this->order->total_amount + ($this->order->total_amount * $this->taxRate) + $this->order->delivery_amount) * ($this->order->caterer->downpayment / 100);
 
         $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($downPayment, 2)))));
 
@@ -142,7 +146,7 @@ class ViewOrder extends Component
 
     public function payFull()
     {
-        $fullPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->order->final_amount + $this->order->delivery_amount, 2)))));
+        $fullPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->order->total_amount + ($this->order->total_amount * $this->taxRate) + $this->order->delivery_amount, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route("full-payment-existing-success");
         $this->data['data']['attributes']['line_items'][0]['amount'] = $fullPayment;
@@ -166,7 +170,7 @@ class ViewOrder extends Component
 
     public function payRemaining()
     {
-        $remainingPayment = ($this->order->final_amount + $this->order->delivery_amount) * ((100 - $this->order->caterer->downpayment) / 100);
+        $remainingPayment = ($this->order->total_amount + ($this->order->total_amount * $this->taxRate) + $this->order->delivery_amount) * ((100 - $this->order->caterer->downpayment) / 100);
         $remainingPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($remainingPayment, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route('remaining-payment-success');

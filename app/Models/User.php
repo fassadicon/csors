@@ -125,6 +125,7 @@ class User extends Authenticatable implements FilamentUser
         $daysAgo = Carbon::now()->subDays(15);
 
         return $this->hasOne(ReportedUser::class, 'reported_user')
-            ->where('created_at', '>=', $daysAgo);
+            ->withoutGlobalScopes()
+            ->whereNotNull('deleted_at'); // Corrected to use whereNotNull
     }
 }

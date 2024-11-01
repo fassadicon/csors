@@ -16,6 +16,8 @@ use Filament\Notifications\Notification;
 
 class PaymentController extends Controller
 {
+
+    public $taxRate = .12;
     public function successPartialExisting()
     {
         $payPartial = session()->get('pay_partial');
@@ -40,7 +42,7 @@ class PaymentController extends Controller
                     'order_id' => $order->id,
                     'type' => 'online',
                     'method' => $response->data->attributes->payment_method_used,
-                    'amount' => $order->final_amount * ($order->caterer->downpayment / 100),
+                    'amount' => ($order->total_amount + ($order->total_amount * $this->taxRate) + $order->delivery_amount) * ($order->caterer->downpayment / 100),
                     'reference_no' => $response->data->id,
                     'remarks' => 'Downpayment',
                 ]);
@@ -49,7 +51,7 @@ class PaymentController extends Controller
                     $order->id,
                     'partial'
                 ));
-
+                // dd($order->user->email)
                 $catererReceipient = User::whereHas('caterer', function ($query) use ($order) {
                     $query->where('id', $order->caterer_id);
                 })->first();
@@ -94,11 +96,13 @@ class PaymentController extends Controller
                     'order_id' => $order->id,
                     'type' => 'online',
                     'method' => $response->data->attributes->payment_method_used,
-                    'amount' => $order->final_amount * ((100 - $order->caterer->downpayment) / 100),
+                    'amount' => ($order->total_amount + ($order->total_amount * $this->taxRate) + $order->delivery_amount) * ((100 - $order->caterer->downpayment) / 100),
                     'reference_no' => $response->data->id,
                     'remarks' => 'Remaining Payment',
                 ]);
-
+                // 461,619.2
+                // 115,404.8
+                // 346,214.4
                 Mail::to($order->user->email)->send(new ReceiptMail(
                     $order->id,
                     'paid'

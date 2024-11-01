@@ -15,6 +15,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ReportedUserResource extends Resource
 {
@@ -31,9 +32,15 @@ class ReportedUserResource extends Resource
             return $query;
         }
 
-        // For other users, filter based on user_id
+        // Remove the global scope for soft deleting if needed
+        $query->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+
+        // Filter the query for other users based on user_id
         $query->where('user_id', auth()->id());
-        // dd($query->get());
+
+        // Return the modified query
         return $query;
     }
 
@@ -91,15 +98,28 @@ class ReportedUserResource extends Resource
                 TextColumn::make('created_at')->date()->sortable(),
             ])
             ->filters([
-                // Add your filters here if needed
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                // Actions for the table
+                // You may add these actions to your table if you're using a simple
+                // resource, or you just want to be able to delete records without
+                // leaving the table.
+                Tables\Actions\DeleteAction::make()->label('Block')
+                    ->modalHeading('Are you sure you want to block this user?')
+                    ->modalSubheading('This action can be reverse.')
+                    ->modalButton('Yes, Block'),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
+                // ...
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
+                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make(),
+                Tables\Actions\RestoreBulkAction::make()->label('Unblock')
+                    ->modalHeading('Are you sure you want to unblock this user?')
+                    ->modalSubheading('This action can be reverse.')
+                    ->modalButton('Yes, Unblock'),
+                // ...
             ]);
     }
 
@@ -108,10 +128,13 @@ class ReportedUserResource extends Resource
         return [];
     }
 
+
+
     public static function canCreate(): bool
     {
         return false; // Disable creating new records
     }
+
 
     public static function getPages(): array
     {
