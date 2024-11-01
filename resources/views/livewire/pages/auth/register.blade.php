@@ -25,8 +25,19 @@ new #[Layout('layouts.guest')] class extends Component {
      * Handle an incoming registration request.
      */
 
+    public function createOTP() {
+        $otp;
+        do {
+            $otp = random_int(1000, 9999); // Generate a random 4-digit OTP
+        } while (DB::table('users')->where('otp', $otp)->exists());
+
+        return $otp;
+    }
+
+
     public function register(): void
     {
+        // dd($this->createOTP());
         $validated = $this->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -35,9 +46,14 @@ new #[Layout('layouts.guest')] class extends Component {
             'phone_number' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+
+        // ADD OTP 
+        $validated['otp'] = $this->createOTP();
+        
         // SEND MAIL
         Mail::to($this->email)->send(new CustomerSignup($this->first_name, $this->email, $this->password));
 
@@ -52,7 +68,7 @@ new #[Layout('layouts.guest')] class extends Component {
             $this->redirect(route('order', absolute: false));
         }
 
-        $this->redirect(route('landing', absolute: false));
+        $this->redirect(route('validateOtp', absolute: false));
     }
 }; ?>
 

@@ -36,6 +36,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('is_customer')->default(1);
             $table->unsignedTinyInteger('is_verified')->default(0);
             $table->text('verification_image_path')->nullable();
+            $table->string('otp')->unique()->nullable(); // eyy
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

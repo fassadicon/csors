@@ -1,11 +1,13 @@
 <?php
 
+use App\Livewire\ValidateOTP;
 use App\Mail\ForgotPassword;
 use App\Models\Order;
 use App\Enums\OrderStatus;
 use App\Models\FoodDetail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
+use App\Http\Livewire\ValidateOTP as LivewireValidateOTP;
 use Illuminate\Support\Facades\Mail;
 
 Route::get('test', function () {
@@ -53,7 +55,7 @@ Route::get('cart', App\Livewire\Cart::class)
 
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'emailVerified']], function () {
     Route::view('profile', 'profile')
         ->name('profile');
 
@@ -93,9 +95,38 @@ Route::get('payment-cancelled', [PaymentController::class, 'cancelled'])
 require __DIR__ . '/auth.php';
 
 
-Route::get('emailPreview', function () {
-    // $order = Order::findOrFail(7);
-    return view('mail.caterer-requirement');
-    // Mail::to('jjarts1028@gmail.com')
-    //     ->send(new ForgotPassword());
+// Route::get('emailPreview', function () {
+//     // $order = Order::findOrFail(7);
+//     return view('mail.caterer-requirement');
+//     // Mail::to('jjarts1028@gmail.com')
+//     //     ->send(new ForgotPassword());
+// });
+
+Route::get('validate-otp', function () {
+    return view('validateOTP');
+});
+
+Route::post('validate-otp', function () {
+    // Validate the OTP input
+    $validatedData = request()->validate([
+        'otp' => ['required', 'min:4', 'max:4']
+    ]);
+
+    $otp = $validatedData['otp']; // Get the validated OTP
+
+    // Retrieve the authenticated user
+    $user = auth()->user();
+
+    if ($user && $user->otp === $otp) {
+        // Mark the email as verified and save the user
+        $user->email_verified_at = now();
+        $user->save();
+
+        // Flash a success message to the session
+        session()->flash('message', 'OTP verified successfully!');
+        return redirect()->route('landing'); // Redirect to the landing page
+    }
+
+    // If the OTP is incorrect, flash an error message
+    return back()->withErrors(['otp' => 'The provided OTP is incorrect.']);
 });

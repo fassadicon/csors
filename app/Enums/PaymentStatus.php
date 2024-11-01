@@ -25,7 +25,7 @@ enum PaymentStatus: string implements HasLabel, HasColor
             self::Partial => 'amber',
             self::Paid => 'success',
             self::Cancelled => 'danger',
-            self::Refunded => ' bg-indigo-400',
+            self::Refunded => ' !bg-indigo-400',
         };
     }
 
@@ -36,7 +36,7 @@ enum PaymentStatus: string implements HasLabel, HasColor
             self::Cancelled => 'warning bg-orange-800 badge-warning',
             self::Partial => ' bg-orange-500 border-transparent text-white',
             self::Paid => 'success !bg-green-500 text-white border-transparent',
-            self::Refunded => 'success !bg-indigo-500 text-white border-transparent',
+            self::Refunded => 'outline !bg-blue-500 text-white border-transparent',
         };
     }
 }

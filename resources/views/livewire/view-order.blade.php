@@ -162,7 +162,7 @@ use Illuminate\Support\Str;
                 @endif
                 @endunless
                 {{-- TEMPORARY --}}
-                @if ($canPay && $order->payment_status->value !== 'paid')
+                @if ($canPay && $order->payment_status->value !== 'paid' && $order->payment_status->value !== 'refunded')
                 <x-primary-button class="w-full btn-primary !bg-blue-500  flex !justify-center" @click='showPopup=true'>
                     ALTERNATIVE PAYMENT (GCASH)
                 </x-primary-button>

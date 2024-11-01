@@ -44,6 +44,7 @@ class User extends Authenticatable implements FilamentUser
         'verification_image_path',
         'is_verified',
         'is_customer',
+        'otp',
     ];
 
     /**
