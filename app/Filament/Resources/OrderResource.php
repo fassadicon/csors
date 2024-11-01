@@ -227,27 +227,23 @@ class OrderResource extends Resource
                     ->visibleOn('edit')
                     ->disableOptionWhen(function (string $value, Model $record) {
                         if ($record->order_status === OrderStatus::Completed) {
-                            return in_array($value, ['pending', 'confirmed', 'cancelled', 'declined', 'to_review']);
+                            return in_array($value, ['pending', 'confirmed', 'cancelled', 'declined']);
                         }
 
                         if ($record->order_status === OrderStatus::Confirmed) {
-                            return in_array($value, ['pending', 'to_review', 'declined']);
+                            return in_array($value, ['pending', 'declined']);
                         }
 
                         if ($record->order_status === OrderStatus::Cancelled) {
-                            return in_array($value, ['pending', 'confirmed', 'completed', 'to_review', 'declined']);
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'declined']);
                         }
 
                         if ($record->order_status === OrderStatus::Pending) {
-                            return in_array($value, ['completed', 'cancelled', 'to_review']);
+                            return in_array($value, ['completed', 'cancelled']);
                         }
 
                         if ($record->order_status === OrderStatus::Declined) {
-                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled', 'to_review']);
-                        }
-
-                        if ($record->order_status === OrderStatus::To_Review) {
-                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled', 'to_review', 'declined']);
+                            return in_array($value, ['pending', 'confirmed', 'completed', 'cancelled']);
                         }
 
                         return false;
