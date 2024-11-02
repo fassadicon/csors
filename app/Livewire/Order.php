@@ -21,10 +21,10 @@ class Order extends Component
     public $cart = [];
     public $caterer;
 
-    #[Validate('required|date|before:endDateTime')]
+    // #[Validate('required|date|before:endDateTime')]
     public $startDateTime;
 
-    #[Validate('required|date|after:startDateTime')]
+    // #[Validate('required|date|after:startDateTime')]
     public $endDateTime;
 
     public $location;
@@ -70,30 +70,24 @@ class Order extends Component
         $this->recipient = auth()->user() ? auth()->user()->full_name : null;
     }
 
-    public function updatedEndDateTime()
-    {
-        // dd([
-        //     $this->startDateTime,
-        //     $this->endDateTime,
-        // ]);
-        $this->validateOnly('startDateTime');
-    }
+    // public function updatedEndDateTime()
+    // {
+    //     $this->validateOnly('startDateTime');
+    // }
 
-    public function updatedStartDateTime()
-    {
-        // dd([
-        //     $this->startDateTime,
-        //     $this->endDateTime,
-        // ]);
-        $this->validateOnly('endDateTime');
-    }
+    // public function updatedStartDateTime()
+    // {
+    //     $this->validateOnly('endDateTime');
+    // }
 
     public function submitOrder()
     {
-        // dd([
-        //     $this->startDateTime,
-        //     $this->endDateTime,
-        // ]);
+        // $this->startDateTime = Carbon::parse($this->startDateTime);
+        // $this->endDateTime = Carbon::parse($this->endDateTime);
+        $this->validate([
+            'startDateTime' => 'required|date|before:endDateTime',
+            'endDateTime' => 'required|date|after:startDateTime'
+        ]);
 
         if (auth()->guest()) {
             return redirect()->route('login');
