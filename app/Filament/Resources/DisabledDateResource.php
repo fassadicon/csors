@@ -45,11 +45,10 @@ class DisabledDateResource extends Resource
                     ->visible(auth()->user()->hasRole('superadmin'))
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make('date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('remarks')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('remarks'),
             ])
             ->filters([
                 //
