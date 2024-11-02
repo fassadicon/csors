@@ -79,4 +79,12 @@ class DisabledDateResource extends Resource
             'edit' => Pages\EditDisabledDate::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->when(auth()->user()->hasRole('caterer'), function ($query) {
+                $query->where('caterer_id', auth()->user()->caterer->id);
+            });
+    }
 }

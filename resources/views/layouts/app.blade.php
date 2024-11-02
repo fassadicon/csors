@@ -16,6 +16,11 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap"
         rel="stylesheet" />
 
+    {{-- Flatpckr --}}
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -29,7 +34,6 @@
             max-height: !400px;
             height: !400px;
         }
-
     </style>
 
 </head>
@@ -48,7 +52,8 @@
         @endif
 
         <!-- Page Content -->
-        <main style="padding-top: 8rem" class="p-4 md:p-0 min-h-screen !pt-32 mx-auto max-w-7xl sm:px-2">
+        <main style="padding-top: 8rem"
+            class="p-4 md:p-0 min-h-screen !pt-32 mx-auto max-w-7xl sm:px-2">
             {{ $slot }}
         </main>
 
