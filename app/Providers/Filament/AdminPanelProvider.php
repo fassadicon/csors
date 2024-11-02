@@ -13,6 +13,7 @@ use App\Filament\Pages\CatererDashboard;
 use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\CatererRegister;
+use App\Filament\Pages\Backups;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -22,6 +23,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+// use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -114,6 +116,8 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                \ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin::make()
+                    ->usingPage(Backups::class),
                 \Saade\FilamentFullCalendar\FilamentFullCalendarPlugin::make()
                     ->schedulerLicenseKey('CC-Attribution-NonCommercial-NoDerivatives')
                     ->plugins([

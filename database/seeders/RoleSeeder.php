@@ -50,7 +50,7 @@ class RoleSeeder extends Seeder
                 'delete_caterer',
                 'delete_any_caterer',
                 'widget_UsersOverview',
-                'page_BackupPage',
+                'page_Backups',
             ]
         )
             ->get();

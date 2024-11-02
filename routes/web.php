@@ -167,12 +167,12 @@ Route::post('validate-otp', function () {
     return back()->withErrors(['otp' => 'The provided OTP is incorrect.']);
 });
 
-Route::get('/download-backup/{filename}', function ($filename) {
-    $filePath = 'CSORS/' . $filename;
+// Route::get('/download-backup/{filename}', function ($filename) {
+//     $filePath = 'CSORS/' . $filename;
 
-    if (Storage::exists($filePath)) {
-        return Storage::download($filePath);
-    } else {
-        abort(404, 'File not found.');
-    }
-})->name('download.backup');
+//     if (Storage::exists($filePath)) {
+//         return Storage::download($filePath);
+//     } else {
+//         abort(404, 'File not found.');
+//     }
+// })->name('download.backup');
