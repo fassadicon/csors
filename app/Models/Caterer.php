@@ -32,6 +32,11 @@ class Caterer extends Model
     //     'images' => 'array',
     // ];
 
+    public function disabledDates(): HasMany
+    {
+        return $this->hasMany(DisabledDate::class);
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

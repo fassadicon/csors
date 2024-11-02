@@ -21,10 +21,10 @@ class Order extends Component
     public $cart = [];
     public $caterer;
 
-    #[Validate('required|date|before:endDateTime')]
+    // #[Validate('required|date|before:endDateTime')]
     public $startDateTime;
 
-    #[Validate('required|date|after:startDateTime')]
+    // #[Validate('required|date|after:startDateTime')]
     public $endDateTime;
 
     public $location;
@@ -41,15 +41,21 @@ class Order extends Component
 
     public $recipient;
 
+    public $disabledDates;
+
     public function mount()
     {
         $this->caterer = Caterer::find(session()->get('caterer'));
 
-        // get between dates
+        $this->disabledDates = $this->caterer->disabledDates
+            ->pluck('date')
+            ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
+            ->toArray();
+
         $this->promos = $this->caterer->promos()
             ->whereDate('start_date', '<=', now())
             ->whereDate('end_date', '>=', now())
-            ->get(); // Add start and end conditions
+            ->get();
 
         $this->cart = session()->get('cart') ?? [];
 
@@ -59,25 +65,30 @@ class Order extends Component
 
         $this->totalAmount = $this->originalTotalAmount;
 
-        $this->downPaymentAmount = $this->originalTotalAmount * 0.7;
-
         $this->updatedPromo();
 
         $this->recipient = auth()->user() ? auth()->user()->full_name : null;
     }
 
-    public function updatedEndDateTime()
-    {
-        $this->validateOnly('startDateTime');
-    }
+    // public function updatedEndDateTime()
+    // {
+    //     $this->validateOnly('startDateTime');
+    // }
 
-    public function updatedStartDateTime()
-    {
-        $this->validateOnly('endDateTime');
-    }
+    // public function updatedStartDateTime()
+    // {
+    //     $this->validateOnly('endDateTime');
+    // }
 
     public function submitOrder()
     {
+        // $this->startDateTime = Carbon::parse($this->startDateTime);
+        // $this->endDateTime = Carbon::parse($this->endDateTime);
+        $this->validate([
+            'startDateTime' => 'required|date|before:endDateTime',
+            'endDateTime' => 'required|date|after:startDateTime'
+        ]);
+
         if (auth()->guest()) {
             return redirect()->route('login');
         }
@@ -151,10 +162,10 @@ class Order extends Component
             DB::rollBack();
 
             // Log the exception message for debugging
-            \Log::error('Order Submission Error: ' . $e->getMessage());
+            // \Log::error('Order Submission Error: ' . $e->getMessage());
 
             // Optionally log additional details
-            \Log::error('File: ' . $e->getFile() . ' | Line: ' . $e->getLine());
+            // \Log::error('File: ' . $e->getFile() . ' | Line: ' . $e->getLine());
 
             // Return an error message to the user
             return redirect()->back()->with('error', 'An error occurred while placing the order. Please try again.');
@@ -187,73 +198,4 @@ class Order extends Component
     {
         return view('livewire.order');
     }
-
-    // public function pay()
-    // {
-    //     if (auth()->guest()) {
-    //         return redirect()->route('login');
-    //     }
-
-
-    //     $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->totalAmount, 2)))));
-    //     if ($this->paymentType === 'partial') {
-    //         $paymentAmount = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->downPaymentAmount, 2)))));
-    //     }
-
-    //     $data = [
-    //         'data' => [
-    //             'attributes' => [
-    //                 'line_items' => [
-    //                     [
-    //                         'currency' => 'PHP',
-    //                         'amount' => $paymentAmount,
-    //                         'name' => 'CSORS test',
-    //                         'quantity' => 1,
-    //                     ]
-    //                 ],
-    //                 'payment_method_types' => [
-    //                     'card',
-    //                     'gcash',
-    //                     'grab_pay',
-    //                     'paymaya',
-    //                     'brankas_landbank',
-    //                     'brankas_metrobank',
-    //                     'billease',
-    //                     'dob',
-    //                     'dob_ubp',
-    //                     'qrph',
-    //                 ],
-    //                 'description' => 'test',
-    //                 'send_email_receipt' => false,
-    //                 'show_description' => true,
-    //                 'show_line_items' => true,
-    //                 'success_url' => $this->paymentType === 'partial' ? url("partial-payment-success") : url("full-payment-success"),
-    //                 'cancel_url' => url("cart"),
-    //             ],
-    //         ],
-    //     ];
-
-    //     $auth_paymongo = base64_encode(env('PAYMONGO_SECRET_KEY'));
-
-    //     $response = Curl::to('https://api.paymongo.com/v1/checkout_sessions')
-    //         ->withHeader('Content-Type: application/json')
-    //         ->withHeader('accept: application/json')
-    //         ->withHeader('Authorization: Basic ' . $auth_paymongo)
-    //         ->withData($data)
-    //         ->asJson()
-    //         ->post();
-
-    //     session()->put('checkout', [
-    //         'recipient' => $this->recipient,
-    //         'start' => $this->startDateTime,
-    //         'end' => $this->endDateTime,
-    //         'location' => $this->location,
-    //         'remarks' => $this->remarks,
-    //         'promo_id' => $this->promo,
-    //         'checkout_id' => $response->data->id,
-    //     ]);
-
-    //     return redirect($response->data->attributes->checkout_url);
-    // }
-
 }

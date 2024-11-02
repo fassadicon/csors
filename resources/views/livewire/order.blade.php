@@ -2,7 +2,7 @@
     <div class="p-4 rounded-sm bg-jt-white">
         @if (session('error'))
             <div class="p-2 text-white bg-red-500">
-                <p>{{session('error')}}</p>
+                <p>{{ session('error') }}</p>
             </div>
         @endif
         <x-mary-header title="Total: Php {{ $totalAmount }}"
@@ -57,40 +57,59 @@
 
     </div>
 
-    <form wire:submit='submitOrder'
+    <form wire:submit.prevent='submitOrder'
         class="p-4 rounded-sm bg-jt-white">
         <x-mary-header title="Customer Information"
             class="!my-2"
             separator />
-        <x-input-label for="recipient"
-            :value="__('Recipient Name')" />
-        <x-text-input wire:model.change="recipient"
-            id="recipient"
-            class="block w-full my-4"
-            type="recipient"
-            name="recipient"
-            required />
         <div class="space-y-2">
+            <x-input-label for="recipient"
+                :value="__('Recipient Name')" />
+            <x-text-input wire:model.live="recipient"
+                id="recipient"
+                class="block w-full mt-1 mb-4"
+                type="text"
+                name="recipient"
+                required />
             <x-input-error :messages="$errors->get('recipient')"
                 class="mt-2" />
             <x-input-label for="startDateTime"
                 :value="__('Start')" />
-            <x-text-input wire:model.change="startDateTime"
-                id="startDateTime"
-                class="block w-full mt-1"
-                type="datetime-local"
-                name="startDateTime"
-                required />
+            <div wire:ignore
+                x-data="{ disabledDates: @js($disabledDates) }"
+                x-init="flatpickr($refs.datetime, {
+                    enableTime: true,
+                    dateFormat: 'Y-m-d H:i',
+                    disable: disabledDates,
+                });">
+                <input wire:model.defer="startDateTime"
+                    x-ref="datetime"
+                    id="startDateTime"
+                    class="block w-full mt-1"
+                    type="text"
+                    name="startDateTime"
+                    required />
+            </div>
+
             <x-input-error :messages="$errors->get('startDateTime')"
                 class="mt-2" />
             <x-input-label for="endDateTime"
                 :value="__('End')" />
-            <x-text-input wire:model.change="endDateTime"
-                id="endDateTime"
-                class="block w-full mt-1"
-                type="datetime-local"
-                name="endDateTime"
-                required />
+            <div wire:ignore
+                x-data="{ disabledDates: @js($disabledDates) }"
+                x-init="flatpickr($refs.datetime, {
+                    enableTime: true,
+                    dateFormat: 'Y-m-d H:i',
+                    disable: disabledDates,
+                });">
+                <input wire:model.defer="endDateTime"
+                    x-ref="datetime"
+                    id="endDateTime"
+                    class="block w-full mt-1"
+                    type="text"
+                    name="endDateTime"
+                    required />
+            </div>
             <x-input-error :messages="$errors->get('endDateTime')"
                 class="mt-2" />
             <x-input-label for="location"
@@ -125,19 +144,6 @@
                 <x-input-error :messages="$errors->get('discount')"
                     class="mt-2" />
             @endif
-            {{-- <x-input-label for="paymentType"
-                :value="__('Payment Type')" />
-            <select wire:model.live="paymentType"
-                id="paymentType"
-                class="block w-full mt-1 mb-4"
-                type="text"
-                name="paymentType"
-                required>
-                <option value="full">Full (PHP {{ $totalAmount }})</option>
-                <option value="partial">Partial (PHP {{ $downPaymentAmount }})</option>
-            </select>
-            <x-input-error :messages="$errors->get('paymentType')"
-                class="mt-2" /> --}}
         </div>
         <hr class="my-4">
         <x-mary-button type="submit"
