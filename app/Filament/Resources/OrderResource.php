@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Carbon\Carbon;
 use Filament\Forms;
 use App\Models\Food;
 use App\Models\User;
@@ -75,10 +76,30 @@ class OrderResource extends Resource
                 Forms\Components\Textarea::make('location')
                     ->required(),
                 Forms\Components\DateTimePicker::make('start')
+                    ->native(false)
+                    ->disabledDates(function () {
+                        if (auth()->user()->hasRole('caterer')) {
+                            return auth()->user()->caterer->disabledDates
+                                ->pluck('date')
+                                ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
+                                ->toArray();
+                        }
+                        return null;
+                    })
                     ->date()
                     ->beforeOrEqual('end')
                     ->required(),
                 Forms\Components\DateTimePicker::make('end')
+                    ->native(false)
+                    ->disabledDates(function () {
+                        if (auth()->user()->hasRole('caterer')) {
+                            return auth()->user()->caterer->disabledDates
+                                ->pluck('date')
+                                ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
+                                ->toArray();
+                        }
+                        return null;
+                    })
                     ->date()
                     ->afterOrEqual('start')
                     ->required(),
