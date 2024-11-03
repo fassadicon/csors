@@ -95,6 +95,7 @@ class OrderSeeder extends Seeder
                         $end = $start->copy()->addHours($addedHours);
 
                         $totalAmount = $foodsTotalAmount + $utilitiesTotalAmount;
+                        $vat = $totalAmount * 0.12;
 
                         $deliveryAmount = rand(0, 1) === 1 ? 0 : rand(500, 1000);
 
@@ -106,7 +107,7 @@ class OrderSeeder extends Seeder
                             'end' => $end,
                             'total_amount' => $totalAmount,
                             'delivery_amount' => $deliveryAmount,
-                            'final_amount' => $totalAmount + $deliveryAmount,
+                            'final_amount' => $totalAmount + $vat + $deliveryAmount,
                             'location' => 'test',
                             'payment_status' => $case['payment_status'],
                             'order_status' => $case['order_status'],
