@@ -73,7 +73,7 @@
 
         <div style="margin-top: 20px; text-align: right;">
             <?php
-                $subtotal = $order->final_amount; // Assuming final_amount is the subtotal
+                $subtotal = $order->total_amount; // Assuming final_amount is the subtotal
                 $taxRate = 0.12;
                 $deliveryFee = $order->deducted_amount ? $order->delivery_amount : 0;
         

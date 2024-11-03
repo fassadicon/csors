@@ -7,7 +7,26 @@
         @endif
         <x-mary-header title="Total: Php {{ $totalAmount }}"
             class="!my-2"
-            separator />
+        />
+        {{-- <p class="text-sm italic"></p> --}}
+        @if ($promo)
+        {{-- @dd($promos[$promo-1]) --}}
+            <div class="flex gap-x-2 w-fit">
+                <p>Promo:</p>
+                <div class="flex items-center mx-auto rounded-full w-max bg-jt-primary">
+                    <span
+                        class="flex items-center justify-center px-2 text-base font-semibold text-gray-900 bg-yellow-300 rounded-full">{{
+                        $promos[$promo-1]->name }}</span>
+                    @if ($promos[$promo-1]->type === "fixed")
+                        <p class="mx-4 text-white uppercase">Php {{ number_format($promos[$promo-1]->value, 2) }}</p>
+                    @else
+                        <p class="mx-4 text-white uppercase">Php {{ number_format($originalTotalAmount * ($promos[$promo-1]->value / 100), 2) }}</p>
+                    @endif
+                </div>
+                {{-- <div>Php {{ number_format($order->deducted_amount, 2) }}</div> --}}
+            </div>
+        @endif
+        <p>Tax: Php {{ number_format(($totalAmount * 0.12), 2) }}</p>
 
         @foreach ($cart as $categoryName => $categoryItems)
             <div>
