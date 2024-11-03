@@ -152,7 +152,7 @@ class OrderResource extends Resource
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
                                 // $set('../../vat', $totalAmount * 0.12);
-                                $set('../../final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('../../delivery_amount'));
+                                $set('../../final_amount', (($totalAmount - $deductedAmount) + (($totalAmount - $deductedAmount) * 0.12)) + $get('../../delivery_amount'));
                             })
                             ->live(debounce: 500)
                             ->required()
@@ -171,7 +171,7 @@ class OrderResource extends Resource
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
                                 // $set('../../vat', $totalAmount * 0.12);
-                                $set('../../final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('../../delivery_amount'));
+                                $set('../../final_amount', ((($totalAmount - $deductedAmount)) + (($totalAmount - $deductedAmount) * 0.12)) + $get('../../delivery_amount'));
                             })
                             ->columnSpan(2),
                         Forms\Components\TextInput::make('amount')
@@ -187,7 +187,7 @@ class OrderResource extends Resource
                         $set('deducted_amount', $deductedAmount);
                         $set('total_amount', $totalAmount - $deductedAmount);
                         // $set('vat', $totalAmount * 0.12);
-                        $set('final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('delivery_amount'));
+                        $set('final_amount', ((($totalAmount - $deductedAmount)) + (($totalAmount - $deductedAmount) * 0.12)) + $get('delivery_amount'));
                     })
                     ->reorderable()
                     ->columns(12)
