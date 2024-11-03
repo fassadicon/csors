@@ -18,7 +18,7 @@ class BackupPage extends Page
     protected static ?string $navigationLabel = 'Database Backup';
     protected static ?string $title = 'Database Backup';
     protected static ?string $navigationGroup = 'Authorization';
-    protected static $shouldRegisterNavigation = false;
+    protected static bool $shouldRegisterNavigation = false;
 
     public $backupStatus = '';
     public $backupFiles = [];
