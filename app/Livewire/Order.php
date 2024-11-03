@@ -121,7 +121,7 @@ class Order extends Component
                 'start' => $this->startDateTime,
                 'end' => $this->endDateTime,
                 'total_amount' => $this->totalAmount,
-                'final_amount' => $this->totalAmount,
+                'final_amount' => $this->totalAmount + ($this->totalAmount * .12),
             ]);
 
             // Save each order item
