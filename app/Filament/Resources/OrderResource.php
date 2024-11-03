@@ -485,6 +485,12 @@ class OrderResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('total_amount')
+                    ->label('Subtotal')
+                    ->numeric()
+                    ->money('php')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('final_amount')
                     ->label('Total')
                     ->numeric()
                     ->money('php')
