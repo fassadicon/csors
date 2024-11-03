@@ -83,13 +83,14 @@
         }
 
         .footer {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            /* display: flex;
+            flex-direction: row; */
+            /* align-items: flex-end; */
             margin-top: 20px;
         }
 
         .footer strong {
+            
             margin: 4px 0;
             font-size: 1.1em;
             color: #277F71;
@@ -163,7 +164,7 @@
         </table>
 
         <div class="footer">
-            <strong>Total: {{ $order->total_amount }}</strong>
+            <strong>Total: {{ number_format($order->total_amount + $order->deducted_amount , 2) }}</strong>
         </div>
 
         <h4>Payment History</h4>
@@ -191,10 +192,33 @@
         </table>
 
         <div class="footer">
-            <strong class="promo">Promo: {{ $order->promo ? $order->promo->name : 'No promo used' }} - Php {{
-                $order->promo ? $order->promo->value : '0' }}</strong><br>
-            <strong>Subtotal: {{ $order->total_amount }}</strong><br>
-            <strong>Total: {{ $order->final_amount }}</strong>
+            @php
+                $subtotalMinusPromo;
+                $promoValue;
+                if($order->promo) {
+                    // $subtotalMinusPromo = ($order->total_amount - $order->promo->value);
+                    // check if fixed
+                    if($order->promo->type === 'fixed') {
+                        $subtotalMinusPromo = ($order->total_amount);
+                        $promoValue = $order->promo->value;
+                    } // check if percentage
+                    else if($order->promo->type === 'percentage') {
+                        $totalPromo = $order->total_amount * ($order->promo->value / 100);
+                        $promoValue = $totalPromo;
+                        $subtotalMinusPromo = $order->total_amount;
+                    }
+                }
+            @endphp
+            <p>Subtotal: Php {{ number_format($order->total_amount + $order->deducted_amount , 2) }}</p>
+            @if ($order->promo)
+                <p class="text-sm italic">Subtotal: Php {{ number_format($order->total_amount+ $order->deducted_amount , 2) }} - <b
+                        class="text-jt-primary">Php {{ number_format($order->deducted_amount, 2) }}</b></p>
+                <p class="text-sm italic">New Subtotal: Php {{ number_format($subtotalMinusPromo, 2) }}</p>
+            @endif
+            <p class="text-sm italic">Tax: Php {{ number_format($subtotalMinusPromo * 0.12, 2) }}</p>
+            <p class="text-sm italic">Delivery Fee: Php {{ number_format($order->delivery_amount, 2) }}</p>
+            <h4>Total Amount: Php {{ number_format($subtotalMinusPromo + ($subtotalMinusPromo * 0.12) + $order->delivery_amount, 2)
+                }}</h4>
         </div>
     </div>
 </body>
