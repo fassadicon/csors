@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Filament\Notifications\Livewire\DatabaseNotifications;
 
@@ -21,5 +22,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         DatabaseNotifications::trigger('livewire.notifications-trigger');
+
+        Gate::define('download-backup', function ($user) {
+            return $user->can('download-backup');
+        });
     }
 }

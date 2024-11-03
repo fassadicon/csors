@@ -23,16 +23,6 @@ class RoleSeeder extends Seeder
         $catererpermissions = Permission::whereNotIn(
             'name',
             [
-                // 'view_user',
-                // 'view_any_user',
-                // 'create_user',
-                // 'update_user',
-                // 'restore_user',
-                // 'restore_any_user',
-                // 'replicate_user',
-                // 'reorder_user',
-                // 'delete_user',
-                // 'delete_any_user',
                 'view_role',
                 'view_any_role',
                 'create_role',
@@ -51,11 +41,12 @@ class RoleSeeder extends Seeder
                 'delete_any_caterer',
                 'widget_UsersOverview',
                 'page_Backups',
+                'page_BackupPage',
             ]
         )
             ->get();
         $caterer->syncPermissions($catererpermissions);
 
-        $customer = Role::create(['name' => 'customer']);
+        Role::create(['name' => 'customer']);
     }
 }
