@@ -29,6 +29,7 @@ use App\Filament\Exports\OrderExporter;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\CancellationRequestStatus;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\ExportAction;
@@ -150,6 +151,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
+                                // $set('../../vat', $totalAmount * 0.12);
                                 $set('../../final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('../../delivery_amount'));
                             })
                             ->live(debounce: 500)
@@ -168,6 +170,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
+                                // $set('../../vat', $totalAmount * 0.12);
                                 $set('../../final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('../../delivery_amount'));
                             })
                             ->columnSpan(2),
@@ -183,6 +186,7 @@ class OrderResource extends Resource
                         $deductedAmount = static::getDeductedAmount($get('promo_id'), $totalAmount);
                         $set('deducted_amount', $deductedAmount);
                         $set('total_amount', $totalAmount - $deductedAmount);
+                        // $set('vat', $totalAmount * 0.12);
                         $set('final_amount', ($totalAmount + ($totalAmount * 0.12)) + $get('delivery_amount'));
                     })
                     ->reorderable()
@@ -202,6 +206,7 @@ class OrderResource extends Resource
                     ->afterStateUpdated(function ($state, $get, $set) {
                         $set('deducted_amount', static::getDeductedAmount($state, static::getTotalAmount($get('orderItems'))));
                         $set('total_amount', static::getTotalAmount($get('orderItems')) - $get('deducted_amount'));
+                        // $set('vat', $get('total_amount') * 0.12);
                         $set('final_amount', ($get('total_amount') + ($get('total_amount') * 0.12)) + $get('delivery_amount'));
                     }),
                 Forms\Components\TextInput::make('deducted_amount')
@@ -214,7 +219,7 @@ class OrderResource extends Resource
                 Forms\Components\TextInput::make('delivery_amount')
                     ->label('Delivery Fee')
                     ->readOnly(function ($get) {
-                        return in_array($get('order_status'), ['pending', 'completed', 'declined', 'cancelled']);
+                        return in_array($get('order_status'), ['completed', 'declined', 'cancelled']);
                     })
                     ->default(0.00)
                     ->prefix('₱')
@@ -225,19 +230,22 @@ class OrderResource extends Resource
                         $set('final_amount', floatval(($get('total_amount') + ($get('total_amount') * 0.12)) + $state));
                     }),
                 Forms\Components\TextInput::make('total_amount')
+                    ->label('Subtotal')
                     ->readOnly()
                     ->default(0)
                     ->prefix('₱')
                     ->required()
                     ->numeric()
                     ->live(debounce: 500),
-                Forms\Components\Placeholder::make('VAT')
-                    ->live()
-                    ->content(function (Get $get): string {
-                        return '₱ ' . number_format($get('total_amount') * 0.12, 2);
-                    })
-                    ->label('VAT'),
+                // Forms\Components\TextInput::make('vat')
+                //     ->label('VAT')
+                //     ->live()
+                //     ->prefix('₱')
+                //     ->numeric()
+                //     ->default(fn(Get $get) => $get('total_amount') * 0.12)
+                //     ->readOnly(),
                 Forms\Components\TextInput::make('final_amount')
+                    ->label('Total (12% VAT + Delivery Fee)')
                     ->live(debounce: 500)
                     ->numeric()
                     ->prefix('₱')
