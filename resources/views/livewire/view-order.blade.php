@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
         <div class="w-[90%] md:w-[70%] mx-auto pt-5 pb-2 -mt-10 text-white bg-red-700 h-fit">
             <center>
                 <h3>Order Declined</h3>
-                {{-- <p>reason</p>
+                <p>reason</p>
                 <hr class="mx-4 my-2">
-                <p>{{$order->decline_reason}}</p> --}}
+                <p>{{$order->decline_reason}}</p>
             </center>
         </div>
     @endif
