@@ -10,6 +10,7 @@ use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomerSignup;
 use App\Mail\UserOtp;
+use Illuminate\Validation\Rule;
 
 new #[Layout('layouts.guest')] class extends Component {
     public string $first_name = '';
@@ -44,7 +45,7 @@ new #[Layout('layouts.guest')] class extends Component {
             'last_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'ext_name' => ['nullable', 'string', 'max:99'],
-            'phone_number' => ['nullable', 'string', 'max:255'],
+            'phone_number' => ['nullable', 'string', 'max:11', 'regex:/^(09)\d{9}$/', 'unique:users,phone_number'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
             
@@ -74,7 +75,7 @@ new #[Layout('layouts.guest')] class extends Component {
 }; ?>
 
 
-<div class="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full overflow-y-auto md:h-screen md:items-start">
+<div class="flex flex-col items-center justify-center w-full h-full overflow-y-auto md:h-screen md:items-start">
 
     <img draggable="false" src="{{asset('images/bgs/bg1.jpg')}}" alt=""
         class="absolute z-0 object-cover w-full h-screen overlay">
@@ -82,8 +83,8 @@ new #[Layout('layouts.guest')] class extends Component {
     <div class="absolute w-full h-screen bg-white/25"></div>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <div
-        class="hidden md:block z-10 px-8 md:px-16  py-8 ml-0 sm:ml-4 md:ml-16 rounded-md md:min-w-[450px] w-[90%] md:w-[30%] space-y-2 ">
+    <div style="padding-top: 5rem; width: 50%; top: 10rem;"
+        class="hidden md:block z-10 px-8 md:px-16  py-8 ml-0 sm:ml-4 md:ml-16  rounded-md md:min-w-[450px] w-[90%] md:w-[30%] space-y-2 ">
         <div class="flex flex-row items-center justify-center md:justify-start gap-x-2">
             <div class="inline-flex w-[10px] h-[40px] bg-jt-primary"></div>
             <h1 class="font-bold">Join Us Today!</h1>
@@ -91,7 +92,7 @@ new #[Layout('layouts.guest')] class extends Component {
         <p class="text-center md:text-left">Create your account and get access to seamless catering services, personalized event planning, and exclusive offers.
         Let’s make your next celebration unforgettable!</p>
     </div>
-    <form wire:submit="register" class=" z-10 px-4 md:px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md bg-jt-white w-[90%] md:min-w-[450px] md:w-[30%] space-y-4">
+    <form style="margin-bottom: 5rem;" wire:submit="register" class=" z-10 px-4 md:px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md bg-jt-white w-[90%] md:min-w-[450px] md:w-[30%] space-y-4">
         <div class="flex flex-col md:flex-row gap-y-4 md:gap-x-4">
             <div class="w-full">
                 <x-input-label for="first_name" :value="__('First Name')" />
@@ -126,9 +127,9 @@ new #[Layout('layouts.guest')] class extends Component {
             <x-text-input wire:model="phone_number"
                 id="phone_number"
                 class="block w-full mt-1"
-                type="text"
+                type="number"
                 name="phone_number"
-                autofocus
+                autofocus maxlength="11"
                 autocomplete="phone_number" />
             <x-input-error :messages="$errors->get('phone_number')"
                 class="mt-2" />

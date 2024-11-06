@@ -42,6 +42,7 @@ class Order extends Component
     public $recipient;
 
     public $disabledDates;
+    
 
     public function mount()
     {
@@ -168,6 +169,7 @@ class Order extends Component
             // \Log::error('File: ' . $e->getFile() . ' | Line: ' . $e->getLine());
 
             // Return an error message to the user
+            // dd('error', $e);
             return redirect()->back()->with('error', 'An error occurred while placing the order. Please try again.');
         }
     }
