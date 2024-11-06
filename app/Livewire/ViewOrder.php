@@ -13,6 +13,7 @@ class ViewOrder extends Component
     public Order $order;
     public $data;
     public $auth_paymongo;
+    public $reason;
     public $cancellationRequestReason;
     public $cancellationRequestResponse;
     public $cancellationRequestStatus;
@@ -56,6 +57,7 @@ class ViewOrder extends Component
 
         if ($this->order->cancellationRequest) {
             $this->cancellationRequestReason = $this->order->cancellationRequest->reason;
+            $this->reason = $this->order->cancellationRequest->reason;
             $this->cancellationRequestResponse = $this->order->cancellationRequest->response;
             $this->cancellationRequestStatus = $this->order->cancellationRequest->status;
         } else {
@@ -195,6 +197,10 @@ class ViewOrder extends Component
 
     public function updateCancellationRequest()
     {
+        $this->validate([
+            'reason' => ['required']
+        ]);
+
         CancellationRequest::where('order_id', $this->order->id)->update([
             'reason' => $this->reason,
         ]);
