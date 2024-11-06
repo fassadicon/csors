@@ -10,7 +10,7 @@
     <div class="max-w-md px-4 py-10 mx-auto text-center bg-white shadow sm:px-8 rounded-xl">
         <header class="mb-8">
             <h1 class="mb-1 text-2xl font-bold">Enter Your OTP</h1>
-            <p class="text-[15px] text-slate-500">Enter the 4-digit verification code that was sent to your phone number.
+            <p class="text-[15px] text-slate-500">Enter the 4-digit verification code that was sent to your email.
             </p>
         </header>
     
