@@ -155,7 +155,7 @@ new class extends Component {
                 class="mt-1 block w-full"
                 autofocus maxlength="11"
                 autocomplete="phone_number" />
-            <x-input-error class="mt-2"
+            <x-input-error class="mt-2" 
                 :messages="$errors->get('phone_number')" />
         </div>
         <div>

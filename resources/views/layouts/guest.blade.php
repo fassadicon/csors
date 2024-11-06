@@ -22,14 +22,14 @@
                 </a>
             </div> --}}
 
-            <div class="w-full !min-h-screen px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-md dark:bg-gray-800 sm:rounded-lg">
+            <div class="w-full">
                 {{ $slot }}
             </div>
 
-            @if (!request()->is('/'))
-                <footer class="w-full h-[30%]">
+            @if (!request()->is('/') || !request()->is('register'))
+                {{-- <footer class="w-full h-[50%]">
                     <x-footer />
-                </footer>
+                </footer> --}}
             @endif
         </div>
     </body>
