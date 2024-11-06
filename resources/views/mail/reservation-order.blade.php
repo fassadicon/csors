@@ -193,7 +193,7 @@
 
         <div class="footer">
             @php
-                $subtotalMinusPromo;
+                $subtotalMinusPromo = 0;
                 $promoValue;
                 if($order->promo) {
                     // $subtotalMinusPromo = ($order->total_amount - $order->promo->value);
@@ -207,6 +207,8 @@
                         $promoValue = $totalPromo;
                         $subtotalMinusPromo = $order->total_amount;
                     }
+                } else {
+                    $subtotalMinusPromo = ($order->total_amount);
                 }
             @endphp
             <p>Subtotal: Php {{ number_format($order->total_amount + $order->deducted_amount , 2) }}</p>

@@ -98,7 +98,7 @@ use Illuminate\Support\Str;
             <hr class="block my-4 md:my-0 md:hidden">
             <div class="flex flex-col gap-y-2 p-4 md:p-0 w-[90%] md:w-[45%] ">
                 @php
-                    $subtotalMinusPromo;
+                    $subtotalMinusPromo = 0;
                     $promoValue;  
                     if($order->promo) {
                         // $subtotalMinusPromo = ($order->total_amount - $order->promo->value);
@@ -112,6 +112,8 @@ use Illuminate\Support\Str;
                             $promoValue = $totalPromo;
                             $subtotalMinusPromo = $order->total_amount;
                         }
+                    } else {
+                        $subtotalMinusPromo = ($order->total_amount);
                     }
                 @endphp
 
@@ -131,6 +133,8 @@ use Illuminate\Support\Str;
                 @if ($order->promo)
                     <p class="text-sm italic">Subtotal: Php {{ number_format($order->total_amount+ $order->deducted_amount , 2) }} - <b class="text-jt-primary">Php {{ number_format($order->deducted_amount, 2) }}</b></p>
                     <p class="text-sm italic">New Subtotal: Php {{ number_format($subtotalMinusPromo, 2) }}</p>
+                {{-- @else
+                    <p class="text-sm italic">New Subtotal: Php {{ number_format($subtotalMinusPromo, 2) }}</p> --}}
                 @endif
 
                 <p class="text-sm italic">Tax: Php {{ number_format($subtotalMinusPromo * 0.12, 2) }}</p>
@@ -143,13 +147,14 @@ use Illuminate\Support\Str;
                     <p>Status: {{ $cancellationRequestStatus }}</p>
                     @if ($cancellationRequestStatus->value == 'approved' || $cancellationRequestStatus->value ==
                     'declined')
-                    <p>Reason: {{ $cancellationRequestReason }}</p>
                     <x-mary-textarea label="Response of Caterer" wire:model="cancellationRequestReason" placeholder="Notes for the Caterer"
-                        rows="4" inline />
+                    rows="4" inline />
+                
                     @else
-                    
+                    <p>Reason: {{ $cancellationRequestReason }}</p>
                     <x-mary-textarea label="Response of Caterer" wire:model="cancellationRequestResponse"
                         placeholder="Awaiting Reply from the Caterer..." rows="4" inline readonly />
+
                     @endif
                 </div>
                 <hr class="my-4">
