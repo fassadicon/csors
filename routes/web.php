@@ -5,6 +5,7 @@ use App\Mail\UserOtp;
 use App\Models\Order;
 use App\Mail\NotifyUser;
 use App\Enums\OrderStatus;
+use App\Http\Controllers\CatererOtpController;
 use App\Models\FoodDetail;
 use App\Mail\ForgotPassword;
 use App\Livewire\ValidateOTP;
@@ -166,6 +167,11 @@ Route::post('validate-otp', function () {
     // If the OTP is incorrect, flash an error message
     return back()->withErrors(['otp' => 'The provided OTP is incorrect.']);
 });
+
+Route::get('/otp-input', [CatererOtpController::class, 'show'])->name('caterer.otp');
+Route::post('/otp-verify', [CatererOtpController::class, 'verify'])->name('caterer.otp.verify');
+Route::get('/caterer-request-otp', [CatererOtpController::class, 'requestOTP'])->name('caterer.otp.request');
+Route::get('/caterer-cancel-login', [CatererOtpController::class,'destroy'])->name('caterer.cancel.login');
 
 // Route::get('/download-backup/{filename}', function ($filename) {
 //     $filePath = 'CSORS/' . $filename;

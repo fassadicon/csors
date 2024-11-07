@@ -149,7 +149,9 @@ use Illuminate\Support\Str;
                     'declined')
                     <x-mary-textarea label="Response of Caterer" wire:model="cancellationRequestReason" placeholder="Notes for the Caterer"
                     rows="4" inline />
-                
+                    <p>Caterer Response: {{ $cancellationRequestResponse }}</p>
+                    {{-- <x-mary-textarea label="Response of Caterer" wire:model="cancellationRequestResponse"
+                        placeholder="Awaiting Reply from the Caterer..." rows="4" inline readonly /> --}}
                     @else
                     <p>Reason: {{ $cancellationRequestReason }}</p>
                     <x-mary-textarea label="Cancellation Reason" wire:model="reason"

@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\CatererCheckIfEmailVerified;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
@@ -89,6 +90,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                CatererCheckIfEmailVerified::class
             ])
             ->navigationGroups([
                 NavigationGroup::make()

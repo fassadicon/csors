@@ -3,6 +3,7 @@
 namespace App\Filament\Pages\Auth;
 
 use App\Mail\CustomerSignup;
+use App\Mail\UserOtp;
 use App\Models\Caterer;
 use Filament\Forms;
 use Filament\Pages\Auth\Register;
@@ -32,6 +33,7 @@ use Illuminate\Auth\SessionGuard;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
@@ -121,6 +123,17 @@ class CatererRegister extends Register
             ]);
     }
 
+
+    public function createOTP()
+    {
+        $otp = null;
+        do {
+            $otp = random_int(1000, 9999); // Generate a random 4-digit OTP
+        } while (DB::table('users')->where('otp', $otp)->exists());
+
+        return $otp;
+    }
+
     public function register(): ?RegistrationResponse
     {
         try {
@@ -145,8 +158,12 @@ class CatererRegister extends Register
                 $plainPassword
             ));
 
-            $this->callHook('afterValidate');
+            // SEND OTP
+            $otp = $this->createOTP();
+            Mail::to($data['email'])->send(new UserOtp($otp));
 
+            $this->callHook('afterValidate');
+            $data['otp'] = $otp;
             // Now hash the password before saving
             $data['password'] = Hash::make($data['password']);
             $data = $this->mutateFormDataBeforeRegister($data);

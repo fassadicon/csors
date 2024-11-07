@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        date_default_timezone_set('Asia/Manila');
         DatabaseNotifications::trigger('livewire.notifications-trigger');
 
         Gate::define('download-backup', function ($user) {
