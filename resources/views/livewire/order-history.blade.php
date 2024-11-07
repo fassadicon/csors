@@ -30,9 +30,17 @@
             {{ '₱ ' . $order->final_amount }}
         @endscope
         @scope('cell_payment_status', $order)
-            <x-mary-badge :value="$order->payment_status->getLabel()"
-                class="badge-{{ $order->payment_status->getMaryColor() }}" />
-            {{-- class="badge-{{ $order->payment_status->getMaryColor() }}" --}}
+            @php
+                // Access the string value of the order status Enum
+                $orderStatus = $order->order_status->value; // Get the value of the Enum
+            @endphp
+            @if (strtolower($orderStatus) === 'declined')
+                <x-mary-badge value="Declined" style="background-color: red; color: white;"
+                    class="badge-warning !bg-red-500 !text-white" />
+            @else
+                <x-mary-badge :value="$order->payment_status->getLabel()"
+                    class="badge-{{ $order->payment_status->getMaryColor() }}" />
+            @endif
         @endscope
         @scope('cell_order_status', $order)
             <x-mary-badge :value="$order->order_status->getLabel()"
