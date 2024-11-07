@@ -74,4 +74,11 @@ class CatererOtpController extends Controller
         // Redirect to the OTP validation page
         return redirect('otp-input')->with('message', 'A new OTP has been sent!');
     }
+
+    public function destroy() {
+        Auth::logout();
+
+        return redirect('admin/login');
+    }
+
 }

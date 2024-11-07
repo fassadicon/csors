@@ -50,6 +50,8 @@
         </form>
         <div class="mt-4 text-sm text-slate-500">Didn't receive code? <a href="{{ route('caterer.otp.request') }}"
                 class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">Resend</a></div>
+            <hr class="my-2 mx-10">
+            <a class="text-red-500" href="{{ route('caterer.cancel.login') }}">Cancel</a>
     </div>
     
     <script>
