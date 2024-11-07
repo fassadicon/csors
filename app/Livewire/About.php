@@ -41,6 +41,9 @@ class About extends Component
         session()->forget('cart');
         session()->forget('caterer');
         session()->put('caterer', $this->caterer->id);
+        session(['caterer_phone_number' => $this->caterer->phone_number]);
+        session(['caterer_email_personal' => $this->caterer->user->email]);
+        session(['caterer_email_business' => $this->caterer->email]);
 
         return redirect()->route('events');
     }

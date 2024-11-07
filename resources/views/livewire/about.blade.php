@@ -79,7 +79,29 @@
         <x-mary-header title="Menu" class="!my-4 !mt-8" size='text-xl' />
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
+
+        {{-- @foreach ($foodDetails as $foodDetail)
+            @if (count($foodDetail->servingTypes) > 0)
+                <x-mary-card title="{{ $foodDetail->name }}" class="!pb-0 flex justify-center items-center card-sm">
+                    <x-slot:figure>
+                        <img
+                            src="{{ $foodDetail->getFirstImagePath() ? asset('storage/' . $foodDetail->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                    </x-slot:figure>
+                    <x-slot:actions>
+                        <div
+                            class="flex items-center justify-center px-16 mb-4 cursor-pointer btn-primary btn-circle hover:!bg-jt-primary-dark">
+                            <a href="{{ route('food', ['foodDetail' => $foodDetail]) }}">
+                                VIEW
+                            </a>
+                        </div>
+                    </x-slot:actions>
+                </x-mary-card>
+            @endif
+        @endforeach --}}
+        
         @foreach ($foodDetails as $foodDetail)
+            {{-- <p>{{$foodDetail}}</p> --}}
+            @if (count($foodDetail->servingTypes) > 0)
             <x-mary-card title="{{ $foodDetail->name }}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
                 <x-slot:figure>
@@ -89,6 +111,7 @@
                     </a>
                 </x-slot:figure>
             </x-mary-card>
+            @endif
         @endforeach
     </div>
 

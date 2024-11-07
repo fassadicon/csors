@@ -13,8 +13,10 @@ class Events extends Component
 
     public function mount()
     {
+
         $this->caterer = Caterer::find(session()->get('caterer'));
         $this->events = Event::where('caterer_id', session()->get('caterer'))->get();
+        // dd($this->events);
     }
     public function render()
     {

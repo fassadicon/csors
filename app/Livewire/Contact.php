@@ -37,7 +37,8 @@ class Contact extends Component
         ]);
 
         // $this->caterer->email
-        Mail::to('sa.csors.offical@gmail.com')->send(new InquiryMail(
+        // dd('personal email:'.session('caterer_email_personal'). ' business email: '. session('caterer_email_business'));
+        Mail::to(session('caterer_email_business'))->send(new InquiryMail(
             $this->name,
             $this->subject,
             $this->content,
@@ -45,6 +46,14 @@ class Contact extends Component
             $this->caterer->id,
         ));
 
+        Mail::to(session('caterer_email_personal'))->send(new InquiryMail(
+            $this->name,
+            $this->subject,
+            $this->content,
+            $this->email,
+            $this->caterer->id,
+        ));
+        // dd('Email sent!');
 
         return redirect()->route('about', ['caterer' => $this->caterer])
             ->success('Inquiry sent! Please wait for an email response.');

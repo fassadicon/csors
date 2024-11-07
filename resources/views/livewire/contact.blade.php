@@ -2,7 +2,7 @@
     <x-mary-header title="Phone number"
         class="!my-2 !mb-4"
         size='text-2xl'
-        subtitle="{{$caterer->phone_number}}" >
+        subtitle="{{ session('caterer_phone_number') }}" >
     </x-mary-header>
 
 
