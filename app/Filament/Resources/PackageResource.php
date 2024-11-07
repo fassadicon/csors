@@ -72,7 +72,8 @@ class PackageResource extends Resource
                                             });
                                         }))
                                         ->getOptionLabelFromRecordUsing(fn(Food $record): string =>
-                                        $record->foodDetail->name .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"),
+                                        $record->foodDetail->name .  " - " . $record->servingType->description.""),
+                                        // .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"
                                 ])
                                 // ->afterStateUpdated(function ($state, $get, $set) {
                                 //     $set('amount', static::getAmount($state['orderable_type'], $state['orderable_id'], $get('quantity')));
