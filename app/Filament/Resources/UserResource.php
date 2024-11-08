@@ -40,7 +40,7 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255)->disabledOn('edit'),
+                    ->maxLength(255),
                 Forms\Components\TextInput::make('phone_number')
                     ->nullable()
                     ->maxLength(255)->disabledOn('edit'),

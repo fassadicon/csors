@@ -70,6 +70,7 @@ class CatererResource extends Resource
                     ->directory(fn($record) => 'caterers/' . $record->id . '/requirements')
                     ->label('Business Requirements (.zip)')
                     ->nullable()->disabledOn('edit')
+                    ->downloadable()
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('images')
                     ->directory(fn($record) => 'caterers/' . $record->id . '/images/profile')
