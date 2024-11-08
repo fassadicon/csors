@@ -18,9 +18,7 @@
             <p> | </p>
             <p>Email: {{session('adminInfo')->email}}</p>
         @endif
-        @if(session('caterer'))
-            <p> | </p>
-            <a href="{{ route('contact-admin') }}">Contact Us</a>
-        @endif
+        <p> | </p>
+        <a href="{{ route('contact-admin') }}">Contact Us</a>
     </div>
 </div>

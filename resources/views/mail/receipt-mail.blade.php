@@ -78,7 +78,7 @@
                 $deliveryFee = $order->deducted_amount ? $order->delivery_amount : 0;
         
                 $tax = $subtotal * $taxRate;
-                $total = $subtotal + $tax + $deliveryFee;
+                $total = $subtotal + $deliveryFee;
             ?>
         
             Subtotal: Php {{ number_format($subtotal, 2) }}<br>

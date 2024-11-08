@@ -215,11 +215,11 @@
             @if ($order->promo)
                 <p class="text-sm italic">Subtotal: Php {{ number_format($order->total_amount+ $order->deducted_amount , 2) }} - <b
                         class="text-jt-primary">Php {{ number_format($order->deducted_amount, 2) }}</b></p>
-                <p class="text-sm italic">New Subtotal: Php {{ number_format($subtotalMinusPromo, 2) }}</p>
+                {{-- <p class="text-sm italic">New Subtotal: Php {{ number_format($subtotalMinusPromo, 2) }}</p> --}}
             @endif
             <p class="text-sm italic">Tax: Php {{ number_format($subtotalMinusPromo * 0.12, 2) }}</p>
             <p class="text-sm italic">Delivery Fee: Php {{ number_format($order->delivery_amount, 2) }}</p>
-            <h4>Total Amount: Php {{ number_format($subtotalMinusPromo + ($subtotalMinusPromo * 0.12) + $order->delivery_amount, 2)
+            <h4>Total Amount: Php {{ number_format($subtotalMinusPromo + $order->delivery_amount, 2)
                 }}</h4>
         </div>
     </div>

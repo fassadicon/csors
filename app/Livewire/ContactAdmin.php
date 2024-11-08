@@ -29,7 +29,7 @@ class ContactAdmin extends Component
 
         // if ($admin) {
         //     // Found a superadmin, process accordingly
-        //     echo $admin->name;
+        // echo $this->admin->phone_number;
         // }
         if (auth()->check()) {
             $this->name = auth()->user()->full_name;
@@ -65,6 +65,6 @@ class ContactAdmin extends Component
 
     public function render()
     {
-        return view('livewire.contact');
+        return view('livewire.contact-admin');
     }
 }

@@ -1,8 +1,8 @@
 <div class="p-4 shadow-md shadow-black/5 bg-jt-light">
     <x-mary-header title="Phone number" class="!my-2 !mb-4" size='text-2xl'
-        subtitle="{{ session('admin_phone_number') }}">
+        subtitle="{{ $admin->phone_number; }}">
     </x-mary-header>
-    sadasdsa
+    {{-- sadasdsa --}}
     <x-mary-header title="Contact Admin" class="!my-2" size='text-xl'>
     </x-mary-header>
 
