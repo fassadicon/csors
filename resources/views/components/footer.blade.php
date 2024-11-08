@@ -20,7 +20,7 @@
         @endif
         @if(session('caterer'))
             <p> | </p>
-            <a href="{{ route('contact') }}">Contact Us</a>
+            <a href="{{ route('contact-admin') }}">Contact Us</a>
         @endif
     </div>
 </div>

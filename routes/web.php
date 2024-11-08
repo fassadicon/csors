@@ -56,6 +56,8 @@ Route::get('menu/{foodDetail}', App\Livewire\Food::class)
 
 Route::get('contact', App\Livewire\Contact::class)
     ->name('contact');
+Route::get('contact-admin', App\Livewire\ContactAdmin::class)
+    ->name('contact-admin');
 
 Route::get('cart', App\Livewire\Cart::class)
     ->name('cart');
@@ -171,7 +173,7 @@ Route::post('validate-otp', function () {
 Route::get('/otp-input', [CatererOtpController::class, 'show'])->name('caterer.otp');
 Route::post('/otp-verify', [CatererOtpController::class, 'verify'])->name('caterer.otp.verify');
 Route::get('/caterer-request-otp', [CatererOtpController::class, 'requestOTP'])->name('caterer.otp.request');
-Route::get('/caterer-cancel-login', [CatererOtpController::class,'destroy'])->name('caterer.cancel.login');
+Route::get('/caterer-cancel-login', [CatererOtpController::class, 'destroy'])->name('caterer.cancel.login');
 
 // Route::get('/download-backup/{filename}', function ($filename) {
 //     $filePath = 'CSORS/' . $filename;
