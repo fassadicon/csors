@@ -37,6 +37,9 @@
             </x-slot:figure>
         </x-mary-card>
         @endforeach
+        @if (count($events) <= 0)
+            <p>No events at the moment.</p>
+        @endif
     </div>
 
     <div class="flex items-center gap-x-4">
@@ -56,6 +59,9 @@
             </x-slot:figure>
         </x-mary-card>
         @endforeach
+        @if (count($packages) <= 0)
+            <p>No packages at the moment.</p>
+        @endif
     </div>
 
     <div class="flex items-center gap-x-4">
@@ -72,6 +78,9 @@
             </x-slot:figure>
         </x-mary-card>
         @endforeach
+        @if (count($foodCategories) <= 0) 
+            <p>No food categories at the moment.</p>
+        @endif
     </div>
 
     <div class="flex items-center gap-x-4">
@@ -113,6 +122,9 @@
             </x-mary-card>
             @endif
         @endforeach
+        @if (count($foodDetails) <= 0) 
+            <p>No menu at the moment.</p>
+        @endif
     </div>
 
     <div class="flex items-center gap-x-4">
@@ -129,6 +141,9 @@
             </x-slot:figure>
         </x-mary-card>
         @endforeach
+        @if (count($servingTypes) <= 0) 
+            <p>No food serving types at the moment.</p>
+        @endif
     </div>
 
     <div class="flex items-center gap-x-4">
@@ -147,6 +162,9 @@
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
+        @if (count($utilities) <= 0) 
+            <p>No food utilities at the moment.</p>
+        @endif
     </div>
 
 </div>

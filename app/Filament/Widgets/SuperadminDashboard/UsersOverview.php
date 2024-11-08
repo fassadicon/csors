@@ -25,7 +25,18 @@ class UsersOverview extends BaseWidget
         $notVerifiedUsersCount = User::where('is_verified', 0)->count();
         $usersCount = User::count();
 
+        $startOfWeek = now()->startOfWeek();  // By default, startOfWeek() returns Monday
+        $endOfWeek = now()->endOfWeek();  // By default, endOfWeek() returns Sunday
+        // Get the number of users created between Monday and Sunday of this week
+        $userPerWeek = User::whereBetween('created_at', [$startOfWeek, $endOfWeek])->count();
         // Create stats with icons and right-aligned values
+
+        // PER YEAR
+        $startOfYear = now()->startOfYear();
+        $endOfYear = now()->endOfYear();
+
+        $userPerYear = User::whereBetween('created_at', [$startOfYear, $endOfYear])->count();
+
         return [
             Stat::make('Caterers', $caterersCount)
                 ->color('success')
@@ -50,6 +61,21 @@ class UsersOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-arrow-trending-up') // Adjust icon here if needed
                 ->icon('heroicon-o-user') // Add an icon for All Users
                 ->extraAttributes(['class' => 'text-right hover:bg-gray-100 transition duration-150']),
+
+            // FOR CATERER COUNT 
+            Stat::make('Customer/Caterer Per Week', $userPerWeek)
+                ->color('success')
+                ->descriptionIcon('heroicon-m-arrow-trending-up') // Adjust icon here if needed
+                ->icon('heroicon-o-user') // Add an icon for All Users
+                ->extraAttributes(['class' => 'text-right hover:bg-gray-100 transition duration-150']),
+
+            // FOR CATERER COUNT 
+            Stat::make('Customer/Caterer Per Year', $userPerYear)
+                ->color('success')
+                ->descriptionIcon('heroicon-m-arrow-trending-up') // Adjust icon here if needed
+                ->icon('heroicon-o-user') // Add an icon for All Users
+                ->extraAttributes(['class' => 'text-right hover:bg-gray-100 transition duration-150']),
+
         ];
     }
 }

@@ -37,6 +37,9 @@
                         </x-mary-card>
                     @endif
                 @endforeach
+                @if (count($foodDetails) <= 0)
+                    <p class="">No menu yet.</p>
+                @endif
             </div>
         </div>
     </div>
