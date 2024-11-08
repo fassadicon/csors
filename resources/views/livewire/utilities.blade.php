@@ -18,5 +18,8 @@
                 </x-slot:actions>
             </x-mary-card>
         @endforeach
+        @if (count($utilities) <= 0)
+            <p class="">No utilities yet.</p>
+        @endif
     </div>
 </div>

@@ -176,9 +176,9 @@ use Illuminate\Support\Str;
                     @if ($order->payment_status->value == 'pending')
                     <x-primary-button class="w-full bg-slate-800 flex !justify-center !text-center"
                         wire:click='payPartial'>{{ __('Pay DP (') . ($order->caterer->downpayment / 100) . '%) - ₱' .
-                        number_format(($order->total_amount + ($order->total_amount * $taxRate) + $order->delivery_amount) * ($order->caterer->downpayment / 100), 2)  }}</x-primary-button>
+                        number_format(($order->total_amount  + $order->delivery_amount) * ($order->caterer->downpayment / 100), 2)  }}</x-primary-button>
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payFull'>{{ __('Pay
-                        Full - ₱') . number_format(($order->total_amount + ($order->total_amount * $taxRate) + $order->delivery_amount), 2)}}
+                        Full - ₱') . number_format(($order->total_amount + $order->delivery_amount), 2)}}
                     </x-primary-button>
                     @elseif ($order->payment_status->value == 'partial')
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payRemaining'>{{
@@ -189,12 +189,17 @@ use Illuminate\Support\Str;
                 @endif
 
                 {{-- CANCEL --}}
+                @php
+                    $firstPayment = $order->payments->first()?->created_at;
+                    // Check if the first payment is within ±24 hours of the current date
+                    $isWithin24Hours = $firstPayment && abs(now()->diffInHours($firstPayment, false)) <= 24; 
+                @endphp
                 @unless ($order->cancellationRequest)
-                @if ($canRequestCancellation)
-                <x-danger-button class="flex justify-center bg-red-700" wire:click='cancel'>{{ __('Request to Cancel')
-                    }}
-                </x-danger-button>
-                @endif
+                    @if ($canRequestCancellation && $isWithin24Hours)
+                        <x-danger-button class="flex justify-center bg-red-700" wire:click='cancel'>
+                            {{ __('Request to Cancel') }}
+                        </x-danger-button>
+                    @endif
                 @endunless
                 {{-- TEMPORARY --}}
                 @if ($canPay && $order->payment_status->value !== 'paid' && $order->payment_status->value !== 'refunded')

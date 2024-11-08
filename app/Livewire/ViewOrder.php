@@ -120,7 +120,7 @@ class ViewOrder extends Component
 
     public function payPartial()
     {
-        $downPayment = ($this->order->total_amount + ($this->order->total_amount * $this->taxRate) + $this->order->delivery_amount) * ($this->order->caterer->downpayment / 100);
+        $downPayment = ($this->order->total_amount + $this->order->delivery_amount) * ($this->order->caterer->downpayment / 100);
 
         $downPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($downPayment, 2)))));
 
@@ -148,7 +148,7 @@ class ViewOrder extends Component
 
     public function payFull()
     {
-        $fullPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->order->total_amount + ($this->order->total_amount * $this->taxRate) + $this->order->delivery_amount, 2)))));
+        $fullPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($this->order->total_amount + $this->order->delivery_amount, 2)))));
 
         $this->data['data']['attributes']['success_url'] = route("full-payment-existing-success");
         $this->data['data']['attributes']['line_items'][0]['amount'] = $fullPayment;
@@ -172,9 +172,11 @@ class ViewOrder extends Component
 
     public function payRemaining()
     {
-        $remainingPayment = ($this->order->total_amount + ($this->order->total_amount * $this->taxRate) + $this->order->delivery_amount) * ((100 - $this->order->caterer->downpayment) / 100);
+        // dd((100 - $this->order->caterer->downpayment) / 100);
+        // $remainingPayment = (($this->order->total_amount) * ((100 - $this->order->caterer->downpayment) / 100)) + $this->order->delivery_amount;
+        $remainingPayment = $this->order->total_amount - $this->order->payments->first()->amount + $this->order->delivery_amount;
         $remainingPayment = intval(str_replace(".", "", trim(preg_replace("/[^-0-9\.]/", "", number_format($remainingPayment, 2)))));
-
+        // dd(($this->order->total_amount + 2) * ((100 - $this->order->caterer->downpayment) / 100));
         $this->data['data']['attributes']['success_url'] = route('remaining-payment-success');
         $this->data['data']['attributes']['line_items'][0]['amount'] = $remainingPayment;
         $this->data['data']['attributes']['line_items'][0]['name'] = 'Payment 2 of 2';

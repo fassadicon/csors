@@ -17,6 +17,9 @@
                 </x-mary-card>
             </a>
         @endforeach
+        @if (count($events) <= 0)
+            <p class="">No events yet.</p>
+        @endif
     </div>
 
 </div>
