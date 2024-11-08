@@ -189,12 +189,17 @@ use Illuminate\Support\Str;
                 @endif
 
                 {{-- CANCEL --}}
+                @php
+                    $firstPayment = $order->payments->first()?->created_at;
+                    // Check if the first payment is within ±24 hours of the current date
+                    $isWithin24Hours = $firstPayment && abs(now()->diffInHours($firstPayment, false)) <= 24; 
+                @endphp
                 @unless ($order->cancellationRequest)
-                @if ($canRequestCancellation)
-                <x-danger-button class="flex justify-center bg-red-700" wire:click='cancel'>{{ __('Request to Cancel')
-                    }}
-                </x-danger-button>
-                @endif
+                    @if ($canRequestCancellation && $isWithin24Hours)
+                        <x-danger-button class="flex justify-center bg-red-700" wire:click='cancel'>
+                            {{ __('Request to Cancel') }}
+                        </x-danger-button>
+                    @endif
                 @endunless
                 {{-- TEMPORARY --}}
                 @if ($canPay && $order->payment_status->value !== 'paid' && $order->payment_status->value !== 'refunded')
