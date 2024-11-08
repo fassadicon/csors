@@ -76,6 +76,7 @@ class EditCatererPage extends Page implements HasForms
                 ->directory('caterers/' . auth()->user()->caterer->id . '/requirements')
                 ->label('Business Requirements (.zip)')
                 ->columnSpanFull()
+                ->downloadable()
                 ->nullable(),
             Forms\Components\FileUpload::make('images')
                 ->directory('caterers/' . $this->data['id'] . '/images/profile')
