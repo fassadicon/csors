@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'middle_name' => 'Segovia',
             'ext_name' => null,
             'phone_number' => '09063406603',
-            'email' => 'sa.csors.official@gmail.com',
+            'email' => 'sa.csors.offical@gmail.com',
             'is_customer' => 0,
             'is_verified' => 1,
             'password' => bcrypt('qwe'),
