@@ -64,7 +64,7 @@ class PackageResource extends Resource
                                         ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
                                             $query->where('caterer_id', auth()->user()->caterer->id);
                                         }))
-                                        ->getOptionLabelFromRecordUsing(fn(Utility $record): string => "$record->name (pc/set)"),
+                                        ->getOptionLabelFromRecordUsing(fn(Utility $record): string => $record->name),
                                     MorphToSelect\Type::make(Food::class)
                                         ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
                                             $query->whereHas('servingType', function ($query) {
@@ -72,7 +72,7 @@ class PackageResource extends Resource
                                             });
                                         }))
                                         ->getOptionLabelFromRecordUsing(fn(Food $record): string =>
-                                        $record->foodDetail->name .  " - " . $record->servingType->name),
+                                        $record->foodDetail->name),
                                     // .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"
                                 ])
                                 // ->afterStateUpdated(function ($state, $get, $set) {
