@@ -43,7 +43,7 @@ Route::get('utility/{utility:name}', App\Livewire\Utility::class)
 // Events
 Route::get('events', App\Livewire\Events::class)
     ->name('events');
-Route::get('event/{event:name}', App\Livewire\Event::class)
+Route::get('event/{event}', App\Livewire\Event::class)
     ->name('event');
 
 Route::get('package/{package:name}', App\Livewire\Package::class)
