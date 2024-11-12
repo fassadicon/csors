@@ -46,7 +46,7 @@ Route::get('events', App\Livewire\Events::class)
 Route::get('event/{event}', App\Livewire\Event::class)
     ->name('event');
 
-Route::get('package/{package:name}', App\Livewire\Package::class)
+Route::get('package/{package}', App\Livewire\Package::class)
     ->name('package');
 
 Route::get('menu', App\Livewire\Menu::class)
