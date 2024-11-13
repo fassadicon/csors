@@ -95,13 +95,17 @@ new #[Layout('layouts.guest')] class extends Component {
     <form style="margin-bottom: 5rem;" wire:submit="register" class=" z-10 px-4 md:px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md bg-jt-white w-[90%] md:min-w-[450px] md:w-[30%] space-y-4">
         <div class="flex flex-col md:flex-row gap-y-4 md:gap-x-4">
             <div class="w-full">
-                <x-input-label for="first_name" :value="__('First Name')" />
+                <div class="flex gap-x-1">
+                    <x-input-label for="first_name" :value="__('First Name')" /><label for="" class="inline-flex text-red-500">*</label>
+                </div>
                 <x-text-input wire:model="first_name" id="first_name" class="block w-full mt-1" type="text" name="first_name"
                     required autofocus autocomplete="first_name" />
                 <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
             </div>
             <div class="w-full">
-                <x-input-label for="last_name" :value="__('Last Name')" />
+                <div class="flex gap-x-1">
+                    <x-input-label for="last_name" :value="__('Last Name')" /><label for="" class="inline-flex text-red-500">*</label>
+                </div>
                 <x-text-input wire:model="last_name" id="last_name" class="block w-full mt-1" type="text" name="last_name" required
                     autofocus autocomplete="last_name" />
                 <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
@@ -137,8 +141,12 @@ new #[Layout('layouts.guest')] class extends Component {
 
         <!-- Email Address -->
         <div>
-            <x-input-label for="email"
-                :value="__('Email')" />
+            <div class="flex gap-x-1">
+                <x-input-label for="email" :value="__('Email')" />
+                <label for="" class="inline-flex text-red-500">*</label>
+            </div>
+
+            
             <x-text-input wire:model="email"
                 id="email"
                 class="block w-full mt-1"
@@ -152,8 +160,10 @@ new #[Layout('layouts.guest')] class extends Component {
 
         <!-- Password -->
         <div>
-            <x-input-label for="password"
-                :value="__('Password')" />
+            <div class="flex gap-x-1">
+                <x-input-label for="password" :value="__('Password')" />
+                <label for="" class="inline-flex text-red-500">*</label>
+            </div>
 
             <x-text-input wire:model="password"
                 id="password"
@@ -169,8 +179,11 @@ new #[Layout('layouts.guest')] class extends Component {
 
         <!-- Confirm Password -->
         <div>
-            <x-input-label for="password_confirmation"
-                :value="__('Confirm Password')" />
+            <div class="flex gap-x-1">
+                <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                <label for="" class="inline-flex text-red-500">*</label>
+            </div>
+
 
             <x-text-input wire:model="password_confirmation"
                 id="password_confirmation"
