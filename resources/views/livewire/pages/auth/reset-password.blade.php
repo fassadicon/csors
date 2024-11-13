@@ -36,7 +36,15 @@ new #[Layout('layouts.guest')] class extends Component
         $this->validate([
             'token' => ['required'],
             'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required', 
+                'string', 
+                'confirmed', 
+                Rules\Password::defaults(),
+                'regex:/[a-z]/',        // Lowercase letter
+                'regex:/[A-Z]/',        // Uppercase letter
+                'regex:/[0-9]/',        // Digit
+            ],
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
