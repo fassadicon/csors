@@ -47,7 +47,15 @@ new #[Layout('layouts.guest')] class extends Component {
             'ext_name' => ['nullable', 'string', 'max:99'],
             'phone_number' => ['nullable', 'string', 'max:11', 'regex:/^(09)\d{9}$/', 'unique:users,phone_number'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required', 
+                'string', 
+                'confirmed', 
+                Rules\Password::defaults(),
+                'regex:/[a-z]/',        // Lowercase letter
+                'regex:/[A-Z]/',        // Uppercase letter
+                'regex:/[0-9]/',        // Digit
+            ],
             
         ]);
 
@@ -161,9 +169,10 @@ new #[Layout('layouts.guest')] class extends Component {
         <!-- Password -->
         <div>
             <div class="flex gap-x-1">
-                <x-input-label for="password" :value="__('Password')" />
+                <x-input-label for="password" :value="__('Password')"  />
                 <label for="" class="inline-flex text-red-500">*</label>
             </div>
+            <label for="password" class="text-xs">Use combination of numbers and characters (upper and lower)</label>
 
             <x-text-input wire:model="password"
                 id="password"
