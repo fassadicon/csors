@@ -146,13 +146,7 @@ new #[Layout('layouts.guest')] class extends Component {
         </div>
 
         <div class="flex flex-col-reverse items-center justify-end mt-4 gap-y-4 md:gap-y-0 md:flex-row">
-            {{-- @if (Route::has('password.request'))
-                <a class="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                    href="{{ route('password.request') }}"
-                    wire:navigate>
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif --}}
+            
             <a class="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 href="{{ route('register') }}"
                 wire:navigate>
@@ -161,6 +155,16 @@ new #[Layout('layouts.guest')] class extends Component {
             <x-primary-button class="ms-3 btn-primary">
                 {{ __('Log in') }}
             </x-primary-button>
+        </div>
+        <hr class="mx-4 my-4">
+        <div class="flex justify-center items-center">
+            @if (Route::has('password.request'))
+                <a class="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                    href="{{ route('password.request') }}"
+                    wire:navigate>
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
         </div>
     </form>
 </div>
