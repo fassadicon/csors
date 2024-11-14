@@ -121,7 +121,7 @@
                 <tr>
                     <td>
                         <strong>{{ $caterer->name }}</strong><br>
-                        {{-- Test, Manila, Philippines<br> --}}
+                        Orani, Bataan, Philippines<br>
                         {{ $caterer->phone_number }}<br>
                         {{ $caterer->email }}
                     </td>
