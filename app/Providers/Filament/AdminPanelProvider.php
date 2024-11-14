@@ -35,6 +35,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->passwordReset()
+            // ->authGuard('freelancer')
+            ->emailVerification()
             ->registration(CatererRegister::class)
             ->userMenuItems([
                 MenuItem::make()

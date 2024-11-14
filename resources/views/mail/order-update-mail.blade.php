@@ -81,7 +81,7 @@
             <tr>
                 <td>
                     <strong>{{ $order->caterer->name }}</strong><br>
-                    Test, Manila, Philippines<br>
+                    {{-- Test, Manila, Philippines<br> --}}
                     {{ $order->caterer->phone_number }}<br>
                     {{ $order->caterer->email }}
                 </td>
@@ -89,7 +89,7 @@
                     <strong>Order #{{ $order->id }}</strong><br>
                     Order Status: {{ $order->order_status }}<br>
                     Payment Status: {{ $order->payment_status }}<br><br>
-                    Paid by:<br>
+                    Ordered by:<br>
                     {{ $order->user->full_name }}<br>
                     {{ $order->user->email }}
                 </td>
