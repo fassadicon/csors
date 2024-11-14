@@ -283,7 +283,7 @@ class OrderResource extends Resource
                         if ($state == 'pending') {
                             $set('delivery_amount', 0.00);
                         }
-                        $set('final_amount', floatval(($get('total_amount') + $get('total_amount') * 0.12) + $get('delivery_amount')));
+                        $set('final_amount', floatval(($get('total_amount')) + $get('delivery_amount')));
                     })
                     ->required(),
                 Forms\Components\Textarea::make('decline_reason')
