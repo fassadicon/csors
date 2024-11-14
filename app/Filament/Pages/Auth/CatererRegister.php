@@ -59,12 +59,19 @@ class CatererRegister extends Register
                                 ->label('Username'),
                             $this->getEmailFormComponent(),
                             Forms\Components\TextInput::make('phone_number')
-                                ->tel()
+                                ->tel()->numeric()
                                 ->nullable(),
                             Forms\Components\TextInput::make('password')
                                 ->password()
                                 ->required()
-                                ->minLength(8),
+                                ->minLength(8)->rules([
+                                    'required',                // Make sure the password is required
+                                    'string',                  // Ensure it's a string
+                                    Password::defaults(), // Use the default Laravel password rules (strong enough defaults)
+                                    'regex:/[a-z]/',           // At least one lowercase letter
+                                    'regex:/[A-Z]/',           // At least one uppercase letter
+                                    'regex:/[0-9]/',           // At least one digit
+                                ]),
                             $this->getPasswordConfirmationFormComponent(),
                         ]),
                     Wizard\Step::make('User')
@@ -119,7 +126,7 @@ class CatererRegister extends Register
                         >
                             Register
                         </x-filament::button>
-                    BLADE))),
+                    BLADE)))
             ]);
     }
 
@@ -150,7 +157,6 @@ class CatererRegister extends Register
 
             // Capture the plain text password
             $plainPassword = $data['password'];
-
             // Send the plain text password via email
             Mail::to($data['email'])->send(new CustomerSignup(
                 $data['first_name'] . ", " . $data['last_name'],
