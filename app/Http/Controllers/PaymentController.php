@@ -38,11 +38,12 @@ class PaymentController extends Controller
                     'payment_status' => 'partial',
                 ]);
 
+
                 Payment::create([
                     'order_id' => $order->id,
                     'type' => 'online',
                     'method' => $response->data->attributes->payment_method_used,
-                    'amount' => ($order->total_amount + ($order->total_amount * $this->taxRate) + $order->delivery_amount) * ($order->caterer->downpayment / 100),
+                    'amount' => ((($order->total_amount ) + $order->delivery_amount) * ($order->caterer->downpayment / 100)),
                     'reference_no' => $response->data->id,
                     'remarks' => 'Downpayment',
                 ]);
@@ -91,12 +92,11 @@ class PaymentController extends Controller
                 $order->update([
                     'payment_status' => 'paid',
                 ]);
-
                 Payment::create([
                     'order_id' => $order->id,
                     'type' => 'online',
-                    'method' => $response->data->attributes->payment_method_used,
-                    'amount' => ($order->total_amount + ($order->total_amount * $this->taxRate) + $order->delivery_amount) * ((100 - $order->caterer->downpayment) / 100),
+                    'method' => $response->data->attributes->payment_method_used, // ($order->total_amount * $this->taxRate)
+                    'amount' => (($order->total_amount) + $order->delivery_amount) -$order->payments->first()->amount,
                     'reference_no' => $response->data->id,
                     'remarks' => 'Remaining Payment',
                 ]);
@@ -147,12 +147,13 @@ class PaymentController extends Controller
                 $order->update([
                     'payment_status' => 'paid',
                 ]);
+                
 
                 Payment::create([
                     'order_id' => $order->id,
                     'type' => 'online',
                     'method' => $response->data->attributes->payment_method_used,
-                    'amount' => $order->final_amount,
+                    'amount' => $order->total_amount + $order->delivery_amount,
                     'reference_no' => $response->data->id,
                     'remarks' => 'Full Payment',
                 ]);
@@ -181,4 +182,14 @@ class PaymentController extends Controller
             abort(404, 'Unauthorized');
         }
     }
+
+    private function getTotalPromo(Order $order) {
+        $promoTotal = 0;
+        if($order && $order->promo->type === 'fixed') {
+            $promoTotal = $order->promo->value;
+        } else {
+            $promoTotal = $order->total_amount * ($order->promo->value / 100); 
+        }   
+        return $promoTotal; 
+    } 
 }
