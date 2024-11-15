@@ -175,7 +175,7 @@ use Illuminate\Support\Str;
                 <div class="flex gap-x-2">
                     @if ($order->payment_status->value == 'pending')
                     <x-primary-button class="w-full bg-slate-800 flex !justify-center !text-center"
-                        wire:click='payPartial'>{{ __('Pay DP (') . ($order->caterer->downpayment / 100) . '%) - ₱' .
+                        wire:click='payPartial'>{{ __('Pay DP (') . ($order->caterer->downpayment) . '%) - ₱' .
                         number_format(($order->total_amount  + $order->delivery_amount) * ($order->caterer->downpayment / 100), 2)  }}</x-primary-button>
                     <x-primary-button class="w-full btn-primary flex !justify-center" wire:click='payFull'>{{ __('Pay
                         Full - ₱') . number_format(($order->total_amount + $order->delivery_amount), 2)}}
