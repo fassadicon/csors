@@ -64,7 +64,7 @@ class PackageResource extends Resource
                                         ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
                                             $query->where('caterer_id', auth()->user()->caterer->id);
                                         }))
-                                        ->getOptionLabelFromRecordUsing(fn(Utility $record): string => "$record->name - (₱$record->price/[pc/set])"),
+                                        ->getOptionLabelFromRecordUsing(fn(Utility $record): string => $record->name),
                                     MorphToSelect\Type::make(Food::class)
                                         ->modifyOptionsQueryUsing(fn(Builder $query) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
                                             $query->whereHas('servingType', function ($query) {
@@ -72,8 +72,8 @@ class PackageResource extends Resource
                                             });
                                         }))
                                         ->getOptionLabelFromRecordUsing(fn(Food $record): string =>
-                                        $record->foodDetail->name .  " - " . $record->servingType->description.""),
-                                        // .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"
+                                        $record->foodDetail->name),
+                                    // .  " - " . $record->servingType->name . " (₱" . $record->price . "/pax)"
                                 ])
                                 // ->afterStateUpdated(function ($state, $get, $set) {
                                 //     $set('amount', static::getAmount($state['orderable_type'], $state['orderable_id'], $get('quantity')));
@@ -141,9 +141,10 @@ class PackageResource extends Resource
                 Tables\Columns\TextColumn::make('events.caterer.name')
                     ->label('Caterer')
                     ->searchable()
-                    ->visible(auth()->user()->hasRole('superadmin')),
-
+                    ->visible(auth()->user()->hasRole('superadmin'))
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('events.name')
+                    ->wrap()
                     ->label('Events')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
@@ -182,15 +183,33 @@ class PackageResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\TrashedFilter::make()
+                    ->label('Status')
+                    ->placeholder('Active Only')
+                    ->trueLabel('All')
+                    ->falseLabel('Inactive Only'),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('logs')
-                    ->url(fn($record) => PackageResource::getUrl('logs', ['record' => $record]))
-                    ->icon('heroicon-m-list-bullet')
-                    ->color('gray'),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                        ->label('Set Inactive')
+                        ->icon('heroicon-m-bookmark-slash')
+                        ->modalIcon('heroicon-m-bookmark-slash')
+                        ->modalHeading('Set Inactive')
+                        ->successNotificationTitle('Food detail has been set Inactive.'),
+                    Tables\Actions\RestoreAction::make()
+                        ->label('Set Active')
+                        ->icon('heroicon-m-bookmark')
+                        ->modalIcon('heroicon-m-bookmark')
+                        ->modalHeading('Set Active')
+                        ->successNotificationTitle('Food detail has been set Active.'),
+                    Tables\Actions\Action::make('logs')
+                        ->url(fn($record) => PackageResource::getUrl('logs', ['record' => $record]))
+                        ->icon('heroicon-m-list-bullet')
+                        ->color('gray'),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

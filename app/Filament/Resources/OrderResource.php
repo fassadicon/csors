@@ -244,8 +244,10 @@ class OrderResource extends Resource
                 //     ->numeric()
                 //     ->default(fn(Get $get) => $get('total_amount') * 0.12)
                 //     ->readOnly(),
+
                 Forms\Components\TextInput::make('total_amount')
-                    ->label('Total (12% VAT + Delivery Fee)')
+                    ->label('Total + Delivery Fee')
+
                     ->live(debounce: 500)
                     ->numeric()
                     ->prefix('₱')

@@ -15,9 +15,18 @@ class EditPackage extends EditRecord
     {
         return [
             Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
-            Actions\ForceDeleteAction::make(),
-            Actions\RestoreAction::make(),
+            Actions\DeleteAction::make()
+                ->label('Set Inactive')
+                ->icon('heroicon-m-bookmark-slash')
+                ->modalIcon('heroicon-m-bookmark-slash')
+                ->modalHeading('Set Inactive')
+                ->successNotificationTitle('Package has been set Inactive.'),
+            Actions\RestoreAction::make()
+                ->label('Set Active')
+                ->icon('heroicon-m-bookmark')
+                ->modalIcon('heroicon-m-bookmark')
+                ->modalHeading('Set Active')
+                ->successNotificationTitle('Package has been set Active.'),
         ];
     }
 

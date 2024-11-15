@@ -18,24 +18,24 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             PermissionSeeder::class,
-            CatererSeeder::class,
+            // CatererSeeder::class,
 
-            ServingTypeSeeder::class,
-            FoodCategorySeeder::class,
-            FoodDetailSeeder::class,
+            // ServingTypeSeeder::class,
+            // FoodCategorySeeder::class,
+            // FoodDetailSeeder::class,
 
-            UtilitySeeder::class,
+            // UtilitySeeder::class,
 
-            EventSeeder::class,
-            PackageSeeder::class,
+            // EventSeeder::class,
+            // PackageSeeder::class,
 
-            PromoSeeder::class,
+            // PromoSeeder::class,
 
-            OrderSeeder::class,
+            // OrderSeeder::class,
 
             // CancellationRequestSeeder::class,
 
-            FeedbackSeeder::class,
+            // FeedbackSeeder::class,
         ]);
     }
 }

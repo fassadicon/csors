@@ -28,7 +28,7 @@
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($events as $event)
-        <x-mary-card title="{{ $event->name }}" class="card !pb-0  !flex !flex-col !justify-center !items-center">
+        <x-mary-card title="{!! $event->name !!}" class="card !pb-0  !flex !flex-col !justify-center !items-center">
             <x-slot:figure>
                 <a href="{{ route('event', ['event'=>$event]) }}">
                     <img
@@ -70,7 +70,7 @@
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($foodCategories as $foodCategory)
-        <x-mary-card title="{{ $foodCategory->name }}"
+        <x-mary-card title="{!! $foodCategory->name !!}"
             class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
             <x-slot:figure>
                 <img
@@ -78,7 +78,7 @@
             </x-slot:figure>
         </x-mary-card>
         @endforeach
-        @if (count($foodCategories) <= 0) 
+        @if (count($foodCategories) <= 0)
             <p>No food categories at the moment.</p>
         @endif
     </div>
@@ -107,11 +107,11 @@
                 </x-mary-card>
             @endif
         @endforeach --}}
-        
+
         @foreach ($foodDetails as $foodDetail)
             {{-- <p>{{$foodDetail}}</p> --}}
             @if (count($foodDetail->servingTypes) > 0)
-            <x-mary-card title="{{ $foodDetail->name }}"
+            <x-mary-card title="{!! $foodDetail->name !!}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
                 <x-slot:figure>
                     <a href="{{ route('food', ['foodDetail' => $foodDetail]) }}">
@@ -122,7 +122,7 @@
             </x-mary-card>
             @endif
         @endforeach
-        @if (count($foodDetails) <= 0) 
+        @if (count($foodDetails) <= 0)
             <p>No menu at the moment.</p>
         @endif
     </div>
@@ -133,7 +133,7 @@
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($servingTypes as $servingType)
-        <x-mary-card title="{{ $servingType->name }}"
+        <x-mary-card title="{!! $servingType->name !!}"
             class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
             <x-slot:figure>
                 <img
@@ -141,7 +141,7 @@
             </x-slot:figure>
         </x-mary-card>
         @endforeach
-        @if (count($servingTypes) <= 0) 
+        @if (count($servingTypes) <= 0)
             <p>No food serving types at the moment.</p>
         @endif
     </div>
@@ -152,7 +152,7 @@
     </div>
     <div class="grid gap-8 mb-4 md:grid-cols-2 lg:grid-cols-4">
         @foreach ($utilities as $utility)
-            <x-mary-card title="{{ $utility->name }}"
+            <x-mary-card title="{!! $utility->name !!}"
                 class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
                 <x-slot:figure>
                     <a href="{{ route('utility', ['utility' => $utility]) }}">
@@ -162,7 +162,7 @@
                 </x-slot:figure>
             </x-mary-card>
         @endforeach
-        @if (count($utilities) <= 0) 
+        @if (count($utilities) <= 0)
             <p>No food utilities at the moment.</p>
         @endif
     </div>

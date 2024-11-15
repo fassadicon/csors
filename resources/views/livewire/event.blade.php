@@ -27,7 +27,7 @@
                 <x-slot:figure>
                     {{-- <img src="{{ asset('images/placeholder.jpg') }}" class="card-img" /> --}}
                     <img
-                        src="{{ $event->getFirstImagePath() ? asset('storage/' . $event->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
+                        src="{{ $package->getFirstImagePath() ? asset('storage/' . $package->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                 </x-slot:figure>
                 <x-slot:actions>
                     <a href="{{ route('package', ['package' => $package]) }}"><x-mary-button icon="o-plus"
