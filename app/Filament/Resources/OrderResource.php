@@ -198,6 +198,9 @@ class OrderResource extends Resource
                     ->relationship(
                         name: 'promo',
                         titleAttribute: 'name',
+                        modifyQueryUsing: fn(Builder $query, Get $get) => $query->when(auth()->user()->hasRole('caterer'), function ($query) {
+                            return $query->where('caterer_id', auth()->user()->caterer->id);
+                        }),
                     )
                     ->nullable()
                     ->live()
