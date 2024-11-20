@@ -151,8 +151,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
-                                // $set('../../vat', $totalAmount * 0.12);
-                                $set('../../final_amount', (($totalAmount - $deductedAmount) + (($totalAmount - $deductedAmount) * 0.12)) + $get('../../delivery_amount'));
+                                $set('../../final_amount', ($totalAmount - $deductedAmount) + $get('../../delivery_amount'));
                             })
                             ->live(debounce: 500)
                             ->required()
@@ -170,8 +169,7 @@ class OrderResource extends Resource
                                 $deductedAmount = static::getDeductedAmount($get('../../promo_id'), $totalAmount);
                                 $set('../../deducted_amount', $deductedAmount);
                                 $set('../../total_amount', $totalAmount - $deductedAmount);
-                                // $set('../../vat', $totalAmount * 0.12);
-                                $set('../../final_amount', ((($totalAmount - $deductedAmount)) + (($totalAmount - $deductedAmount) * 0.12)) + $get('../../delivery_amount'));
+                                $set('../../final_amount', $totalAmount - $deductedAmount + $get('../../delivery_amount'));
                             })
                             ->columnSpan(2),
                         Forms\Components\TextInput::make('amount')
@@ -186,8 +184,7 @@ class OrderResource extends Resource
                         $deductedAmount = static::getDeductedAmount($get('promo_id'), $totalAmount);
                         $set('deducted_amount', $deductedAmount);
                         $set('total_amount', $totalAmount - $deductedAmount);
-                        // $set('vat', $totalAmount * 0.12);
-                        $set('final_amount', ((($totalAmount - $deductedAmount)) + (($totalAmount - $deductedAmount) * 0.12)) + $get('delivery_amount'));
+                        $set('final_amount', $totalAmount - $deductedAmount + $get('delivery_amount'));
                     })
                     ->reorderable()
                     ->columns(12)
@@ -208,8 +205,7 @@ class OrderResource extends Resource
                     ->afterStateUpdated(function ($state, $get, $set) {
                         $set('deducted_amount', static::getDeductedAmount($state, static::getTotalAmount($get('orderItems'))));
                         $set('total_amount', static::getTotalAmount($get('orderItems')) - $get('deducted_amount'));
-                        // $set('vat', $get('total_amount') * 0.12);
-                        $set('final_amount', ($get('total_amount') + ($get('total_amount') * 0.12)) + $get('delivery_amount'));
+                        $set('final_amount', $get('total_amount') + $get('delivery_amount'));
                     }),
                 Forms\Components\TextInput::make('deducted_amount')
                     ->live(debounce: 500)
@@ -229,7 +225,7 @@ class OrderResource extends Resource
                     ->numeric()
                     ->live(debounce: 500)
                     ->afterStateUpdated(function ($state, $get, $set) {
-                        $set('final_amount', floatval(($get('total_amount') + ($get('total_amount') * 0.12)) + $state));
+                        $set('final_amount', $get('total_amount') + $state);
                     }),
                 Forms\Components\TextInput::make('total_amount')
                     ->label('Subtotal')
@@ -239,15 +235,7 @@ class OrderResource extends Resource
                     ->required()
                     ->numeric()
                     ->live(debounce: 500),
-                // Forms\Components\TextInput::make('vat')
-                //     ->label('VAT')
-                //     ->live()
-                //     ->prefix('₱')
-                //     ->numeric()
-                //     ->default(fn(Get $get) => $get('total_amount') * 0.12)
-                //     ->readOnly(),
-
-                Forms\Components\TextInput::make('total_amount')
+                Forms\Components\TextInput::make('final_amount')
                     ->label('Total + Delivery Fee')
 
                     ->live(debounce: 500)
@@ -287,7 +275,7 @@ class OrderResource extends Resource
                         if ($state == 'pending') {
                             $set('delivery_amount', 0.00);
                         }
-                        $set('final_amount', floatval(($get('total_amount') + $get('total_amount') * 0.12) + $get('delivery_amount')));
+                        $set('final_amount', $get('total_amount') + $get('delivery_amount'));
                     })
                     ->required(),
                 Forms\Components\Textarea::make('decline_reason')

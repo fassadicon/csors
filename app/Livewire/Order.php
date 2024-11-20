@@ -42,7 +42,7 @@ class Order extends Component
     public $recipient;
 
     public $disabledDates;
-    
+
 
     public function mount()
     {
@@ -122,7 +122,7 @@ class Order extends Component
                 'start' => $this->startDateTime,
                 'end' => $this->endDateTime,
                 'total_amount' => $this->totalAmount,
-                'final_amount' => $this->totalAmount + ($this->totalAmount * .12),
+                'final_amount' => $this->totalAmount,
             ]);
 
             // Save each order item
