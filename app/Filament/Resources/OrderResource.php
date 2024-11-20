@@ -198,7 +198,6 @@ class OrderResource extends Resource
                     ->relationship(
                         name: 'promo',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn(Builder $query, Get $get) => $query->where('minimum', '<=', $get('total_amount')),
                     )
                     ->nullable()
                     ->live()
