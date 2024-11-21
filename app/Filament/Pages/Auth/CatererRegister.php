@@ -19,6 +19,7 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Events\Auth\Registered;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -53,6 +54,20 @@ class CatererRegister extends Register
         return $form
             ->schema([
                 Wizard::make([
+                    Wizard\Step::make('Terms and Conditions') // Move this step to the first position
+                    ->schema([
+                        Checkbox::make('terms')
+                            ->required()
+                            ->label('I hereby acknowledge that I have read, fully understood, and agree to the CSORS ')
+                            ->helperText(
+                                new HtmlString('By clicking this, you agree to the <a href="' . route('terms-and-condition') . '" target="_blank" class="text-blue-500">Data Privacy Terms and Conditions</a>.')
+                            )
+                            ->inline()
+                            ->accepted()
+                            ->afterStateUpdated(function ($state) {
+                                // You can add additional actions based on whether the terms are accepted.
+                            }),
+                    ]),
                     Wizard\Step::make('Account')
                         ->schema([
                             $this->getNameFormComponent()

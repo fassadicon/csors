@@ -206,6 +206,19 @@ new #[Layout('layouts.guest')] class extends Component {
                 class="mt-2" />
         </div>
 
+        <!-- Terms and condition -->
+        <div class="block mt-4">
+            <label for="terms"
+                class="inline-flex items-center">
+                <input 
+                    id="remember"
+                    type="checkbox" required
+                    class="text-indigo-600 border-gray-300 rounded shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
+                    name="remember">
+                <span class="text-sm text-gray-600 ms-2 dark:text-gray-400">{{ __('BY CLICKING THIS, I HEREBY ACKNOWLEDGE TO HAVE READ, FULLY UNDERSTOOD, AND AGREE TO THE CSORS ') }} <a target="_blank" class="text-blue-500" href="{{ route('terms-and-condition') }}">DATA PRIVACY TERMS AND CONDITION</a></span>
+            </label>
+        </div>
+
         <div class="flex flex-col-reverse items-center justify-end mt-8 md:mt-0 gap-y-4 md:gap-y-0 md:flex-row">
             <a class="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                 href="{{ route('login') }}"
