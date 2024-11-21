@@ -104,12 +104,17 @@ Route::get('payment-cancelled', [PaymentController::class, 'cancelled'])
 require __DIR__ . '/auth.php';
 
 
-// Route::get('emailPreview', function () {
+// Route::get('terms', function () {
 //     // $order = Order::findOrFail(7);
-//     return view('mail.caterer-requirement');
+//     // return view('mail.caterer-requirement');
 //     // Mail::to('jjarts1028@gmail.com')
 //     //     ->send(new ForgotPassword());
+//     // return view('terms-condition');
 // });
+Route::get('terms-and-condition', function() {
+    return view('terms-condition');
+})->name('terms-and-condition');
+
 
 Route::get('otp', function () {
     return view('validateOTP');
