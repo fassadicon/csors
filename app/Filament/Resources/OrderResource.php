@@ -19,10 +19,12 @@ use Filament\Tables\Table;
 use Filament\Notifications;
 use App\Enums\PaymentStatus;
 use App\Models\ReportedUser;
+use App\Mail\OrderUpdateMail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Modal;
+use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Components\Button;
 use Filament\Forms\Components\Select;
 use App\Filament\Exports\OrderExporter;
@@ -519,10 +521,91 @@ class OrderResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Action::make('confirmOrder')
+                    ->label('Confirm')
+                    ->icon('heroicon-s-check-circle')
+                    ->visible(fn($record) => $record->order_status->value == 'pending')
+                    ->action(function ($record, array $data): void {
+                        $record->update([
+                            'order_status' => OrderStatus::Confirmed,
+                        ]);
 
+                        // Caterer
+                        $notification = 'Order #' . $record->id . ' has been ' . $record->order_status->name;
+                        if (auth()->user()->hasRole('caterer')) {
+                            Mail::to(auth()->user()->caterer->email)->send(new OrderUpdateMail(
+                                $record->id,
+                            ));
+                            Notification::make()
+                                ->title($notification)
+                                ->sendToDatabase(auth()->user());
+                        }
+
+                        // Superadmin
+                        $notification = 'Order #' . $record->id . ' of ' . $record->caterer->name . ' has been ' . $record->order_status->name;
+                        $superadmin = User::where('id', 1)->first();
+                        Mail::to($superadmin->email)->send(new OrderUpdateMail(
+                            $record->id,
+                        ));
+                        Notification::make()
+                            ->title($notification)
+                            ->sendToDatabase($superadmin);
+
+                        // Customer
+                        $recipient = User::where('is_customer', 1)->where('id', $record->user->id)->first();
+                        $notification = 'Your order ' . $record->id . ' has been ' . $record->order_status->name;
+                        Notification::make()
+                            ->title($notification)
+                            ->sendToDatabase($recipient);
+                        Mail::to($recipient->email)->send(new OrderUpdateMail(
+                            $record->id,
+                        ));
+                    })
+                    ->requiresConfirmation(),
+                Action::make('declineOrder')
+                    ->label('Decline')
+                    ->color('danger')
+                    ->icon('heroicon-s-x-circle')
+                    ->visible(fn($record) => $record->order_status->value == 'pending')
+                    ->action(function ($record, array $data): void {
+                        $record->update([
+                            'order_status' => OrderStatus::Declined,
+                            'payment_status' => PaymentStatus::Cancelled,
+                        ]);
+
+                        // Caterer
+                        $notification = 'Order #' . $record->id . ' has been ' . $record->order_status->name;
+                        if (auth()->user()->hasRole('caterer')) {
+                            Mail::to(auth()->user()->caterer->email)->send(new OrderUpdateMail(
+                                $record->id,
+                            ));
+                            Notification::make()
+                                ->title($notification)
+                                ->sendToDatabase(auth()->user());
+                        }
+
+                        // Superadmin
+                        $notification = 'Order #' . $record->id . ' of ' . $record->caterer->name . ' has been ' . $record->order_status->name;
+                        $superadmin = User::where('id', 1)->first();
+                        Mail::to($superadmin->email)->send(new OrderUpdateMail(
+                            $record->id,
+                        ));
+                        Notification::make()
+                            ->title($notification)
+                            ->sendToDatabase($superadmin);
+
+                        // Customer
+                        $recipient = User::where('is_customer', 1)->where('id', $record->user->id)->first();
+                        $notification = 'Your order ' . $record->id . ' has been ' . $record->order_status->name;
+                        Notification::make()
+                            ->title($notification)
+                            ->sendToDatabase($recipient);
+                        Mail::to($recipient->email)->send(new OrderUpdateMail(
+                            $record->id,
+                        ));
+                    })
+                    ->requiresConfirmation(),
                 ActionGroup::make([
-
-
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
@@ -538,6 +621,7 @@ class OrderResource extends Resource
                             $payments = $record->payments; // Assuming $record is an instance of your order model
                             // Return the view with the order items
                             return view('filament.order.receipt', [
+                                'id' => $record->id,
                                 'order' => $items,
                                 'payments' => $payments
                             ]);
