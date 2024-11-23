@@ -43,6 +43,10 @@ class ListOrders extends ListRecords
                 ->modifyQueryUsing(fn() => $this->getOrderByOrderStatus(OrderStatus::Completed))
                 ->badge($this->getOrderByOrderStatus(OrderStatus::Completed)->count())
                 ->badgeColor('success'),
+            'declined' => Tab::make()
+                ->modifyQueryUsing(fn() => $this->getOrderByOrderStatus(OrderStatus::Declined))
+                ->badge($this->getOrderByOrderStatus(OrderStatus::Declined)->count())
+                ->badgeColor('danger'),
             'cancelled' => Tab::make()
                 ->modifyQueryUsing(fn() => $this->getOrderByOrderStatus(OrderStatus::Cancelled))
                 ->badge($this->getOrderByOrderStatus(OrderStatus::Cancelled)->count())
@@ -55,10 +59,14 @@ class ListOrders extends ListRecords
                 ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Partial))
                 ->badge($this->getOrderByPaymentStatus(PaymentStatus::Partial)->count())
                 ->badgeColor('blue'),
-            'payment_paid' => Tab::make('Paid Payment')
+            'payment_paid' => Tab::make('Paid')
                 ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Paid))
                 ->badge($this->getOrderByPaymentStatus(PaymentStatus::Paid)->count())
                 ->badgeColor('success'),
+            'payment_refunded' => Tab::make('Refunded')
+                ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Refunded))
+                ->badge($this->getOrderByPaymentStatus(PaymentStatus::Refunded)->count())
+                ->badgeColor('amber'),
         ];
 
         // Add the 'all' tab
