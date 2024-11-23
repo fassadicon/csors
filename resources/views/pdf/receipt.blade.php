@@ -39,7 +39,6 @@
                 <td style="border: 1px solid #000; padding: 8px;">
                     <strong>{{ $order->caterer->name }}</strong><br>
                     Orani, Bataan, Philippines<br>
-                    {{ $order->caterer-> }}
                     {{ $order->caterer->phone_number }}<br>
                     {{ $order->caterer->email }}
                 </td>
