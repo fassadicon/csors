@@ -20,5 +20,7 @@
         @endif
         <p> | </p>
         <a href="{{ route('contact-admin') }}">Contact Us</a>
+        <p> | </p>
+        <a href="{{ route('terms-and-condition') }}">Terms and Conditions</a>
     </div>
 </div>
