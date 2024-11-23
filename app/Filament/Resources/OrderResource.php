@@ -71,10 +71,13 @@ class OrderResource extends Resource
                         modifyQueryUsing: fn(Builder $query) => $query->where('is_customer', 1)
                     )
                     ->visibleOn('create')
+                    ->disabledOn('edit')
                     ->required(),
                 Forms\Components\TextInput::make('recipient')
+                    ->disabledOn('edit')
                     ->required(),
                 Forms\Components\Textarea::make('location')
+                    ->disabledOn('edit')
                     ->required(),
                 Forms\Components\DateTimePicker::make('start')
                     ->native(false)
@@ -89,6 +92,7 @@ class OrderResource extends Resource
                     })
                     ->date()
                     ->beforeOrEqual('end')
+                    ->disabledOn('edit')
                     ->required(),
                 Forms\Components\DateTimePicker::make('end')
                     ->native(false)
@@ -103,20 +107,24 @@ class OrderResource extends Resource
                     })
                     ->date()
                     ->afterOrEqual('start')
+                    ->disabledOn('edit')
                     ->required(),
                 Forms\Components\Select::make('caterer_id')
                     ->preload()
                     ->relationship('caterer', 'name')
                     ->hidden(auth()->user()->hasRole('caterer'))
+                    ->disabledOn('edit')
                     ->required(),
 
                 Forms\Components\Textarea::make('remarks')
+                    ->disabledOn('edit')
                     ->nullable(),
             ])
                 ->columns(3),
             Forms\Components\Section::make([
                 Forms\Components\Repeater::make('orderItems')
                     ->label('Order List')
+                    ->disabledOn('edit')
                     ->relationship()
                     ->schema([
                         Forms\Components\MorphToSelect::make('orderable')
@@ -237,7 +245,6 @@ class OrderResource extends Resource
                     ->live(debounce: 500),
                 Forms\Components\TextInput::make('final_amount')
                     ->label('Total + Delivery Fee')
-
                     ->live(debounce: 500)
                     ->numeric()
                     ->prefix('₱')
