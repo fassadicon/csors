@@ -231,7 +231,6 @@ class OrderResource extends Resource
                     })
                     ->default(0.00)
                     ->prefix('₱')
-                    ->required()
                     ->numeric()
                     ->live(debounce: 500)
                     ->afterStateUpdated(function ($state, $get, $set) {
