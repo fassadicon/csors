@@ -140,6 +140,14 @@ use Illuminate\Support\Str;
                 <p class="text-sm italic">Tax: Php {{ number_format($subtotalMinusPromo * 0.12, 2) }}</p>
                 <p class="text-sm italic">Delivery Fee: Php {{ number_format($order->delivery_amount, 2) }}</p>
                 <h4>Total Amount: Php {{ number_format($subtotalMinusPromo + $order->delivery_amount, 2) }}</h4>
+                @if ($order->payment_status->value == 'partial')
+                @php
+                    $remainingPayment = ($this->order->total_amount - $this->order->payments->first()->amount + $this->order->delivery_amount);
+                    // dd($remainingPayment);
+                @endphp
+                    <h4>Balance: Php {{ number_format($remainingPayment, 2) }}</h4>
+                @endif
+
                 {{-- + ($subtotalMinusPromo * 0.12)  --}}
                 <hr class="mx-4 my-4">
                 @if ($order->cancellationRequest)
@@ -192,15 +200,18 @@ use Illuminate\Support\Str;
                 @php
                     $firstPayment = $order->payments->first()?->created_at;
                     // Check if the first payment is within ±24 hours of the current date
-                    $isWithin24Hours = $firstPayment && abs(now()->diffInHours($firstPayment, false)) <= 24; 
+                    $isWithin24Hours = $firstPayment && abs(now()->diffInHours($firstPayment, false)) <= 24;
+                    // dd($order->order_status->name);
+
                 @endphp
                 @unless ($order->cancellationRequest)
-                    @if ($canRequestCancellation && $isWithin24Hours)
+                    @if (($canRequestCancellation && $isWithin24Hours) || $order->order_status->name === 'Pending')
                         <x-danger-button class="flex justify-center bg-red-700" wire:click='cancel'>
                             {{ __('Request to Cancel') }}
                         </x-danger-button>
                     @endif
                 @endunless
+                
                 {{-- TEMPORARY --}}
                 @if ($canPay && $order->payment_status->value !== 'paid' && $order->payment_status->value !== 'refunded')
                 <x-primary-button class="w-full btn-primary !bg-blue-500  flex !justify-center" @click='showPopup=true'>
