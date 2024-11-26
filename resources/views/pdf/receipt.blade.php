@@ -7,7 +7,9 @@
         content="width=device-width, initial-scale=1.0">
     <title>Receipt</title>
 </head>
-
+@php
+    $remainingPayment = ($order->total_amount - $order->payments->first()->amount + $this->order->delivery_amount);
+@endphp
 <body style="font-family: Arial, sans-serif;">
 
     <div
@@ -19,7 +21,7 @@
 
         <p>
             @if ($order->payment_status == 'partial')
-                Downpayment paid successfully. Please settle the remaining balance before the event date.
+                Downpayment paid successfully. Please settle the remaining balance {{ number_format($remainingPayment, 2) }} before the event date .
             @elseif($order->payment_status == 'paid')
                 Order fully paid. Thank you!
             @elseif($order->payment_status == 'cancelled')
@@ -117,6 +119,8 @@
 
         <div style="margin-top: 20px; text-align: right;">
             <strong>Total: {{ $order->payments->sum('amount') }}</strong>
+            
+            <strong>Balance: {{ number_format($remainingPayment, 2) }}</strong>
         </div>
     </div>
 
