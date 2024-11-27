@@ -55,19 +55,19 @@ class CatererRegister extends Register
             ->schema([
                 Wizard::make([
                     Wizard\Step::make('Terms and Conditions') // Move this step to the first position
-                    ->schema([
-                        Checkbox::make('terms')
-                            ->required()
-                            ->label('I hereby acknowledge that I have read, fully understood, and agree to the CSORS ')
-                            ->helperText(
-                                new HtmlString('By clicking this, you agree to the <a href="' . route('terms-and-condition') . '" target="_blank" class="text-blue-500">Data Privacy Terms and Conditions</a>.')
-                            )
-                            ->inline()
-                            ->accepted()
-                            ->afterStateUpdated(function ($state) {
-                                // You can add additional actions based on whether the terms are accepted.
-                            }),
-                    ]),
+                        ->schema([
+                            Checkbox::make('terms')
+                                ->required()
+                                ->label('I hereby acknowledge that I have read, fully understood, and agree to the CSORS ')
+                                ->helperText(
+                                    new HtmlString('By clicking this, you agree to the <a href="' . route('terms-and-condition') . '" target="_blank" class="text-blue-500">Data Privacy Terms and Conditions</a>.')
+                                )
+                                ->inline()
+                                ->accepted()
+                                ->afterStateUpdated(function ($state) {
+                                    // You can add additional actions based on whether the terms are accepted.
+                                }),
+                        ]),
                     Wizard\Step::make('Account')
                         ->schema([
                             $this->getNameFormComponent()
@@ -86,7 +86,14 @@ class CatererRegister extends Register
                                     'regex:/[a-z]/',           // At least one lowercase letter
                                     'regex:/[A-Z]/',           // At least one uppercase letter
                                     'regex:/[0-9]/',           // At least one digit
-                                ]),
+                                ])->suffixAction(
+                                    Forms\Components\Actions\Action::make('toggle-password-visibility')
+                                        ->icon('heroicon-o-eye')
+                                        ->iconSize('md')
+                                        ->action(function ($component) {
+                                            $component->type('text');
+                                        })
+                                ),
                             $this->getPasswordConfirmationFormComponent(),
                         ]),
                     Wizard\Step::make('User')

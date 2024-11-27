@@ -187,7 +187,7 @@ new #[Layout('layouts.guest')] class extends Component {
         </div>
 
         <!-- Confirm Password -->
-        <div>
+        <div class="flex flex-col">
             <div class="flex gap-x-1">
                 <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
                 <label for="" class="inline-flex text-red-500">*</label>
@@ -204,7 +204,14 @@ new #[Layout('layouts.guest')] class extends Component {
 
             <x-input-error :messages="$errors->get('password_confirmation')"
                 class="mt-2" />
+            <div class="mt-2">
+                <input type="checkbox" id="showPassword" onclick="togglePass()" />
+                <label for="showPassword">Show Password</label>
+            </div>
+        
         </div>
+
+        
 
         <!-- Terms and condition -->
         <div class="block mt-4">
@@ -241,3 +248,17 @@ new #[Layout('layouts.guest')] class extends Component {
         </center>
     </form>
 </div>
+
+
+<script defer="defer">
+    // Select elements
+    var passwordInput = document.getElementById('password');
+    var confirmPasswordInput = document.getElementById('password_confirmation');
+    var showPasswordCheckbox = document.getElementById('showPassword');
+
+    // Toggle password visibility
+    function togglePass(){
+        passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+        confirmPasswordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+    }
+</script>

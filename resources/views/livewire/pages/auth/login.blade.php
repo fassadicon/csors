@@ -130,6 +130,12 @@ new #[Layout('layouts.guest')] class extends Component {
 
             <x-input-error :messages="$errors->get('form.password')"
                 class="mt-2" />
+            
+            <div class="mt-2">
+                <input type="checkbox" id="showPassword" onclick="showPass()" />
+                <label for="showPassword">Show Password</label>
+            </div>
+
         </div>
 
         <!-- Remember Me -->
@@ -161,7 +167,7 @@ new #[Layout('layouts.guest')] class extends Component {
             </x-primary-button>
         </div>
         <hr class="mx-4 my-4">
-        <div class="flex flex-col justify-center items-center">
+        <div class="flex flex-col items-center justify-center">
             @if (Route::has('password.request'))
                 <a class="text-sm text-gray-600 underline rounded-md dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                     href="{{ route('password.request') }}"
@@ -177,3 +183,14 @@ new #[Layout('layouts.guest')] class extends Component {
         </div>
     </form>
 </div>
+
+<script defer="defer">
+    // Select elements
+    var passwordInput = document.getElementById('password');
+    var showPasswordCheckbox = document.getElementById('showPassword');
+
+    // Toggle password visibility
+    function showPass() {
+        passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+    }
+</script>
