@@ -19,6 +19,7 @@ use Filament\Tables\Table;
 use Filament\Notifications;
 use App\Enums\PaymentStatus;
 use App\Models\ReportedUser;
+use App\Models\Caterer;
 use App\Mail\OrderUpdateMail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Resources\Resource;
@@ -39,6 +40,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\MorphToSelect;
 use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Mail\NotifyUser;
+
 
 class OrderResource extends Resource
 {
@@ -681,6 +684,10 @@ class OrderResource extends Resource
                                 'reported_user' => $record->user_id, // Assuming this is the user being reported
                                 'comment' => $data['comment'], // Capture the selected reason
                             ]);
+                            $customer = User::findOrFail($record->user_id);
+                            $caterer = Caterer::findOrFail($record->caterer_id);
+                            // dd($caterer->name);
+                            Mail::to($customer->email)->send(new NotifyUser('You have been reported', '', "You have been reported by  ".$caterer->name.""));
 
                             // Add a success notification
                             Notification::make()
