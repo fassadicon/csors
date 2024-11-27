@@ -90,7 +90,7 @@ class OrderResource extends Resource
                                 ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
                                 ->toArray();
                         }
-                        return null;
+                        return [];
                     })
                     ->date()
                     ->beforeOrEqual('end')
@@ -105,7 +105,7 @@ class OrderResource extends Resource
                                 ->map(fn($date) => Carbon::parse($date)->format('Y-m-d'))
                                 ->toArray();
                         }
-                        return null;
+                        return [];
                     })
                     ->date()
                     ->afterOrEqual('start')
