@@ -125,18 +125,20 @@
         </thead>
         <tbody>
             @foreach ($orders as $order)
-                <tr>
-                    <td>{{ $order->id }}</td>
-                    <td>{{ $order->user }}</td>
-                    <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y g:i A') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($order->start)->format('M j, Y g:i A') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($order->end)->format('M j, Y g:i A') }}</td>
-                    <td>{{ $order->order_status }}</td>
-                    <td>{{ $order->payment_status }}</td>
-                    <td>P {{ number_format($order->total_amount - $order->payments->sum('amount'), 2) }}</td>
-                    <td>P {{ number_format($order->total_amount, 2) }}</td>
+                @if ($order->user)
+                    <tr>
+                        <td>{{ $order->id }}</td>
+                        <td>{{ $order->user->full_name }}</td>
+                        <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y g:i A') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($order->start)->format('M j, Y g:i A') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($order->end)->format('M j, Y g:i A') }}</td>
+                        <td>{{ $order->order_status }}</td>
+                        <td>{{ $order->payment_status }}</td>
+                        <td>P {{ number_format($order->total_amount - $order->payments->sum('amount'), 2) }}</td>
+                        <td>P {{ number_format($order->total_amount, 2) }}</td>
 
-                </tr>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
