@@ -88,9 +88,7 @@ class ReportedUserResource extends Resource
                 TextColumn::make('reported')
                     ->label('Reported User')
                     ->getStateUsing(function ($record) {
-                        return $record->user->is_customer === 1
-                            ? Caterer::where('user_id', $record->reported_user)->first()->name ?? 'Unknown Caterer'
-                            : $record->user->name;
+                        return User::where('id', $record->reported_user)->first()->name;
                     })
                     ->visible(auth()->user()->hasRole('superadmin')),
 
