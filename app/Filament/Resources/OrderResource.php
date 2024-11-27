@@ -438,6 +438,7 @@ class OrderResource extends Resource
                     })
                     ->badge(function ($record) {
                         $isReportedUser = ReportedUser::where('reported_user', $record->user_id)
+                            ->whereNotNull('deleted_at')
                             ->first();
                         if ($isReportedUser) {
                             return true;
@@ -446,6 +447,7 @@ class OrderResource extends Resource
                     })
                     ->color(function ($record) {
                         $isReportedUser = ReportedUser::where('reported_user', $record->user_id)
+                            ->whereNotNull('deleted_at')
                             ->first();
                         if ($isReportedUser) {
                             return 'danger';
@@ -687,7 +689,7 @@ class OrderResource extends Resource
                             $customer = User::findOrFail($record->user_id);
                             $caterer = Caterer::findOrFail($record->caterer_id);
                             // dd($caterer->name);
-                            Mail::to($customer->email)->send(new NotifyUser('You have been reported', '', "You have been reported by  ".$caterer->name.""));
+                            Mail::to($customer->email)->send(new NotifyUser('You have been reported', '', "You have been reported by  " . $caterer->name . ""));
 
                             // Add a success notification
                             Notification::make()
