@@ -438,7 +438,7 @@ class OrderResource extends Resource
                     })
                     ->badge(function ($record) {
                         $isReportedUser = ReportedUser::where('reported_user', $record->user_id)
-                            ->whereNotNull('deleted_at')
+                            ->whereNull('deleted_at')
                             ->first();
                         if ($isReportedUser) {
                             return true;
@@ -447,7 +447,7 @@ class OrderResource extends Resource
                     })
                     ->color(function ($record) {
                         $isReportedUser = ReportedUser::where('reported_user', $record->user_id)
-                            ->whereNotNull('deleted_at')
+                            ->whereNull('deleted_at')
                             ->first();
                         if ($isReportedUser) {
                             return 'danger';
@@ -702,6 +702,7 @@ class OrderResource extends Resource
                             // Check if the user has already reported this customer
                             return !ReportedUser::where('user_id', auth()->user()->id)
                                 ->where('reported_user', $record->user_id)
+                                ->whereNull('deleted_at')
                                 ->exists();
                         }),
                 ]),
