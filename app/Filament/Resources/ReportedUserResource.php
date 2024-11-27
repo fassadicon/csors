@@ -59,7 +59,7 @@ class ReportedUserResource extends Resource
     {
         return $table
             ->columns([
-                // for caterer 
+                // for caterer
                 TextColumn::make('reported_user')
                     ->label('Reported Customer')
                     ->getStateUsing(function ($record) {
@@ -98,7 +98,11 @@ class ReportedUserResource extends Resource
                 TextColumn::make('created_at')->date()->sortable(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\TrashedFilter::make()
+                    ->label('Status')
+                    ->placeholder('Blocked Only')
+                    ->trueLabel('All')
+                    ->falseLabel('Unblocked Only'),
             ])
             ->actions([
                 // You may add these actions to your table if you're using a simple
@@ -109,12 +113,12 @@ class ReportedUserResource extends Resource
                     ->modalSubheading('This action can be reverse.')
                     ->modalButton('Yes, Block'),
                 Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\RestoreAction::make()->label('Unblock'),
                 // ...
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-                Tables\Actions\ForceDeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make()
+                    ->icon('heroicon-o-no-symbol'),
                 Tables\Actions\RestoreBulkAction::make()->label('Unblock')
                     ->modalHeading('Are you sure you want to unblock this user?')
                     ->modalSubheading('This action can be reverse.')
