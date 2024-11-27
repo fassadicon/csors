@@ -433,6 +433,22 @@ class OrderResource extends Resource
                     ->formatStateUsing(function ($state, Model $record) {
                         return $state == $record->recipient ? $record->recipient . ' (' . $state . ')' : $state;
                     })
+                    ->badge(function ($record) {
+                        $isReportedUser = ReportedUser::where('reported_user', $record->user_id)
+                            ->first();
+                        if ($isReportedUser) {
+                            return true;
+                        }
+                        return false;
+                    })
+                    ->color(function ($record) {
+                        $isReportedUser = ReportedUser::where('reported_user', $record->user_id)
+                            ->first();
+                        if ($isReportedUser) {
+                            return 'danger';
+                        }
+                        return null;
+                    })
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('orderItems')
