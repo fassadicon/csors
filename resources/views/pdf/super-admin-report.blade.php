@@ -127,7 +127,7 @@
             @foreach ($orders as $order)
                 <tr>
                     <td>{{ $order->id }}</td>
-                    <td>{{ $order->user->full_name }}</td>
+                    <td>{{ $order->user->first_name }} {{ $order->user->last_name }}</td>
                     <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y g:i A') }}</td>
                     <td>{{ \Carbon\Carbon::parse($order->start)->format('M j, Y g:i A') }}</td>
                     <td>{{ \Carbon\Carbon::parse($order->end)->format('M j, Y g:i A') }}</td>
