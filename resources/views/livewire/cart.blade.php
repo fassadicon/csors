@@ -85,12 +85,20 @@
             class="!my-2">
         </x-mary-header>
         <hr class="my-4">
+        @php
+            $user = auth()->user();
+            // dd($user);
+        @endphp
         @if (count($cart) > 0)
             @unless ($totalAmount <= 2000)
-                <x-mary-button type="submit"
+                @if ($user->is_verified)
+                    <x-mary-button type="submit"
                     label="Proceed to Checkout"
                     class="my-4 btn-primary md:w-[40%]"
                     spinner />
+                @else
+                    <p class="py-4 text-sm italic text-red-500">Admin will verify your account first before you can place an order.</p>
+                @endif
             @endunless
         @endif
     </form>

@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomerSignup;
 use App\Mail\UserOtp;
 use Illuminate\Validation\Rule;
-
+use Livewire\WithFileUploads;
 new #[Layout('layouts.guest')] class extends Component {
+
+    use WithFileUploads;
     public string $first_name = '';
     public string $last_name = '';
     public string $middle_name = '';
@@ -21,6 +23,7 @@ new #[Layout('layouts.guest')] class extends Component {
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
+    public $image;
     // public $image;
 
     /**
@@ -45,6 +48,7 @@ new #[Layout('layouts.guest')] class extends Component {
             'last_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'ext_name' => ['nullable', 'string', 'max:99'],
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'phone_number' => ['nullable', 'string', 'max:11', 'regex:/^(09)\d{9}$/', 'unique:users,phone_number'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => [
@@ -60,7 +64,9 @@ new #[Layout('layouts.guest')] class extends Component {
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-
+        $imagePath = $this->image->store('customer-verification-images', 'public');
+        $validated['verification_image_path'] = $imagePath;
+        // Store the image in the `public/uploads` directory
         // ADD OTP 
         $validated['otp'] = $this->createOTP();
         
@@ -100,7 +106,34 @@ new #[Layout('layouts.guest')] class extends Component {
         <p class="text-center md:text-left">Create your account and get access to seamless catering services, personalized event planning, and exclusive offers.
         Let’s make your next celebration unforgettable!</p>
     </div>
-    <form style="margin-bottom: 5rem;" wire:submit="register" class=" z-10 px-4 md:px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md bg-jt-white w-[90%] md:min-w-[450px] md:w-[30%] space-y-4">
+    <form style="margin-bottom: 5rem;" wire:submit="register" class="overflow-y-auto z-10 px-4 md:px-16 py-8 ml-0 sm:ml-4 md:ml-16 rounded-md bg-jt-white w-[90%] md:min-w-[450px] md:w-[30%] space-y-4">
+
+        {{-- Image  --}}
+        <div class="w-full ">
+            <label for="image" class="block font-medium text-gray-700">Upload a Valid ID</label>
+            
+            <!-- File Input -->
+            <div class="mb-4">
+                <input type="file" required wire:model="image" id="image" accept="image/*"
+                    class="block w-full p-2 mt-2 border rounded" onchange="previewImage(event)">
+                @error('image')
+                <div class="mt-2 text-red-500">{{ $message }}</div>
+                @enderror
+            </div>
+            
+            <!-- Loading Indicator -->
+            <div wire:loading wire:target="image" class="text-blue-500">
+                Uploading...
+            </div>
+            
+            <!-- Preview -->
+            @if ($image)
+            <div class="mt-4">
+                <img src="{{ $image->temporaryUrl() }}" alt="Image Preview" class="object-cover w-32 h-32 rounded">
+            </div>
+            @endif
+        </div>
+        
         <div class="flex flex-col md:flex-row gap-y-4 md:gap-x-4">
             <div class="w-full">
                 <div class="flex gap-x-1">
@@ -233,7 +266,8 @@ new #[Layout('layouts.guest')] class extends Component {
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4 btn-primary">
+            <x-primary-button class="ms-4 btn-primary" wire:loading.attr="disabled" 
+        wire:target="image">
                 {{ __('Register') }}
             </x-primary-button>
 
@@ -260,5 +294,22 @@ new #[Layout('layouts.guest')] class extends Component {
     function togglePass(){
         passwordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
         confirmPasswordInput.type = showPasswordCheckbox.checked ? 'text' : 'password';
+    }
+
+
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden'); // Show the preview image
+            };
+            
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 </script>
