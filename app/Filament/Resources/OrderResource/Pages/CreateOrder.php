@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\OrderResource\Pages;
 
 use Filament\Actions;
+use App\RedirectToList;
 use App\Mail\OrderUpdateMail;
 use Illuminate\Support\Facades\Mail;
 use App\Filament\Resources\OrderResource;
@@ -13,6 +14,8 @@ class CreateOrder extends CreateRecord
     protected static string $resource = OrderResource::class;
 
     protected static bool $canCreateAnother = false;
+
+    use RedirectToList;
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {

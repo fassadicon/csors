@@ -6,10 +6,13 @@ use Filament\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\FoodCategoryResource;
+use App\RedirectToList;
 
 class EditFoodCategory extends EditRecord
 {
     protected static string $resource = FoodCategoryResource::class;
+
+    use RedirectToList;
 
     protected function getHeaderActions(): array
     {

@@ -7,10 +7,13 @@ use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\CatererResource;
+use App\RedirectToList;
 
 class CreateCaterer extends CreateRecord
 {
     protected static string $resource = CatererResource::class;
+
+    use RedirectToList;
 
     protected function afterCreate(): void
     {

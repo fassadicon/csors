@@ -7,6 +7,7 @@ use Filament\Actions;
 use Illuminate\Database\Eloquent\Model;
 use App\Filament\Resources\UserResource;
 use App\Mail\NotifyUser;
+use App\RedirectToList;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Mail;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
+
+    use RedirectToList;
 
     protected function getHeaderActions(): array
     {

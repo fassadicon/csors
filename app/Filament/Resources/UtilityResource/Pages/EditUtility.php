@@ -6,10 +6,13 @@ use Filament\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\UtilityResource;
+use App\RedirectToList;
 
 class EditUtility extends EditRecord
 {
     protected static string $resource = UtilityResource::class;
+
+    use RedirectToList;
 
     protected function getHeaderActions(): array
     {

@@ -8,12 +8,15 @@ use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\CatererResource;
 use App\Mail\NotifyUser;
 use App\Models\User;
+use App\RedirectToList;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
 
 class EditCaterer extends EditRecord
 {
     protected static string $resource = CatererResource::class;
+
+    use RedirectToList;
 
     protected function getHeaderActions(): array
     {
@@ -28,7 +31,7 @@ class EditCaterer extends EditRecord
                     // $user = User::find($recipient);
                     $notification = 'Requirements do not pass the verification. Please reupload the correct and updated requirements. Contact the superadmin for more information';
                     // dd($recipient->caterer->email);
-                    // send email 
+                    // send email
                     Mail::to($recipient->caterer->email)->send(new NotifyUser('Reupload Requirements', 'We need you to reupload the requirements.', $notification));
                     Notification::make()
                         ->title($notification)

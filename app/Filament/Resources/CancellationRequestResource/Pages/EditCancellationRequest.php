@@ -4,6 +4,7 @@ namespace App\Filament\Resources\CancellationRequestResource\Pages;
 
 use App\Models\User;
 use Filament\Actions;
+use App\RedirectToList;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Mail\CancellationMail;
@@ -16,6 +17,8 @@ use App\Filament\Resources\CancellationRequestResource;
 class EditCancellationRequest extends EditRecord
 {
     protected static string $resource = CancellationRequestResource::class;
+
+    use RedirectToList;
 
     protected function getHeaderActions(): array
     {

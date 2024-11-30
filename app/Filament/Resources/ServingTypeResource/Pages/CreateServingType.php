@@ -3,12 +3,15 @@
 namespace App\Filament\Resources\ServingTypeResource\Pages;
 
 use App\Filament\Resources\ServingTypeResource;
+use App\RedirectToList;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateServingType extends CreateRecord
 {
     protected static string $resource = ServingTypeResource::class;
+
+    use RedirectToList;
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {

@@ -9,11 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\CustomerResource;
+use App\RedirectToList;
 use Illuminate\Support\Facades\Mail;
 
 class EditCustomer extends EditRecord
 {
     protected static string $resource = CustomerResource::class;
+
+    use RedirectToList;
 
     protected function getHeaderActions(): array
     {

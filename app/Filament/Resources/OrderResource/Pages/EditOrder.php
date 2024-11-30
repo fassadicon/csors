@@ -9,10 +9,13 @@ use Illuminate\Support\Facades\Mail;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\OrderResource;
+use App\RedirectToList;
 
 class EditOrder extends EditRecord
 {
     protected static string $resource = OrderResource::class;
+
+    use RedirectToList;
 
     protected function getHeaderActions(): array
     {

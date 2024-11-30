@@ -7,10 +7,13 @@ use App\Enums\OrderStatus;
 use App\Enums\CancellationRequestStatus;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\CancellationRequestResource;
+use App\RedirectToList;
 
 class CreateCancellationRequest extends CreateRecord
 {
     protected static string $resource = CancellationRequestResource::class;
+
+    use RedirectToList;
 
     protected function afterCreate(): void
     {

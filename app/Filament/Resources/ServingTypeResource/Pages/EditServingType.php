@@ -6,10 +6,13 @@ use Filament\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\EditRecord;
 use App\Filament\Resources\ServingTypeResource;
+use App\RedirectToList;
 
 class EditServingType extends EditRecord
 {
     protected static string $resource = ServingTypeResource::class;
+
+    use RedirectToList;
 
     protected function getHeaderActions(): array
     {

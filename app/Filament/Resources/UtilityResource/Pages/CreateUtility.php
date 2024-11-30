@@ -7,10 +7,13 @@ use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\UtilityResource;
+use App\RedirectToList;
 
 class CreateUtility extends CreateRecord
 {
     protected static string $resource = UtilityResource::class;
+
+    use RedirectToList;
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
