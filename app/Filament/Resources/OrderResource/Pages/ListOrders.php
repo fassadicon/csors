@@ -94,11 +94,13 @@ class ListOrders extends ListRecords
         if (auth()->user()->hasRole('superadmin')) {
             return Order::query()
                 // ->where('caterer_id', auth()->user()->caterer->id)
-                ->where('order_status', $orderStatus);
+                ->where('order_status', $orderStatus)
+                ->orderBy('start', 'asc');
         } else {
             return Order::query()
                 ->where('caterer_id', auth()->user()->caterer->id)
-                ->where('order_status', $orderStatus);
+                ->where('order_status', $orderStatus)
+                ->orderBy('start', 'asc');
         }
     }
 
@@ -107,11 +109,13 @@ class ListOrders extends ListRecords
         if (auth()->user()->hasRole('superadmin')) {
             return Order::query()
                 // ->where('caterer_id', auth()->user()->caterer->id)
-                ->where('payment_status', $paymentStatus);
+                ->where('payment_status', $paymentStatus)
+                ->orderBy('start', 'asc');
         } else {
             return Order::query()
                 ->where('caterer_id', auth()->user()->caterer->id)
-                ->where('payment_status', $paymentStatus);
+                ->where('payment_status', $paymentStatus)
+                ->orderBy('start', 'asc');
         }
     }
 
@@ -120,12 +124,14 @@ class ListOrders extends ListRecords
         if (auth()->user()->hasRole('superadmin')) {
             return Order::query()
                 ->where('order_status', OrderStatus::Pending)
-                ->orWhere('payment_status', PaymentStatus::Pending);
+                ->orWhere('payment_status', PaymentStatus::Pending)
+                ->orderBy('start', 'asc');
         } else {
             return Order::query()
                 ->where('caterer_id', auth()->user()->caterer->id)
                 ->where('order_status', OrderStatus::Pending)
-                ->orWhere('payment_status', PaymentStatus::Pending);
+                ->orWhere('payment_status', PaymentStatus::Pending)
+                ->orderBy('start', 'asc');
         }
     }
 }
