@@ -8,7 +8,7 @@
     <title>Receipt</title>
 </head>
 @php
-    $remainingPayment = ($order->total_amount - $order->payments->first()->amount + $this->order->delivery_amount);
+    $remainingPayment = ($order->total_amount - $order->payments->first()->amount + $order->delivery_amount);
 @endphp
 <body style="font-family: Arial, sans-serif;">
 
@@ -119,7 +119,7 @@
 
         <div style="margin-top: 20px; text-align: right;">
             <strong>Total: {{ $order->payments->sum('amount') }}</strong>
-            
+
             <strong>Balance: {{ number_format($remainingPayment, 2) }}</strong>
         </div>
     </div>
