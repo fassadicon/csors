@@ -29,7 +29,7 @@ class OrderCalendarWidget extends FullCalendarWidget
                 $query->where('caterer_id', auth()->user()->caterer->id);
             })
             ->where('order_status', OrderStatus::Confirmed)
-            ->orWhereIn('payment_status', [PaymentStatus::Paid, PaymentStatus::Partial])
+            ->whereIn('payment_status', [PaymentStatus::Paid, PaymentStatus::Partial])
             ->where('start', '>=', $fetchInfo['start'])
             ->where('end', '<=', $fetchInfo['end']);
 
