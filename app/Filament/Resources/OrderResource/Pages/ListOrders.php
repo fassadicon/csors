@@ -129,8 +129,10 @@ class ListOrders extends ListRecords
         } else {
             return Order::query()
                 ->where('caterer_id', auth()->user()->caterer->id)
-                ->where('order_status', OrderStatus::Pending)
-                ->orWhere('payment_status', PaymentStatus::Pending)
+                ->where(function ($query) {
+                    $query->where('order_status', OrderStatus::Pending)
+                        ->orWhere('payment_status', PaymentStatus::Pending);
+                })
                 ->orderBy('start', 'asc');
         }
     }
