@@ -32,8 +32,8 @@ class ListOrders extends ListRecords
 
         $tabs = [
             'pending' => Tab::make()
-                ->modifyQueryUsing(fn() => $this->getOrderByOrderStatus(OrderStatus::Pending))
-                ->badge($this->getOrderByOrderStatus(OrderStatus::Pending)->count())
+                ->modifyQueryUsing(fn() => $this->getPendingOrders())
+                ->badge($this->getPendingOrders()->count())
                 ->badgeColor('amber'),
             'confirmed' => Tab::make()
                 ->modifyQueryUsing(fn() => $this->getOrderByOrderStatus(OrderStatus::Confirmed))
@@ -51,10 +51,10 @@ class ListOrders extends ListRecords
                 ->modifyQueryUsing(fn() => $this->getOrderByOrderStatus(OrderStatus::Cancelled))
                 ->badge($this->getOrderByOrderStatus(OrderStatus::Cancelled)->count())
                 ->badgeColor('danger'),
-            'payment_pending' => Tab::make('Pending Payment')
-                ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Pending))
-                ->badge($this->getOrderByPaymentStatus(PaymentStatus::Pending)->count())
-                ->badgeColor('amber'),
+            // 'payment_pending' => Tab::make('Pending Payment')
+            //     ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Pending))
+            //     ->badge($this->getOrderByPaymentStatus(PaymentStatus::Pending)->count())
+            //     ->badgeColor('amber'),
             'payment_partial' => Tab::make('Partial Payment')
                 ->modifyQueryUsing(fn() => $this->getOrderByPaymentStatus(PaymentStatus::Partial))
                 ->badge($this->getOrderByPaymentStatus(PaymentStatus::Partial)->count())
@@ -112,6 +112,20 @@ class ListOrders extends ListRecords
             return Order::query()
                 ->where('caterer_id', auth()->user()->caterer->id)
                 ->where('payment_status', $paymentStatus);
+        }
+    }
+
+    protected function getPendingOrders(): Builder
+    {
+        if (auth()->user()->hasRole('superadmin')) {
+            return Order::query()
+                ->where('order_status', OrderStatus::Pending)
+                ->orWhere('payment_status', PaymentStatus::Pending);
+        } else {
+            return Order::query()
+                ->where('caterer_id', auth()->user()->caterer->id)
+                ->where('order_status', OrderStatus::Pending)
+                ->orWhere('payment_status', PaymentStatus::Pending);
         }
     }
 }
