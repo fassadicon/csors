@@ -192,7 +192,8 @@ class PackageResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\EditAction::make()
+                        ->visible(fn() => auth()->user()->hasRole('caterer')),
                     Tables\Actions\DeleteAction::make()
                         ->label('Set Inactive')
                         ->icon('heroicon-m-bookmark-slash')

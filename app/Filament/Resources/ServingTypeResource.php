@@ -81,7 +81,8 @@ class ServingTypeResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn() => auth()->user()->hasRole('caterer')),
                 Tables\Actions\Action::make('logs')
                     ->url(fn($record) => ServingTypeResource::getUrl('logs', ['record' => $record]))
                     ->icon('heroicon-m-list-bullet')
