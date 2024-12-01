@@ -65,6 +65,7 @@ class UserResource extends Resource
                     ->columnSpan(2)
                     ->nullable()->disabledOn('edit'),
                 Forms\Components\Toggle::make('is_verified')
+                    ->disabled(fn(Get $get) => $get('verification_image_path') == null)
                     ->visible(auth()->user()->hasRole('superadmin')),
                 // Forms\Components\Select::make('roles')
                 //     ->multiple()

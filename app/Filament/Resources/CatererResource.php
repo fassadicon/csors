@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Caterer;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -85,6 +86,7 @@ class CatererResource extends Resource
                     ->columnSpanFull()
                     ->visibleOn('edit')->disabledOn('edit'),
                 Forms\Components\Toggle::make('is_verified')
+                    ->disabled(fn(Get $get) => $get('requirements_path') == null)
                     ->label('Verified?')
                     ->required(),
             ]);

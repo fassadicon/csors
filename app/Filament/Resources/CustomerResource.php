@@ -2,15 +2,16 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Exports\UserExporter;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Get;
 use App\Models\Customer;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\FormsComponent;
+use App\Filament\Exports\UserExporter;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -62,6 +63,7 @@ class CustomerResource extends Resource
                 Forms\Components\TextInput::make('ext_name')
                     ->maxLength(255)->readOnly(),
                 Forms\Components\Toggle::make('is_verified')
+                    ->disabled(fn(Get $get) => $get('verification_image_path') == null)
                     ->visible(auth()->user()->hasRole('superadmin')),
                 // ->columnSpan(2),
                 Forms\Components\FileUpload::make('verification_image_path')
