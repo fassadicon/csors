@@ -19,7 +19,9 @@
 
     <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 bg-jt-light">
         <!-- First Column: Carousel -->
+        
         <div>
+            <button onclick="history.back()" class="px-2 badge-ghost w-fit">back</button>
             <x-mary-header title="{!! $package->name !!}"
                 class="!my-4 !mt-8">
             </x-mary-header>

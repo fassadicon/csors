@@ -52,7 +52,7 @@
         <x-mary-card title="{!! $package->name !!}"
             class="!pb-0 !flex !flex-col !justify-center !items-center !max-h-[250px]">
             <x-slot:figure>
-                <a href="{{ route('package', ['package'=>$package->name]) }}">
+                <a href="{{ route('package', ['package'=>$package->id]) }}">
                     <img
                         src="{{ $package->getFirstImagePath() ? asset('storage/' . $package->getFirstImagePath()) : asset('images/placeholder.jpg') }}" />
                 </a>
