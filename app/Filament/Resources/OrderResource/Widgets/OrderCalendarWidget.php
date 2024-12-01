@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\OrderResource\Widgets;
 
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Models\Food;
 use App\Models\Order;
 use App\Models\Package;
@@ -26,6 +28,8 @@ class OrderCalendarWidget extends FullCalendarWidget
             ->when(auth()->user()->hasRole('caterer'), function ($query) {
                 $query->where('caterer_id', auth()->user()->caterer->id);
             })
+            ->where('order_status', OrderStatus::Confirmed)
+            ->orWhereIn('payment_status', [PaymentStatus::Paid, PaymentStatus::Partial])
             ->where('start', '>=', $fetchInfo['start'])
             ->where('end', '<=', $fetchInfo['end']);
 
