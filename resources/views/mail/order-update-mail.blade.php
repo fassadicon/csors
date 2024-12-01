@@ -90,7 +90,7 @@
                     Order Status: {{ $order->order_status }}<br>
                     Payment Status: {{ $order->payment_status }}<br><br>
                     Ordered by:<br>
-                    {{ $order->user->full_name }}<br>
+                    {{ $order->user->first_name . ' ' . $order->user->last_name }}<br>
                     {{ $order->user->email }}
                 </td>
             </tr>
