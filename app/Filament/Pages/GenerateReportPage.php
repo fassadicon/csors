@@ -152,11 +152,11 @@ class GenerateReportPage extends Page implements HasForms
             ->setPaper('a4', 'portrait')
             ->loadHtml(view('pdf.report', [
                 'caterer' => $this->caterer->toArray(),
-                'foodDetails' => $this->foodDetails,
-                'foodCategories' => $this->foodCategories,
-                'servingTypes' => $this->servingTypes,
-                'utilities' => $this->utilities,
-                'packages' => $this->packages,
+                // 'foodDetails' => $this->foodDetails,
+                // 'foodCategories' => $this->foodCategories,
+                // 'servingTypes' => $this->servingTypes,
+                // 'utilities' => $this->utilities,
+                // 'packages' => $this->packages,
                 'orders' => $orders,
             ])->render());
 

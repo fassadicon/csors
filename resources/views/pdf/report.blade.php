@@ -47,47 +47,58 @@
     </style>
 </head>
 
-<div id="header">
-    <h1>{{ $caterer['name'] }}</h1>
-    <p>{{ $caterer['phone_number'] }}</p>
-    <p>{{ $caterer['email'] }} </p>
-</div>
+<body>
+    <div id="header">
+        <h1>{{ $caterer['name'] }}</h1>
+        <p>{{ $caterer['phone_number'] }}</p>
+        <p>{{ $caterer['email'] }} </p>
+    </div>
 
-<div>
-    <h2>Reservations</h2>
-    <table>
-        <thead>
-            <th>Id</th>
-            <th>Customer</th>
-            <th>Date</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Order Status</th>
-            <th>Payment Status</th>
-            <th>Balance</th>
-            <th>Total Amount</th>
-        </thead>
-        <tbody>
-            @foreach ($orders as $order)
-                @if ($order->user)
-                    <tr>
-                        <td>{{ $order->id }}</td>
-                        <td>{{ $order->user->full_name }}</td>
-                        <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y g:i A') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($order->start)->format('M j, Y g:i A') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($order->end)->format('M j, Y g:i A') }}</td>
-                        <td>{{ $order->order_status }}</td>
-                        <td>{{ $order->payment_status }}</td>
-                        <td>P {{ number_format($order->total_amount - $order->payments->sum('amount'), 2) }}</td>
-                        <td>P {{ number_format($order->total_amount, 2) }}</td>
+    <div>
+        <h2>Reservations</h2>
+        <table>
+            <thead>
+                <th>Id</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Order Status</th>
+                <th>Payments</th>
+                <th>Balance</th>
+                <th>Total Amount Paid</th>
+            </thead>
+            <tbody>
+                @foreach ($orders as $order)
+                    @if ($order->user)
+                        <tr>
+                            <td>{{ $order->id }}</td>
+                            <td>{{ $order->user->full_name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y g:i A') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($order->start)->format('M j, Y g:i A') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($order->end)->format('M j, Y g:i A') }}</td>
+                            <td>{{ $order->order_status }}</td>
+                            <td>
+                                @foreach ($order->payments as $payment)
+                                    @if ($payment->type == 'cash')
+                                        P {{ $payment->amount }} - {{ $payment->type }} <br>
+                                        {{ $payment->created_at->format('M j, Y g:i A') }}
+                                    @else
+                                        P {{ $payment->amount }} - {{ $payment->type }} - {{ $payment->method }} <br>
+                                        {{ $payment->created_at->format('M j, Y g:i A') }}
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>P {{ number_format($order->payments->sum('amount'), 2) }}</td>
+                            <td>P {{ number_format($order->total_amount - $order->payments->sum('amount'), 2) }}</td>
 
-                    </tr>
-                @endif
-            @endforeach
-        </tbody>
-    </table>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
 
-    <h2>Food Categories</h2>
+        {{-- <h2>Food Categories</h2>
     <table>
         <thead>
             <th>Id</th>
@@ -103,9 +114,9 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
-    <h2>Serving Types</h2>
+        {{-- <h2>Serving Types</h2>
     <table>
         <thead>
             <th>Id</th>
@@ -121,9 +132,9 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
-    <h2>Food Items</h2>
+        {{-- <h2>Food Items</h2>
     <table>
         <thead>
             <th>Category</th>
@@ -143,9 +154,9 @@
                 @endforeach
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
-    <h2>Utilities</h2>
+        {{-- <h2>Utilities</h2>
     <table>
         <thead>
             <th>Id</th>
@@ -163,9 +174,9 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
-    <h2>Packages</h2>
+        {{-- <h2>Packages</h2>
     <table>
         <thead>
             <th>Id</th>
@@ -194,13 +205,13 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
-</div>
+    </table> --}}
+    </div>
 
 
-Generated on: {{ now() }}
+    Generated on: {{ now() }}
 
-<body>
+
 
 </body>
 
