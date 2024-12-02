@@ -57,6 +57,18 @@ class Caterers extends Component
         return 0;
     }
 
+    public function selectCaterer(Caterer $caterer)
+    {
+        // dd($caterer);
+        session()->forget('cart');
+        session()->forget('caterer');
+        session()->put('caterer', $caterer->id);
+        session(['caterer_phone_number' => $caterer->phone_number]);
+        session(['caterer_email_personal' => $caterer->user->email]);
+        session(['caterer_email_business' => $caterer->email]);
+
+        return redirect()->route('about', ['caterer' => $caterer->name]);
+    }
 
 
     public function render()
