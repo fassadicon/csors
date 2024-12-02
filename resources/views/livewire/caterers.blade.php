@@ -4,11 +4,11 @@
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 !text-center">
         {{-- @dd()) --}}
         @foreach ($caterers as $caterer)
-        <a href="{{ route('about', ['caterer' => $caterer]) }}">
+        <a wire:click="selectCaterer({{ $caterer }})">
             <x-mary-card title="{!! $caterer->name !!}" class="flex items-center justify-center">
                 <div class="flex items-center justify-center gap-x-2">
                     {!! \Illuminate\Support\Str::limit($caterer->about, 50) !!}
-        
+
                 </div>
                 {{--
                 <x-mary-rating class="!my-4 badge-warning" /> --}}
