@@ -1,5 +1,5 @@
 <x-app-layout>
-    <h1 class="font-bold text-center py-5">Terms and Condition of Catering Services Online Reservation System</h3>
+    <h1 class="py-5 font-bold text-center">Terms and Condition of Catering Services Online Reservation System</h3>
     <hr class="my-4 mb-10">
     <div class="space-y-2 ">
         <ul class="px-20">
@@ -164,18 +164,36 @@
             <h1 class="text-center">SCOPE</h1>
             <h4 class="font-extrabold">CUSTOMER
             </h4>
-            <h5 class="font-bold pl-10">RESERVATION
+            <h5 class="pl-10 font-bold">RESERVATION
             </h5>
             <br>
             <li><b>CREATING A RESERVATION</b>Put all of your orders to the cart. This will show the total amount of goods you are about to order. Make sure that you fill-up the time, location, and the remarks of the reservation.</li>
             <br>
             <li><b>AFTER CREATING A RESERVATION</b>Kindly wait for the caterer’s reservation confirmation before proceeding with the payment condition. </li>
+            <br>
+            <li><b>ACCOUNT DELETION</b><br>a. When a user deletes their account, all associated records, including but not limited to past reservations and
+            activity logs, will be retained in the system for historical and reference purposes. These records will not be removed
+            to ensure data integrity and compliance with our operational requirements.</li>
+            <br>
+            <li>b. A deleted account will no longer be accessible, and the user will be unable to log in to the system using the deleted
+            account credentials.</li>
+            <br>
+            <li>c. The email address associated with the deleted account will be permanently restricted from being used to create a new
+            account within the system.</li>
+            <br>
+            <li><b>ACCOUNT BLOCKING</b><br>If your account is blocked, you will be unable to log in for N days. This measure is implemented to protect your account
+            and our platform from potential misuse or security breaches. Common reasons for account blocking include multiple failed
+            login attempts, violations of our terms of service, or detection of suspicious activity.</li>
+            <br>
+            <li>To resolve a blocked account, you can wait for the block period to expire or contact our support team if you believe the
+            action was taken in error. Please ensure your account credentials remain secure and adhere to our platform guidelines to
+            prevent future blocks.</li>
         </ul>
 
         <br>
 
         <ul class="px-20">
-            <h5 class="font-bold pl-10">CANCELLATION
+            <h5 class="pl-10 font-bold">CANCELLATION
             </h5>
             <br>
             <li><b>CANCELLATION RULES</b>
@@ -197,7 +215,7 @@
         <ul class="px-20">
             <h4 class="font-extrabold">CATERER
             </h4>
-            <h5 class="font-bold pl-10">RESERVATION
+            <h5 class="pl-10 font-bold">RESERVATION
             </h5>
             <br>
             <li><b>PAYMENT RESERVATION</b> Customers can pay the caterers in-person, caterers are required to update the customers payment status manually.
@@ -209,7 +227,7 @@
         <br>
 
         <ul class="px-20">
-            <h5 class="font-bold pl-10">CANCELLATION
+            <h5 class="pl-10 font-bold">CANCELLATION
             </h5>
             <br>
             <li><b>CANCELLATION RULES</b>
