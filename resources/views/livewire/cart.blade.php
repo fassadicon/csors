@@ -91,14 +91,18 @@
         @endphp
         @if (count($cart) > 0)
             @unless ($totalAmount <= 2000)
-                @if ($user->is_verified)
-                    <x-mary-button type="submit"
-                    label="Proceed to Checkout"
-                    class="my-4 btn-primary md:w-[40%]"
-                    spinner />
+                @if($user) 
+                    @if ($user->is_verified)
+                        <x-mary-button type="submit"
+                        label="Proceed to Checkout"
+                        class="my-4 btn-primary md:w-[40%]"
+                        spinner />
+                    @else
+                        <p class="py-4 text-sm italic text-red-500">Admin will verify your account first before you can place an order.</p>
+                    @endif
                 @else
-                    <p class="py-4 text-sm italic text-red-500">Admin will verify your account first before you can place an order.</p>
-                @endif
+                    <p class="py-4 text-sm italic text-red-500">You need to login first before placing an order.</p>
+                 @endif
             @endunless
         @endif
     </form>

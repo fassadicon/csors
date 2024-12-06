@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Caterer;
 use App\Models\Utility as UtilityModel;
 use Livewire\Component;
 
@@ -12,9 +13,10 @@ class Utility extends Component
 
     public int $quantity = 1;
     public float $price = 0.00;
-
+    public $caterer;
     public function mount()
     {
+        $this->caterer = Caterer::find(session()->get('caterer'))->first();
         $this->utility->load(['images']);
         // dd($this->utility->images);
         $this->price = $this->utility->price * $this->quantity;
@@ -46,6 +48,7 @@ class Utility extends Component
         session()->put('cart.utilities', $cart);
 
         $this->dispatch('cart-item-added');
+        return redirect()->route('about', ['caterer' => $this->caterer->name]);
     }
 
     public function render()

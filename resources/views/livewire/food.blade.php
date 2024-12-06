@@ -83,7 +83,7 @@
                     <x-popup.select-caterer />
                 </template>
                 @if (session('caterer'))
-                    <x-mary-button type="submit" label="Add to Order" class="w-full btn-primary" />
+                    <x-mary-button type="submit"  label="Add to Order" class="w-full btn-primary" />
                     <a href="{{ route('menu') }}">
                         <x-mary-button label="Back to Menu" class="w-full mt-4 btn-outline" />
                     </a>
@@ -103,6 +103,13 @@
 </div>
 
 <script>
+
+    // function goBack(){
+    //     setTimeout(() => {
+    //         window.history.back();
+    //     }, 2000);
+    // }
+
     // Function to attach event listeners to number inputs
     function addNumberInputListeners() {
         const numberInputs = document.querySelectorAll('input[type="number"]');

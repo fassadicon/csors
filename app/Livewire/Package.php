@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Caterer;
 use App\Models\Package as PackageModel;
 use Livewire\Component;
 
@@ -13,9 +14,11 @@ class Package extends Component
     public float $price = 0.00;
 
     public ?array $slides;
-
+    public $caterer;
     public function mount()
     {
+        $this->caterer = Caterer::find(session()->get('caterer'))->first();
+
         $this->package->load('images');
         $this->price = $this->package->price * $this->quantity;
 
@@ -46,6 +49,7 @@ class Package extends Component
         session()->put('cart.packages', $cart);
 
         $this->dispatch('cart-item-added');
+        return redirect()->route('about', ['caterer' => $this->caterer->name]);
     }
 
     public function render()
