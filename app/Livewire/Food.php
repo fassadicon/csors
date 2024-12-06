@@ -91,6 +91,7 @@ class Food extends Component
         session()->put('cart.foods', $cart);
 
         $this->dispatch('cart-item-added');
+        return redirect()->route('menu');
     }
 
 

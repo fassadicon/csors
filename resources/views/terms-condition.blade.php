@@ -150,7 +150,7 @@
             <p>We may update this Policy from time to time. When we do so, we will post the new privacy policy on this page and change the date at the top of the policy.
             </p>
             <br>
-            <p>We encourage you to check the date of our privacy policy when you visit our website or app/s for any updates or changes. For any questions or concerns regarding our privacy policy please send an email to <b class="text-blue-500">CSORS.admin@gmail.com</b>.
+            <p>We encourage you to check the date of our privacy policy when you visit our website or app/s for any updates or changes. For any questions or concerns regarding our privacy policy please send an email to <b class="text-blue-500">sa.csors.offical@gmail.com</b>.
             </p>
         </ul>
     </div>

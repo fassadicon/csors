@@ -1,12 +1,12 @@
 <div>
     <x-mary-header title="Caterers" class="!my-4"
         subtitle="Please select your chosen caterer to view their products, services, pricings, and more." separator />
-    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 !text-center">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 !text-center ">
         {{-- @dd()) --}}
         @foreach ($caterers as $caterer)
         <a wire:click="selectCaterer({{ $caterer }})">
-            <x-mary-card title="{!! $caterer->name !!}" class="flex items-center justify-center">
-                <div class="flex items-center justify-center gap-x-2">
+            <x-mary-card title="{!! $caterer->name !!}" class="flex items-center justify-center cursor-pointer">
+                <div class="flex items-center justify-center gap-x-2 ">
                     {!! \Illuminate\Support\Str::limit($caterer->about, 50) !!}
 
                 </div>
