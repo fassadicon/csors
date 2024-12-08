@@ -133,7 +133,17 @@
                         <td>{{ \Carbon\Carbon::parse($order->start)->format('M j, Y g:i A') }}</td>
                         <td>{{ \Carbon\Carbon::parse($order->end)->format('M j, Y g:i A') }}</td>
                         <td>{{ $order->order_status }}</td>
-                        <td>{{ $order->payment_status }}</td>
+                        <td>
+                            @foreach ($order->payments as $payment)
+                                @if ($payment->type == 'cash')
+                                    P {{ $payment->amount }} - {{ $payment->type }} <br>
+                                    {{ $payment->created_at->format('M j, Y g:i A') }}
+                                @else
+                                    P {{ $payment->amount }} - {{ $payment->type }} - {{ $payment->method }} <br>
+                                    {{ $payment->created_at->format('M j, Y g:i A') }}
+                                @endif
+                            @endforeach
+                        </td>
                         <td>P {{ number_format($order->total_amount - $order->payments->sum('amount'), 2) }}</td>
                         <td>P {{ number_format($order->total_amount, 2) }}</td>
 

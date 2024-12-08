@@ -89,8 +89,8 @@
                                     @endif
                                 @endforeach
                             </td>
-                            <td>P {{ number_format($order->payments->sum('amount'), 2) }}</td>
                             <td>P {{ number_format($order->total_amount - $order->payments->sum('amount'), 2) }}</td>
+                            <td>P {{ number_format($order->payments->sum('amount'), 2) }}</td>
 
                         </tr>
                     @endif
