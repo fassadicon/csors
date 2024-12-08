@@ -53,31 +53,44 @@
 </div>
 
 <div>
-    <h2>Caterers</h2>
-    <table>
-        <thead>
-            <th>Id</th>
-            <th>User</th>
-            <th>Name</th>
-            <th>CP #</th>
-            <th>Email</th>
-            <th>Verified At</th>
-        </thead>
-        <tbody>
-            @foreach ($caterers as $caterer)
-                <tr>
-                    <td>{{ $caterer->id }}</td>
-                    <td>{{ $caterer->user->full_name }} {{ $caterer->user->phone_number }} {{ $caterer->user->email }}
-                    </td>
-                    <td>{{ $caterer->name }}</td>
-                    <td>{{ $caterer->phone_number }}</td>
-                    <td>{{ $caterer->email }}</td>
-                    <td>{{ \Carbon\Carbon::parse($caterer->updated_at)->format('M j, Y g:i A') }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    @unless ($selectedCaterer != null)
+        <h2>Caterers</h2>
+        <table>
+            <thead>
+                <th>Id</th>
+                <th>User</th>
+                <th>Name</th>
+                <th>CP #</th>
+                <th>Email</th>
+                <th>Verified At</th>
+            </thead>
+            <tbody>
+                @foreach ($caterers as $caterer)
+                    <tr>
+                        <td>{{ $caterer->id }}</td>
+                        <td>{{ $caterer->user->full_name }} {{ $caterer->user->phone_number }}
+                            {{ $caterer->user->email }}
+                        </td>
+                        <td>{{ $caterer->name }}</td>
+                        <td>{{ $caterer->phone_number }}</td>
+                        <td>{{ $caterer->email }}</td>
+                        <td>{{ \Carbon\Carbon::parse($caterer->updated_at)->format('M j, Y g:i A') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endunless
+</div>
 
+@if ($selectedCaterer != null)
+    <div class="header">
+        <h1>{{ $selectedCaterer['name'] }}</h1>
+        <p>{{ $selectedCaterer['phone_number'] }}</p>
+        <p>{{ $selectedCaterer['email'] }} </p>
+    </div>
+@endif
+
+<div>
     <h2>Customers</h2>
     <table>
         <thead>
@@ -100,14 +113,6 @@
         </tbody>
     </table>
 </div>
-
-@if ($selectedCaterer != null)
-    <div class="header">
-        <h1>{{ $selectedCaterer['name'] }}</h1>
-        <p>{{ $selectedCaterer['phone_number'] }}</p>
-        <p>{{ $selectedCaterer['email'] }} </p>
-    </div>
-@endif
 
 <div>
     <h2>Reservations</h2>
@@ -153,7 +158,7 @@
         </tbody>
     </table>
 
-    <h2>Food Categories</h2>
+    {{-- <h2>Food Categories</h2>
     <table>
         <thead>
             <th>Id</th>
@@ -175,9 +180,9 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
-    <h2>Serving Types</h2>
+    {{-- <h2>Serving Types</h2>
     <table>
         <thead>
             <th>Id</th>
@@ -199,9 +204,9 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
-    <h2>Food Items</h2>
+    {{-- <h2>Food Items</h2>
     <table>
         <thead>
             @if ($selectedCaterer == null)
@@ -227,9 +232,9 @@
                 @endforeach
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
-    <h2>Utilities</h2>
+    {{-- <h2>Utilities</h2>
     <table>
         <thead>
             <th>Id</th>
@@ -253,9 +258,9 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 
-    <h2>Packages</h2>
+    {{-- <h2>Packages</h2>
     <table>
         <thead>
             <th>Id</th>
@@ -284,7 +289,7 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 </div>
 
 

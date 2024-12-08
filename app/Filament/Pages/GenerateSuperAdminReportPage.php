@@ -123,21 +123,21 @@ class GenerateSuperAdminReportPage extends Page implements HasForms
 
         $selectedCaterer = Caterer::where('id', $state['caterer_id'])->first();
 
-        $foodDetails = null;
-        $foodCategories = null;
-        $servingTypes = null;
-        $utilities = null;
-        $packagesWithItems = null;
+        // $foodDetails = null;
+        // $foodCategories = null;
+        // $servingTypes = null;
+        // $utilities = null;
+        // $packagesWithItems = null;
         $orders = null;
 
         if ($selectedCaterer != null) {
-            $foodDetails = $selectedCaterer->foodDetails;
-            $foodCategories = $selectedCaterer->foodCategories;
-            $servingTypes = $selectedCaterer->servingTypes;
-            $utilities = $selectedCaterer->utilities;
+            // $foodDetails = $selectedCaterer->foodDetails;
+            // $foodCategories = $selectedCaterer->foodCategories;
+            // $servingTypes = $selectedCaterer->servingTypes;
+            // $utilities = $selectedCaterer->utilities;
 
-            $packagesWithItems = $selectedCaterer->packages()->get();
-            $packages = $packagesWithItems->load('packageItems');
+            // $packagesWithItems = $selectedCaterer->packages()->get();
+            // $packages = $packagesWithItems->load('packageItems');
 
             $orders = Order::with(
                 'user',
@@ -163,13 +163,13 @@ class GenerateSuperAdminReportPage extends Page implements HasForms
                 })
                 ->get();
         } else {
-            $foodDetails = FoodDetail::all();
-            $foodCategories = FoodCategory::all();
-            $servingTypes = ServingType::all();
-            $utilities = Utility::all();
+            // $foodDetails = FoodDetail::all();
+            // $foodCategories = FoodCategory::all();
+            // $servingTypes = ServingType::all();
+            // $utilities = Utility::all();
 
-            $packagesWithItems = Package::all();
-            $packages = $packagesWithItems->load('packageItems');
+            // $packagesWithItems = Package::all();
+            // $packages = $packagesWithItems->load('packageItems');
 
             $orders = Order::with(
                 'user',
@@ -203,11 +203,11 @@ class GenerateSuperAdminReportPage extends Page implements HasForms
                 'selectedCaterer' => $selectedCaterer != null ? $selectedCaterer->toArray() : false,
                 'customers' => $this->customers,
                 'caterers' => $this->caterers,
-                'foodDetails' => $foodDetails,
-                'foodCategories' => $foodCategories,
-                'servingTypes' => $servingTypes,
-                'utilities' => $utilities,
-                'packages' => $packages,
+                // 'foodDetails' => $foodDetails,
+                // 'foodCategories' => $foodCategories,
+                // 'servingTypes' => $servingTypes,
+                // 'utilities' => $utilities,
+                // 'packages' => $packages,
                 'orders' => $orders,
             ])->render());
 
