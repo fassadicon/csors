@@ -88,7 +88,8 @@ class ReportedUserResource extends Resource
                 TextColumn::make('reported')
                     ->label('Reported User')
                     ->getStateUsing(function ($record) {
-                        return User::where('id', $record->reported_user)->first()->name;
+                        $reportedUser = User::where('id', $record->reported_user)->first();
+                        return $reportedUser->first_name . ' ' . $reportedUser->last_name;
                     })
                     ->visible(auth()->user()->hasRole('superadmin')),
 
