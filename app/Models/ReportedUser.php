@@ -32,6 +32,6 @@ class ReportedUser extends Model
     // Relationship to the reported user
     public function reportedUser(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'reported_user');
+        return $this->belongsTo(User::class, 'reported_user', 'id');
     }
 }

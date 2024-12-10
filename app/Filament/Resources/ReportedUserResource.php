@@ -2,20 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ReportedUserResource\Pages;
-use App\Models\Caterer;
-use App\Models\ReportedUser;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
+use App\Models\Caterer;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\ReportedUser;
+use Filament\Resources\Resource;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\ReportedUserResource\Pages;
 
 class ReportedUserResource extends Resource
 {
@@ -87,8 +88,9 @@ class ReportedUserResource extends Resource
 
                 TextColumn::make('reported')
                     ->label('Reported User')
-                    ->getStateUsing(function ($record) {
+                    ->getStateUsing(function (Model $record) {
                         $reportedUser = User::where('id', $record->reported_user)->first();
+                        dd($reportedUser);
                         return $reportedUser->first_name . ' ' . $reportedUser->last_name;
                     })
                     ->visible(auth()->user()->hasRole('superadmin')),
