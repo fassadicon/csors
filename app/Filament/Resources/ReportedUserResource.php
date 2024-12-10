@@ -90,7 +90,7 @@ class ReportedUserResource extends Resource
                     ->label('Reported User')
                     ->getStateUsing(function (Model $record) {
                         $reportedUser = User::where('id', $record->reported_user)->first();
-                        dd($reportedUser);
+                        dump($reportedUser->first_name);
                         return $reportedUser->first_name . ' ' . $reportedUser->last_name;
                     })
                     ->visible(auth()->user()->hasRole('superadmin')),
