@@ -86,13 +86,13 @@ class ReportedUserResource extends Resource
                     })
                     ->visible(auth()->user()->hasRole('superadmin')),
 
-                TextColumn::make('reported')
+                TextColumn::make('reportedUser.name')
                     ->label('Reported User')
-                    ->getStateUsing(function (Model $record) {
-                        $reportedUser = User::where('id', $record->reported_user)->first();
-                        dump($reportedUser->first_name);
-                        return $reportedUser->first_name . ' ' . $reportedUser->last_name;
-                    })
+                    // ->getStateUsing(function (Model $record) {
+                    //     $reportedUser = User::where('id', $record->reported_user)->first();
+                    //     dump($reportedUser->first_name);
+                    //     return $reportedUser->first_name . ' ' . $reportedUser->last_name;
+                    // })
                     ->visible(auth()->user()->hasRole('superadmin')),
 
                 TextColumn::make('comment'),
