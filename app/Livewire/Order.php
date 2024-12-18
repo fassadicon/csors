@@ -152,6 +152,7 @@ class Order extends Component
 
             // Send the email to the user
             Mail::to(auth()->user()->email)->send(new ReservationOrder($order->id, $this->caterer, now()->format('Y-m-d H:i:s'), $this->startDateTime, $this->endDateTime));
+            Mail::to($this->caterer->email)->send(new ReservationOrder($order->id, $this->caterer, now()->format('Y-m-d H:i:s'), $this->startDateTime, $this->endDateTime));
 
             // Clear cart session data
             session()->forget('cart');
