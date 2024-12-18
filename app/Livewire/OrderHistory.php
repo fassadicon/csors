@@ -24,13 +24,13 @@ class OrderHistory extends Component
 
         $this->headers = [
             ['key' => 'id', 'label' => '#'],
-            ['key' => 'total_amount', 'label' => 'Total Amount'],
+            ['key' => 'final_amount', 'label' => 'Total Amount'],
             ['key' => 'payment_status', 'label' => 'Payment Status'],
             ['key' => 'order_status', 'label' => 'Order Status'],
             ['key' => 'caterer.name', 'label' => 'Caterer'],
             ['key' => 'location', 'label' => 'Location'],
             ['key' => 'duration', 'label' => 'Duration'],
-            ['key' => 'decline_reason', 'label' => 'Decline Reason'],
+            // ['key' => 'decline_reason', 'label' => 'Decline Reason'],
             // ['key' => 'end', 'label' => 'End'],
             ['key' => 'created_at', 'label' => 'Date Ordered'],
         ];

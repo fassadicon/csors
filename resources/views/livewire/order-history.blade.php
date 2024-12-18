@@ -27,8 +27,9 @@
         {{-- :link="route('users.show', ['username' => ['username'], 'id' => ['id']])" --}}
         {{-- :cell-decoration="$cell_decoration" --}}>
         @scope('cell_final_amount', $order)
-            {{ '₱ ' . $order->final_amount }}
+            {{ '₱ ' . number_format($order->final_amount, 2) }}
         @endscope
+
         @scope('cell_payment_status', $order)
             @php
                 // Access the string value of the order status Enum
@@ -48,11 +49,6 @@
         @endscope
         @scope('cell_duration', $order)
             {{ \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') . ' - ' . \Carbon\Carbon::parse($order->start)->format('M d, Y g:i A') }}
-        @endscope
-
-        {{-- DECLINE REASON  --}}
-        @scope('cell_final_amount', $order)
-            {{ $order->decline_reason ? $order->decline_reason : ' - - - ' }}
         @endscope
 
         {{-- @scope('cell_end', $order)
