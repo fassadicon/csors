@@ -118,7 +118,7 @@
     <h2>Reservations</h2>
     <table>
         <thead>
-            <th>Id</th>
+            {{-- <th>Id</th> --}}
             <th>Customer</th>
             <th>Date</th>
             <th>Start</th>
@@ -132,7 +132,7 @@
             @foreach ($orders as $order)
                 @if ($order->user)
                     <tr>
-                        <td>{{ $order->id }}</td>
+                        {{-- <td>{{ $order->id }}</td> --}}
                         <td>{{ $order->user->full_name }}</td>
                         <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y g:i A') }}</td>
                         <td>{{ \Carbon\Carbon::parse($order->start)->format('M j, Y g:i A') }}</td>
@@ -292,8 +292,10 @@
     </table> --}}
 </div>
 
-
+<br>
 Generated on: {{ now() }}
+<br>
+Generated on: {{ auth()->user()->name }}
 
 <body>
 
