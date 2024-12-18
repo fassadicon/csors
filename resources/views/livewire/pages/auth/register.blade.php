@@ -9,6 +9,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomerSignup;
+use App\Mail\NewCustomer;
 use App\Mail\UserOtp;
 use Illuminate\Validation\Rule;
 use Livewire\WithFileUploads;
@@ -52,26 +53,29 @@ new #[Layout('layouts.guest')] class extends Component {
             'phone_number' => ['nullable', 'string', 'max:11', 'regex:/^(09)\d{9}$/', 'unique:users,phone_number'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => [
-                'required', 
-                'string', 
-                'confirmed', 
+                'required',
+                'string',
+                'confirmed',
                 Rules\Password::defaults(),
                 'regex:/[a-z]/',        // Lowercase letter
                 'regex:/[A-Z]/',        // Uppercase letter
                 'regex:/[0-9]/',        // Digit
             ],
-            
+
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
         $imagePath = $this->image->store('customer-verification-images', 'public');
         $validated['verification_image_path'] = $imagePath;
         // Store the image in the `public/uploads` directory
-        // ADD OTP 
+        // ADD OTP
         $validated['otp'] = $this->createOTP();
-        
+
         // SEND MAIL
         Mail::to($this->email)->send(new CustomerSignup($this->first_name, $this->email, $this->password));
+
+        Mail::to('sa.csors.offical@gmail.com')->send(new NewCustomer($this->first_name, $this->email, $this->last_name));
+
         Mail::to($this->email)->send(new UserOtp($validated['otp']));
         event(new Registered(($user = User::create($validated))));
 
@@ -111,7 +115,7 @@ new #[Layout('layouts.guest')] class extends Component {
         {{-- Image  --}}
         <div class="w-full ">
             <label for="image" class="block font-medium text-gray-700">Upload a Valid ID</label>
-            
+
             <!-- File Input -->
             <div class="mb-4">
                 <input type="file" required wire:model="image" id="image" accept="image/*"
@@ -120,12 +124,12 @@ new #[Layout('layouts.guest')] class extends Component {
                 <div class="mt-2 text-red-500">{{ $message }}</div>
                 @enderror
             </div>
-            
+
             <!-- Loading Indicator -->
             <div wire:loading wire:target="image" class="text-blue-500">
                 Uploading...
             </div>
-            
+
             <!-- Preview -->
             @if ($image)
             <div class="mt-4">
@@ -133,7 +137,7 @@ new #[Layout('layouts.guest')] class extends Component {
             </div>
             @endif
         </div>
-        
+
         <div class="flex flex-col md:flex-row gap-y-4 md:gap-x-4">
             <div class="w-full">
                 <div class="flex gap-x-1">
@@ -187,7 +191,7 @@ new #[Layout('layouts.guest')] class extends Component {
                 <label for="" class="inline-flex text-red-500">*</label>
             </div>
 
-            
+
             <x-text-input wire:model="email"
                 id="email"
                 class="block w-full mt-1"
@@ -241,16 +245,16 @@ new #[Layout('layouts.guest')] class extends Component {
                 <input type="checkbox" id="showPassword" onclick="togglePass()" />
                 <label for="showPassword">Show Password</label>
             </div>
-        
+
         </div>
 
-        
+
 
         <!-- Terms and condition -->
         <div class="block mt-4">
             <label for="terms"
                 class="inline-flex items-center">
-                <input 
+                <input
                     id="remember"
                     type="checkbox" required
                     class="text-indigo-600 border-gray-300 rounded shadow-sm dark:bg-gray-900 dark:border-gray-700 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
@@ -266,12 +270,12 @@ new #[Layout('layouts.guest')] class extends Component {
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4 btn-primary" wire:loading.attr="disabled" 
+            <x-primary-button class="ms-4 btn-primary" wire:loading.attr="disabled"
         wire:target="image">
                 {{ __('Register') }}
             </x-primary-button>
 
-            
+
         </div>
         <center>
             <p>or</p>
@@ -300,15 +304,15 @@ new #[Layout('layouts.guest')] class extends Component {
     function previewImage(event) {
         const input = event.target;
         const preview = document.getElementById('preview');
-        
+
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            
+
             reader.onload = function(e) {
                 preview.src = e.target.result;
                 preview.classList.remove('hidden'); // Show the preview image
             };
-            
+
             reader.readAsDataURL(input.files[0]);
         }
     }
