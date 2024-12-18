@@ -22,7 +22,7 @@ class EditUser extends EditRecord
     {
         return [
             Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
+            // Actions\DeleteAction::make(),
             Actions\Action::make('Notify to Reupload Requirements')
                 ->action(function (Model $record) {
                     $recipient = User::find($record->id);
